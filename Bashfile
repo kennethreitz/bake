@@ -1,0 +1,4 @@
+test: hello
+    echo 'bye'
+hello:
+    echo 'hi'
