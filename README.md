@@ -37,7 +37,7 @@ system-deps:
 
 **Running the above `Bakefile`**:
 
-```shell
+```text
 $ bake --silent format
 All done! ✨ 🍰 ✨
 7 files left unchanged.
