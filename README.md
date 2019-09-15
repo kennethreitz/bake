@@ -15,7 +15,7 @@ Options:
   -b, --bakefile PATH      Custom path to a Bakefile.
   -l, --list               Lists available tasks from Bakefile.
   --whitelist TEXT         Whitelist an environment variable for
-                           use with --secure (persists between runs).
+                           use.
   --yes                    Set medium–security prompts to yes.
   -x, --fail               Fail immediately, if any task fails.
   --insecure               Use parent shell's environment variables.

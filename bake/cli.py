@@ -39,11 +39,12 @@ def indent(line):
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--shellcheck", default=False, is_flag=True, hidden=False)
 @click.option(
-    "--whitelist",
+    "--allow",
     default=False,
     nargs=1,
+    multiple=True,
     hidden=False,
-    help="Whitelist an environment variable for use with --secure (persists between runs).",
+    help="Whitelist an environment variable for use.",
 )
 @click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
 @click.option(
@@ -88,7 +89,7 @@ def task(
     silent,
     insecure,
     no_color,
-    whitelist,
+    allow,
     yes,
 ):
     """bake — the familiar Bash/Make hybrid."""
@@ -97,12 +98,7 @@ def task(
     if no_color:
         crayons.DISABLE_COLOR = True
 
-    if whitelist:
-        if debug:
-            click.echo(f" + config: {config!r}")
-        if whitelist not in config["ENVIRON_WHITELIST"]:
-            config["ENVIRON_WHITELIST"].append(whitelist)
-            config.save()
+    SAFE_ENVIRONS.extend(allow)
 
     if task == "__LIST_ALL__":
         _list = True
