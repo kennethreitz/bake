@@ -31,4 +31,4 @@ Unlike `Makefile`, either tabs or 4 spaces can be used.
 
 Install `bake` via:
 
-    $ brew install kennethreitz/-/bake --head
+    $ brew install kennethreitz/-/bake --HEAD
