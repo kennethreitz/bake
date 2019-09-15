@@ -1,4 +1,0 @@
-click
-delegator.py
-crayons
-bash.py

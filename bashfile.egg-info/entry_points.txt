@@ -1,3 +1,0 @@
-[console_scripts]
-bashf = bashfile.cli:entrypoint
-
