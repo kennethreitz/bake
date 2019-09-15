@@ -86,7 +86,7 @@ def task(
     whitelist,
     yes,
 ):
-    """bashf — Bashfile runner (the familiar Bash/Make hybrid)."""
+    """bake — the familiar Bash/Make hybrid."""
 
     # Default to list behavior, when no task is provided.
     if no_color:

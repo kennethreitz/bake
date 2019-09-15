@@ -12,9 +12,9 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = "bashf"
+NAME = "bake"
 DESCRIPTION = "The familar Make / Bash hybrid."
-URL = "https://github.com/kennethreitz/bashfile"
+URL = "https://github.com/kennethreitz/bake"
 EMAIL = "me@kennethreitz.org"
 AUTHOR = "Kenneth Reitz"
 REQUIRES_PYTHON = ">=3.6.0"
