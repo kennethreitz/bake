@@ -6,6 +6,7 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 
 To be improved:
 
+```make
     echo:
         cat Bashfile
     format:
@@ -22,6 +23,7 @@ To be improved:
 
     system-deps:
         brew install pipenv
+```
 
 Unlike `Makefile`s, either tabs or 4 spaces can be used.
 
