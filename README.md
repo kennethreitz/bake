@@ -40,8 +40,9 @@ system-deps:
 
 ## Features
 
-- a `Bakefile`
-Unlike `Makefile`, either tabs or 4 spaces can be used.
+- a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- except, you can write real bash code!
+- Unlike `Makefile`, either tabs or 4 spaces can be used.
 
 ## Installation
 
