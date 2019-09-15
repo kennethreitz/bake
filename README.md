@@ -64,6 +64,7 @@ HELLO, you
 $ bake dangerous-example
 · Executing '@confirm:secure' ·
    What is 10 times 2?:
+```
 
 ## Features
 
