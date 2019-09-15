@@ -5,7 +5,7 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 
 **WORK IN PROGRESS**
 
-```text
+```console
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
@@ -57,7 +57,7 @@ system-deps:
 
 **Running the above `Bakefile`**:
 
-```text
+```console
 $ bake --silent format
 All done! ✨ 🍰 ✨
 7 files left unchanged.
