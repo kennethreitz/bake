@@ -4,6 +4,9 @@ bash.py module
 import re
 import time
 import json as json_lib
+import os
+import stat
+from tempfile import mkstemp
 from shlex import quote as shlex_quote
 
 import delegator
@@ -100,9 +103,37 @@ class Bash:
         """execute the bash process as a child of this process"""
         return BashProcess(parent=self, args=args, **kwargs)
 
-    def command(self, script: str, **kwargs) -> BashProcess:
+    def command(self, script: str, debug=False, **kwargs) -> BashProcess:
         """form up the command with shlex and execute"""
-        return self._exec(f"-c {shlex_quote(script)}", **kwargs)
+
+        tf = mkstemp(suffix='.sh', prefix='bashf-')[1]
+
+        with open(tf, 'w') as f:
+            f.write(script)
+
+        # Mark the temporary file as executable.
+        st = os.stat(tf)
+        os.chmod(tf, st.st_mode | stat.S_IEXEC)
+
+        stdlib_path = os.path.join(
+            os.path.dirname(__file__), 'scripts', 'stdlib.sh'
+        )
+        # print(stdlib_path)
+
+        # cmd = f"bash -c {(script)}"
+        script = shlex_quote(f"unbuffer {tf} 2>&1 | bashf-indent")
+        cmd = f'bash --init-file {shlex_quote(stdlib_path)} -i -c {script} '
+
+        if debug:
+            print(cmd)
+
+        return_code = os.system(cmd)
+
+        if not debug:
+            # Cleanup temporary file.
+            os.remove(tf)
+
+        return return_code
 
 
 def run(script=None, **kwargs):

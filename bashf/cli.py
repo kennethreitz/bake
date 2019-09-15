@@ -4,6 +4,10 @@ import crayons
 from .bashfile import Bashfile
 
 
+def indent(line):
+    return f'{" " * 4}{line}'
+
+
 @click.command()
 @click.argument(
     'task',
@@ -32,12 +36,22 @@ from .bashfile import Bashfile
     help='task environment variable (can be passed multiple times).',
 )
 @click.option(
+    '--fail',
+    '-x',
+    is_flag=True,
+    type=click.BOOL,
+    help='Fail immediately, if any task fails.',
+)
+@click.option(
     '--arg',
     '-a',
     nargs=1,
     type=click.STRING,
     multiple=True,
     help='task ARGV arguments (can be passed multiple times).',
+)
+@click.option(
+    '--quiet', '-q', is_flag=True, type=click.BOOL, help='Reduce output.'
 )
 @click.option(
     '--environ-json',
@@ -47,7 +61,17 @@ from .bashfile import Bashfile
     help='environment variables, in JSON format.',
 )
 def task(
-    *, task, bashfile, arg, _list, environ, environ_json, shellcheck, debug
+    *,
+    task,
+    bashfile,
+    arg,
+    _list,
+    environ,
+    fail,
+    environ_json,
+    shellcheck,
+    debug,
+    quiet,
 ):
     """bashf — Bashfile runner (the familiar Bash/Make hybrid)."""
     # Default to list behavior, when no task is provided.
@@ -80,22 +104,22 @@ def task(
         try:
             task = bashfile[task]
         except KeyError:
-            click.echo(f'Task {task!r} does not exist!')
+            click.echo(crayons.red(f'Task {task!r} does not exist!'))
             sys.exit(1)
 
         # print(task)
         for task in task.depends_on(recursive=True):
-            cmd = task.execute()
+            if not quiet:
+                click.echo(crayons.yellow(f'Executing task {task.name!r}…'))
+            return_code = task.execute()
 
-            for line in cmd.output:
-                click.echo(line, nl=False, err=False)
+            if fail:
+                if not return_code == 0:
+                    click.echo(f'Task {task.name!r} failed!')
+                    sys.exit(return_code)
 
-            # if cmd.err:
-            #     click.echo(cmd.err, nl=False, err=True)
-
-            if not cmd.ok:
-                click.echo(f'Task {task.name!r} failed!')
-                sys.exit(cmd.return_code)
+        click.echo('Done!')
+        sys.exit(0)
 
 
 def entrypoint():

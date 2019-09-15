@@ -48,9 +48,6 @@ class TaskScript:
                     if t.name not in [task.name for task in tasks]:
                         tasks.insert(i + 1, t)
 
-        # if reverse:
-        #     tasks = list(reversed(tasks))
-
         return tasks
 
     @classmethod
