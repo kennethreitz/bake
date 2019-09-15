@@ -1,3 +1,4 @@
+import sys
 import click
 import crayons
 from .bashfile import Bashfile
@@ -70,8 +71,31 @@ def task(
             )
         bashfile.add_environ(key, value)
 
-    print(bashfile.scripts)
-    # print(locals())
+    if _list:
+        for task in bashfile.tasks:
+            print(f" - {task}")
+        sys.exit(0)
+
+    if task:
+        try:
+            task = bashfile[task]
+        except KeyError:
+            click.echo(f'Task {task!r} does not exist!')
+            sys.exit(1)
+
+        # print(task)
+        for task in task.depends_on(recursive=True):
+            cmd = task.execute()
+
+            for line in cmd.output:
+                click.echo(line, nl=False, err=False)
+
+            # if cmd.err:
+            #     click.echo(cmd.err, nl=False, err=True)
+
+            if not cmd.ok:
+                click.echo(f'Task {task.name!r} failed!')
+                sys.exit(cmd.return_code)
 
 
 def entrypoint():

@@ -1,4 +1,9 @@
-test: hello
-    echo 'bye'
-hello:
-    echo 'hi'
+echo:
+    cat Bashfile
+black:
+    black .
+install: system-deps python-deps
+python-deps:
+    # pipenv install
+system-deps:
+    brew install pipenv
