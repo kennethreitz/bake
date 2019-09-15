@@ -3,7 +3,7 @@ import json
 
 from .bash import Bash
 
-INDENT_STYLES = ('\t', ' ' * 4)
+INDENT_STYLES = ("\t", " " * 4)
 
 
 class NoBashfileFound(RuntimeError):
@@ -12,6 +12,15 @@ class NoBashfileFound(RuntimeError):
 
 class TaskNotInBashfile(ValueError):
     pass
+
+
+class FlagNotAvailable(ValueError):
+    pass
+
+
+class Flag:
+    def __init__(self, name):
+        self.name = name
 
 
 class TaskScript:
@@ -33,10 +42,8 @@ class TaskScript:
 
     def depends_on(self, *, reverse=False, recursive=False):
         def gen_tasks():
-            task_names = self.declaration_line.split(':')[1].split()
-            task_indexes = [
-                self.bashfile.find_chunk(task_name=n) for n in task_names
-            ]
+            task_names = self.declaration_line.split(":")[1].split()
+            task_indexes = [self.bashfile.find_chunk(task_name=n) for n in task_names]
             for i in task_indexes:
                 yield TaskScript(bashfile=self.bashfile, chunk_index=i)
 
@@ -67,7 +74,7 @@ class TaskScript:
 
     @property
     def name(self):
-        return self.chunk[0].split(':')[0].strip()
+        return self.chunk[0].split(":")[0].strip()
 
     @property
     def chunk(self):
@@ -81,7 +88,7 @@ class TaskScript:
 
     @property
     def source(self):
-        return '\n'.join([s for s in self._iter_source()])
+        return "\n".join([s for s in self._iter_source()])
 
     @property
     def source_lines(self):
@@ -132,7 +139,7 @@ class Bashfile:
 
     def find_chunk(self, task_name):
         for i, chunk in enumerate(self.chunks):
-            if chunk[0].split(':')[0].strip() == task_name:
+            if chunk[0].split(":")[0].strip() == task_name:
                 return i
 
     def __iter__(self):
@@ -147,7 +154,7 @@ class Bashfile:
         except json.JSONDecodeError:
             assert os.path.exists(s)
             # Assume a path was passed, instead.
-            with open(s, 'r') as f:
+            with open(s, "r") as f:
                 j = json.load(f)
 
         self.environ.update(j)
@@ -158,34 +165,29 @@ class Bashfile:
 
     @classmethod
     def find(
-        Class,
-        *,
-        filename='Bashfile',
-        root=os.getcwd(),
-        max_depth=4,
-        topdown=True,
+        Class, *, filename="Bashfile", root=os.getcwd(), max_depth=4, topdown=True
     ):
         """Returns the path of a Pipfile in parent directories."""
         i = 0
         for c, d, f in os.walk(root, topdown=topdown):
             if i > max_depth:
-                raise NoBashfileFound('No {filename} found!')
+                raise NoBashfileFound("No {filename} found!")
             elif filename in f:
                 return Class(path=os.path.join(c, filename))
             i += 1
 
     @property
     def source(self):
-        with open(self.path, 'r') as f:
+        with open(self.path, "r") as f:
             return f.read()
 
     @property
     def source_lines(self):
-        return self.source.split('\n')
+        return self.source.split("\n")
 
     @staticmethod
     def _is_declaration_line(line):
-        return not (line.startswith(' ') or line.startswith('\t'))
+        return not (line.startswith(" ") or line.startswith("\t"))
 
     @property
     def tasks(self):

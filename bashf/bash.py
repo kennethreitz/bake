@@ -36,9 +36,7 @@ class BashProcess:
         args = " ".join(args)
         self.start_time = time.time()
         self.sub = delegator.run(
-            f"{self.parent.path} {args}",
-            env=self.parent.environ,
-            block=blocking,
+            f"{self.parent.path} {args}", env=self.parent.environ, block=blocking
         )
         if blocking:
             self.elapsed_time = time.time() - self.start_time
@@ -75,7 +73,9 @@ class BashProcess:
 
     def __repr__(self) -> str:
         """string representation of the bash process"""
-        return f"<BashProcess pid={self.sub.pid!r} return_code={self.sub.return_code!r}>"
+        return (
+            f"<BashProcess pid={self.sub.pid!r} return_code={self.sub.return_code!r}>"
+        )
 
 
 class Bash:
@@ -106,23 +106,21 @@ class Bash:
     def command(self, script: str, debug=False, **kwargs) -> BashProcess:
         """form up the command with shlex and execute"""
 
-        tf = mkstemp(suffix='.sh', prefix='bashf-')[1]
+        tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
 
-        with open(tf, 'w') as f:
+        with open(tf, "w") as f:
             f.write(script)
 
         # Mark the temporary file as executable.
         st = os.stat(tf)
         os.chmod(tf, st.st_mode | stat.S_IEXEC)
 
-        stdlib_path = os.path.join(
-            os.path.dirname(__file__), 'scripts', 'stdlib.sh'
-        )
+        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
         # print(stdlib_path)
 
         # cmd = f"bash -c {(script)}"
         script = shlex_quote(f"unbuffer {tf} 2>&1 | bashf-indent")
-        cmd = f'bash --init-file {shlex_quote(stdlib_path)} -i -c {script} '
+        cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script} "
 
         if debug:
             print(cmd)
