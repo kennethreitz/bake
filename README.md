@@ -25,7 +25,7 @@ system-deps:
     brew install pipenv
 ```
 
-Unlike `Makefile`s, either tabs or 4 spaces can be used.
+Unlike `Makefile`, either tabs or 4 spaces can be used.
 
 ## Installation
 
