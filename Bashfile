@@ -1,9 +1,12 @@
 echo:
     cat Bashfile
-black:
+format:
     black .
+
 install: system-deps python-deps
+
 python-deps:
-    # pipenv install
+    # Example of comments
+    pipenv install
 system-deps:
     brew install pipenv
