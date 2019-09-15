@@ -1,10 +1,14 @@
 # `bake`— Kinda like Bash & Make, combined.
 
+
 I love using `Makefile`s for one-off tasks in projects. The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash sytnax. This project seeks to bridge these works.
 
-## Example `Bakefile`, for use with `bake`:
+**WORK IN PROGRESS**
 
-To be improved:
+![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
+
+
+## Example `Bakefile`, for use with `bake`:
 
 ```make
 echo:
