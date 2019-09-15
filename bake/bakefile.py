@@ -97,11 +97,6 @@ class TaskScript:
     def depends_on(self, *, reverse=False, recursive=False):
         def gen_actions():
             task_strings = self.declaration_line.split(":", 1)[1].split()
-            # Filter out filters.
-            # filters = [t for t in task_names if t.startswith("@")]
-
-            # for filter in filters:
-            # del task_names[task_names.index(filter)]
 
             task_name_index_tuples = [
                 (self.bashfile.find_chunk(task_name=s), s) for s in task_strings
