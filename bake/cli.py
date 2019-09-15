@@ -2,7 +2,7 @@ import sys
 import click
 import crayons
 
-from .bashfile import Bashfile
+from .bakefile import Bakefile
 from .config import config
 
 SAFE_ENVIRONS = ["HOME"]
@@ -104,7 +104,7 @@ def task(
         task = None
 
     if bashfile == "__BASHFILE__":
-        bashfile = Bashfile.find(root=".")
+        bashfile = Bakefile.find(root=".")
     if secure:
         for key in bashfile.environ:
             if key not in SAFE_ENVIRONS:

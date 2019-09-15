@@ -188,7 +188,7 @@ class TaskScript:
                 pass
 
 
-class Bashfile:
+class Bakefile:
     def __init__(self, *, path):
         self.path = path
         self.environ = os.environ
@@ -201,7 +201,7 @@ class Bashfile:
         self.chunks
 
     def __repr__(self):
-        return f"<Bashfile path={self.path!r}>"
+        return f"<Bakefile path={self.path!r}>"
 
     def __getitem__(self, key):
         return self.tasks[key]
