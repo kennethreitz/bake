@@ -103,7 +103,10 @@ def task(
         task = None
 
     if bakefile == "__BAKEFILE__":
-        bakefile = Bakefile.find(root=".")
+        bakefile = "Bakefile"
+
+    bakefile = Bakefile.find(root=".", filename=bakefile)
+
     if secure:
         for key in bakefile.environ:
             if key not in SAFE_ENVIRONS:
@@ -111,6 +114,9 @@ def task(
 
     if environ_json:
         bakefile.add_environ_json(environ_json)
+
+    if shellcheck:
+        pass
 
     argv = []
     environ = []

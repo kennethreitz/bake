@@ -10,7 +10,7 @@ from .bash import Bash
 INDENT_STYLES = ("\t", " " * 4)
 
 
-class NoBashfileFound(RuntimeError):
+class NoBakefileFound(RuntimeError):
     pass
 
 
@@ -194,7 +194,7 @@ class Bakefile:
         self.args = []
 
         if not os.path.exists(path):
-            raise NoBashfileFound()
+            raise NoBakefileFound()
 
         self.chunks
 
@@ -264,7 +264,7 @@ class Bakefile:
         i = 0
         for c, d, f in os.walk(root, topdown=topdown):
             if i > max_depth:
-                raise NoBashfileFound("No {filename} found!")
+                raise NoBakefileFound(f"No {filename} found!")
             elif filename in f:
                 return Class(path=os.path.join(c, filename))
             i += 1
