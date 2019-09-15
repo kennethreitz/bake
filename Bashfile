@@ -1,16 +1,7 @@
-echo:
-    cat Bashfile
-format:
-    black .
-
-full-install: system-deps python-deps @confirm
-install: node-deps python-deps
-
-python-deps:
-    # Example of comments
-    pipenv install
-node-deps:
-    yarn install
-
-system-deps:
-    brew install pipenv
+hello:
+    set -eu pipefail
+    echo hello $HELLO
+env:
+    env
+argv:
+    echo $@

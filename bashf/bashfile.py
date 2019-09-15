@@ -34,8 +34,8 @@ class TaskFilter:
         return self.source.split(":", 1)[0][len("@") :]
 
     @property
-    def args(self):
-        args = {}
+    def arguments(self):
+        arguments = {}
 
         try:
 
@@ -45,11 +45,11 @@ class TaskFilter:
                 key = split[0]
                 value = split[1] if len(split) == 2 else True
 
-                args[key] = value
+                arguments[key] = value
         except IndexError:
             pass
 
-        return args
+        return arguments
 
     def depends_on(self, **kwargs):
         return []
@@ -137,9 +137,31 @@ class TaskScript:
             if line.startswith(indent_style):
                 return line[len(indent_style) :]
 
-    def execute(self, *, blocking=False, **kwargs):
-        bash = Bash(environ=self.bashfile.environ)
-        return bash.command(self.source, blocking=False)
+    def execute(self, *, blocking=False, debug=False, **kwargs):
+        from tempfile import mkstemp
+        import stat
+        from shlex import quote as shlex_quote
+
+        tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
+
+        with open(tf, "w") as f:
+            f.write(self.source)
+
+        # Mark the temporary file as executable.
+        st = os.stat(tf)
+        os.chmod(tf, st.st_mode | stat.S_IEXEC)
+
+        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
+
+        args = [shlex_quote(a) for a in self.bashfile.args]
+
+        script = shlex_quote(f"unbuffer {tf} {args} 2>&1 | bashf-indent")
+        cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script} "
+
+        if debug:
+            print(cmd)
+
+        return os.system(cmd)
 
     @property
     def name(self):
@@ -171,6 +193,7 @@ class Bashfile:
         self.path = path
         self.environ = os.environ
         self._chunks = []
+        self.args = []
 
         if not os.path.exists(path):
             raise NoBashfileFound()
@@ -213,6 +236,9 @@ class Bashfile:
 
     def __iter__(self):
         return (v for v in self.tasks.values())
+
+    def add_args(self, *args):
+        self.args.extend(args)
 
     def add_environ(self, key, value):
         self.environ[key] = value

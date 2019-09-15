@@ -1,7 +1,9 @@
 import sys
 import click
 import crayons
+
 from .bashfile import Bashfile
+from .config import config
 
 SAFE_ENVIRONS = ["HOME"]
 
@@ -10,7 +12,7 @@ def indent(line):
     return f'{" " * 4}{line}'
 
 
-@click.command()
+@click.command(context_settings=dict(help_option_names=["-h", "--help"]))
 @click.argument(
     "task",
     type=click.STRING,
@@ -26,17 +28,17 @@ def indent(line):
     nargs=1,
     type=click.Path(),
 )
-@click.option("--list", "-l", "_list", default=False, is_flag=True)
-@click.option("--debug", default=False, is_flag=True, hidden=True)
-@click.option("--shellcheck", default=False, is_flag=True, hidden=True)
 @click.option(
-    "--environ",
-    "-e",
-    nargs=2,
-    type=click.STRING,
-    multiple=True,
-    help="task environment variable (can be passed multiple times).",
+    "--list",
+    "-l",
+    "_list",
+    default=False,
+    is_flag=True,
+    help="Lists available tasks from Bashfile.",
 )
+@click.option("--debug", default=False, is_flag=True, hidden=True)
+@click.option("--shellcheck", default=False, is_flag=True, hidden=False)
+@click.option("--whitelist", default=False, nargs=1, hidden=False)
 @click.option("--yes", is_flag=True, help="Set prompts to yes.")
 @click.option(
     "--fail",
@@ -52,14 +54,14 @@ def indent(line):
     type=click.BOOL,
     help="Ignore parent shell's environment variables.",
 )
-@click.option(
-    "--arg",
-    "-a",
-    nargs=1,
+@click.argument(
+    "arguments",
+    nargs=-1,
     type=click.STRING,
-    multiple=True,
-    help="task ARGV arguments (can be passed multiple times).",
+    # multiple=True,
+    # help="task ARGV argument (can be passed multiple times).",
 )
+@click.option("--no-color", is_flag=True, type=click.BOOL, help="Disable colors.")
 @click.option("--quiet", "-q", is_flag=True, type=click.BOOL, help="Reduce output.")
 @click.option(
     "--environ-json",
@@ -72,19 +74,30 @@ def task(
     *,
     task,
     bashfile,
-    arg,
+    arguments,
     _list,
-    environ,
     fail,
     environ_json,
     shellcheck,
     debug,
     quiet,
     secure,
+    no_color,
+    whitelist,
     yes,
 ):
     """bashf — Bashfile runner (the familiar Bash/Make hybrid)."""
+
     # Default to list behavior, when no task is provided.
+    if no_color:
+        crayons.DISABLE_COLOR = True
+
+    if whitelist:
+        if debug:
+            click.echo(f" + config: {config!r}")
+        if whitelist not in config["ENVIRON_WHITELIST"]:
+            config["ENVIRON_WHITELIST"].append(whitelist)
+            config.save()
 
     if task == "__LIST_ALL__":
         _list = True
@@ -100,14 +113,30 @@ def task(
     if environ_json:
         bashfile.add_environ_json(environ_json)
 
+    argv = []
+    environ = []
+
+    for i, argument in enumerate(arguments[:]):
+        if "=" in argument:
+            key, value = argument.split("=", 1)
+            environ.append((key, value))
+        else:
+            argv.append(argument)
+
+    if debug:
+        click.echo(f" + argv: {argv!r}")
+        click.echo(f" + environ: {environ!r}")
+
     for env in environ:
-        key, value = env[:]
+        key, value = env
         if debug:
             click.echo(
-                f"    Setting environ: {crayons.red(key)} {crayons.white('=')} {value}.",
+                f" + Setting environ: {crayons.red(key)} {crayons.white('=')} {value}.",
                 err=True,
             )
         bashfile.add_environ(key, value)
+
+    bashfile.add_args(*argv)
 
     if _list:
         for task in bashfile.tasks:
