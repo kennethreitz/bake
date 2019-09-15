@@ -38,7 +38,13 @@ def indent(line):
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--shellcheck", default=False, is_flag=True, hidden=False)
-@click.option("--whitelist", default=False, nargs=1, hidden=False)
+@click.option(
+    "--whitelist",
+    default=False,
+    nargs=1,
+    hidden=False,
+    help="Whitelist an environment variable for use with --secure (persists between runs).",
+)
 @click.option("--yes", is_flag=True, help="Set prompts to yes.")
 @click.option(
     "--fail",
@@ -48,10 +54,10 @@ def indent(line):
     help="Fail immediately, if any task fails.",
 )
 @click.option(
-    "--secure",
+    "--insecure",
     is_flag=True,
     type=click.BOOL,
-    help="Ignore parent shell's environment variables.",
+    help="Use parent shell's environment variables.",
 )
 @click.argument(
     "arguments",
@@ -80,7 +86,7 @@ def task(
     shellcheck,
     debug,
     silent,
-    secure,
+    insecure,
     no_color,
     whitelist,
     yes,
@@ -107,7 +113,7 @@ def task(
 
     bakefile = Bakefile.find(root=".", filename=bakefile)
 
-    if secure:
+    if not insecure:
         for key in bakefile.environ:
             if key not in SAFE_ENVIRONS:
                 del bakefile.environ[key]
@@ -158,9 +164,9 @@ def task(
         def execute_task(task, *, next_task=None, silent=False):
             if not silent:
                 click.echo(
-                    crayons.white(" · ")
+                    crayons.white(" + ")
                     + crayons.yellow(f"Executing {task}")
-                    + crayons.white(" · ")
+                    + crayons.white(":")
                 )
             return_code = task.execute(yes=yes, next_task=next_task, silent=silent)
 
@@ -180,7 +186,7 @@ def task(
 
         if not silent:
             click.echo(
-                crayons.white(" · ") + crayons.green("Done") + crayons.white(" · ")
+                crayons.white(" + ") + crayons.green("Done") + crayons.white(".")
             )
         sys.exit(0)
 

@@ -153,7 +153,7 @@ class TaskScript:
         if silent:
             script = shlex_quote(f"{tf} {args}")
         else:
-            script = shlex_quote(f"{tf} {args}")
+            script = shlex_quote(f"{tf} {args} 2>&1 | bake-indent")
         cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script} "
 
         if debug:

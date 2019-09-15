@@ -6,6 +6,8 @@ format:
 full-install: system-deps install
 install: node-deps python-deps
 
+env:
+    env
 
 argv-example:
     set -eux
