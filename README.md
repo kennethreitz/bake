@@ -12,16 +12,16 @@ Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
   bake — the familiar Bash/Make hybrid.
 
 Options:
-  -b, --bakefile PATH
+  -b, --bakefile PATH      Custom path to a Bakefile.
   -l, --list               Lists available tasks from Bakefile.
-  --shellcheck
-  --whitelist TEXT
-  --yes                    Set prompts to yes.
+  --whitelist TEXT         Whitelist an environment variable for
+                           use with --secure (persists between runs).
+  --yes                    Set medium–security prompts to yes.
   -x, --fail               Fail immediately, if any task fails.
-  --secure                 Ignore parent shell's environment variables.
+  --insecure               Use parent shell's environment variables.
   --no-color               Disable colors.
   -s, --silent             Reduce output.
-  -j, --environ-json TEXT  environment variables, in JSON format.
+  -j, --environ-json TEXT  Environment variables, in JSON format.
   -h, --help               Show this message and exit.
 ```
 

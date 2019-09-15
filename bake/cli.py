@@ -45,7 +45,7 @@ def indent(line):
     hidden=False,
     help="Whitelist an environment variable for use with --secure (persists between runs).",
 )
-@click.option("--yes", is_flag=True, help="Set prompts to yes.")
+@click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
 @click.option(
     "--fail",
     "-x",
