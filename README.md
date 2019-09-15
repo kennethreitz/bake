@@ -63,7 +63,8 @@ HELLO, you
 
 $ bake dangerous-example
 · Executing '@confirm:secure' ·
-   What is 10 times 2?:
+   What is 10 times 2?: 7
+· Aborted.
 ```
 
 ## Features
