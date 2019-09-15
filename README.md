@@ -100,4 +100,6 @@ $ bake dangerous-example
 
 Install `bake` via:
 
-    $ brew install kennethreitz/-/bake --HEAD
+```console
+$ brew install kennethreitz/-/bake --HEAD
+```
