@@ -58,6 +58,18 @@ system-deps:
 **Running the above `Bakefile`**:
 
 ```console
+$ bake
+ - format
+ - full-install
+ - install
+ - env
+ - argv-example
+ - dangerous-example
+ - python-deps
+ - node-deps
+ - system-deps
+
+
 $ bake --silent format
 All done! ✨ 🍰 ✨
 7 files left unchanged.
