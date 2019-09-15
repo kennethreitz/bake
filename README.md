@@ -42,6 +42,7 @@ $ bake --silent format
 All done! ✨ 🍰 ✨
 7 files left unchanged.
 
+
 $ bake install
  · Executing 'node-deps':
 yarn install v1.17.3
@@ -53,6 +54,7 @@ Installing dependencies from Pipfile.lock (2ee04c)…
   🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
  · Done.
 
+
 $ bake argv-example WHO=you 1 2 3
  · Executing 'argv-example':
 ++ echo 'HELLO, you'
@@ -60,6 +62,7 @@ HELLO, you
 ++ echo '[1,' 2, '3]'
 [1, 2, 3]
  · Done.
+
 
 $ bake dangerous-example
 · Executing '@confirm:secure' ·
