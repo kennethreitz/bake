@@ -49,7 +49,6 @@ def indent(line):
 )
 @click.option(
     "--secure",
-    "-s",
     is_flag=True,
     type=click.BOOL,
     help="Ignore parent shell's environment variables.",
@@ -62,7 +61,7 @@ def indent(line):
     # help="task ARGV argument (can be passed multiple times).",
 )
 @click.option("--no-color", is_flag=True, type=click.BOOL, help="Disable colors.")
-@click.option("--quiet", "-q", is_flag=True, type=click.BOOL, help="Reduce output.")
+@click.option("--silent", "-s", is_flag=True, type=click.BOOL, help="Reduce output.")
 @click.option(
     "--environ-json",
     "-j",
@@ -80,7 +79,7 @@ def task(
     environ_json,
     shellcheck,
     debug,
-    quiet,
+    silent,
     secure,
     no_color,
     whitelist,
@@ -150,14 +149,14 @@ def task(
             click.echo(crayons.red(f"Task {task} does not exist!"))
             sys.exit(1)
 
-        def execute_task(task, *, next_task=None):
-            if not quiet:
+        def execute_task(task, *, next_task=None, silent=False):
+            if not silent:
                 click.echo(
                     crayons.white(" · ")
                     + crayons.yellow(f"Executing {task}")
                     + crayons.white(" · ")
                 )
-            return_code = task.execute(yes=yes, next_task=next_task)
+            return_code = task.execute(yes=yes, next_task=next_task, silent=silent)
 
             if fail:
                 if not return_code == 0:
@@ -171,9 +170,12 @@ def task(
             except IndexError:
                 next_task = None
 
-            execute_task(task, next_task=next_task)
+            execute_task(task, next_task=next_task, silent=silent)
 
-        click.echo(crayons.white(" · ") + crayons.green("Done") + crayons.white(" · "))
+        if not silent:
+            click.echo(
+                crayons.white(" · ") + crayons.green("Done") + crayons.white(" · ")
+            )
         sys.exit(0)
 
 

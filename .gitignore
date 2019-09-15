@@ -1,2 +1,3 @@
 .vscode/settings.json
 bake.egg-info/*
+**/__pycache__/**

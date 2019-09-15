@@ -71,7 +71,7 @@ class TaskFilter:
 
     def execute(self, yes=False, **kwargs):
         if self.name == "confirm":
-            self.execute_confirm(yes=yes, **self.args)
+            self.execute_confirm(yes=yes, **self.arguments)
 
 
 class TaskScript:
@@ -137,7 +137,7 @@ class TaskScript:
             if line.startswith(indent_style):
                 return line[len(indent_style) :]
 
-    def execute(self, *, blocking=False, debug=False, **kwargs):
+    def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
         from tempfile import mkstemp
         import stat
         from shlex import quote as shlex_quote
@@ -155,7 +155,10 @@ class TaskScript:
 
         args = [shlex_quote(a) for a in self.bashfile.args]
 
-        script = shlex_quote(f"unbuffer {tf} {args} 2>&1 | bashf-indent")
+        if silent:
+            script = shlex_quote(f"{tf} {args}")
+        else:
+            script = shlex_quote(f"{tf} {args}")
         cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script} "
 
         if debug:
