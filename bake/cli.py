@@ -17,14 +17,14 @@ def indent(line):
     "task",
     type=click.STRING,
     default="__LIST_ALL__",
-    envvar="BASHFILE_TASK",
+    envvar="BAKE_TASK",
     # required=False,
 )
 @click.option(
-    "--bashfile",
+    "--bakefile",
     "-b",
-    default="__BASHFILE__",
-    envvar="BASHFILE_PATH",
+    default="__BAKEFILE__",
+    envvar="BAKEFILE_PATH",
     nargs=1,
     type=click.Path(),
 )
@@ -34,7 +34,7 @@ def indent(line):
     "_list",
     default=False,
     is_flag=True,
-    help="Lists available tasks from Bashfile.",
+    help="Lists available tasks from Bakefile.",
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--shellcheck", default=False, is_flag=True, hidden=False)
@@ -72,7 +72,7 @@ def indent(line):
 def task(
     *,
     task,
-    bashfile,
+    bakefile,
     arguments,
     _list,
     fail,
@@ -102,15 +102,15 @@ def task(
         _list = True
         task = None
 
-    if bashfile == "__BASHFILE__":
-        bashfile = Bakefile.find(root=".")
+    if bakefile == "__BAKEFILE__":
+        bakefile = Bakefile.find(root=".")
     if secure:
-        for key in bashfile.environ:
+        for key in bakefile.environ:
             if key not in SAFE_ENVIRONS:
-                del bashfile.environ[key]
+                del bakefile.environ[key]
 
     if environ_json:
-        bashfile.add_environ_json(environ_json)
+        bakefile.add_environ_json(environ_json)
 
     argv = []
     environ = []
@@ -133,18 +133,18 @@ def task(
                 f" + Setting environ: {crayons.red(key)} {crayons.white('=')} {value}.",
                 err=True,
             )
-        bashfile.add_environ(key, value)
+        bakefile.add_environ(key, value)
 
-    bashfile.add_args(*argv)
+    bakefile.add_args(*argv)
 
     if _list:
-        for task in bashfile.tasks:
+        for task in bakefile.tasks:
             print(f" - {task}")
         sys.exit(0)
 
     if task:
         try:
-            task = bashfile[task]
+            task = bakefile[task]
         except KeyError:
             click.echo(crayons.red(f"Task {task} does not exist!"))
             sys.exit(1)
