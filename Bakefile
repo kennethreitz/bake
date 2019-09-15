@@ -1,27 +1,13 @@
-echo:
-    cat Bakefile
-format:
-    black .
-
-full-install: system-deps install
-install: node-deps python-deps
-
-env:
-    env
-
-argv-example:
-    set -eux
-    echo "HELLO, $WHO"
-    echo $@
-
-dangerous-example: @confirm:secure
-    rm -fr *
+full-install: system-install python-deps
 
 python-deps:
-    # Example of comments
     pipenv install
-node-deps:
-    yarn install
 
-system-deps:
-    brew install pipenv
+python-dev-deps:
+    pipenv install --dev
+
+system-install: @confirm
+    brew install python pipenv
+
+pypi-upload: python-dev-deps
+    pipenv run setup.py upload

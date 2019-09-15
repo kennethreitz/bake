@@ -5,7 +5,7 @@ import crayons
 from .bakefile import Bakefile
 from .config import config
 
-SAFE_ENVIRONS = ["HOME"]
+SAFE_ENVIRONS = ["HOME", "PATH"]
 
 
 def indent(line):
@@ -26,7 +26,8 @@ def indent(line):
     default="__BAKEFILE__",
     envvar="BAKEFILE_PATH",
     nargs=1,
-    type=click.Path(),
+    # TODO: click.Path()?
+    type=click.STRING,
 )
 @click.option(
     "--list",
@@ -48,8 +49,9 @@ def indent(line):
 )
 @click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
 @click.option(
-    "--fail",
-    "-x",
+    "--continue",
+    "-c",
+    "_continue",
     is_flag=True,
     type=click.BOOL,
     help="Fail immediately, if any task fails.",
@@ -82,7 +84,7 @@ def task(
     bakefile,
     arguments,
     _list,
-    fail,
+    _continue,
     environ_json,
     shellcheck,
     debug,
@@ -105,9 +107,9 @@ def task(
         task = None
 
     if bakefile == "__BAKEFILE__":
-        bakefile = "Bakefile"
-
-    bakefile = Bakefile.find(root=".", filename=bakefile)
+        bakefile = Bakefile.find(root=".", filename="Bakefile")
+    else:
+        bakefile = Bakefile(path=bakefile)
 
     if not insecure:
         for key in bakefile.environ:
@@ -166,7 +168,7 @@ def task(
                 )
             return_code = task.execute(yes=yes, next_task=next_task, silent=silent)
 
-            if fail:
+            if not _continue:
                 if not return_code == 0:
                     click.echo(f"Task {task} failed!")
                     sys.exit(return_code)

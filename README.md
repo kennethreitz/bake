@@ -37,7 +37,7 @@ format:
     black .
 
 argv-example:
-    set -eux
+    set -euxe
     echo "HELLO, $WHO"
     echo $@
 

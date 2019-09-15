@@ -1,0 +1,2 @@
+kinda-dangerous: @confirm
+really-dangerous: @confirm:secure

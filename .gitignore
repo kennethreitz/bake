@@ -1,3 +1,4 @@
 .vscode/settings.json
 bake.egg-info/*
 **/__pycache__/**
+.DS_Store

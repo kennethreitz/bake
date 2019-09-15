@@ -1,0 +1,14 @@
+test1: test2 test3
+    source ./
+test2: test3
+    echo '2'
+test3:
+    echo '3'
+
+
+echo:
+    echo 'hi, kenneth!'
+
+needs-echo: echo
+
+needs-needs: needs-echo
