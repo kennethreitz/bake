@@ -5,7 +5,7 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 
 **WORK IN PROGRESS**
 
-```shell
+```text
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
