@@ -5,6 +5,26 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 
 **WORK IN PROGRESS**
 
+```shell
+$ bake -h
+Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
+
+  bake — the familiar Bash/Make hybrid.
+
+Options:
+  -b, --bakefile PATH
+  -l, --list               Lists available tasks from Bakefile.
+  --shellcheck
+  --whitelist TEXT
+  --yes                    Set prompts to yes.
+  -x, --fail               Fail immediately, if any task fails.
+  --secure                 Ignore parent shell's environment variables.
+  --no-color               Disable colors.
+  -s, --silent             Reduce output.
+  -j, --environ-json TEXT  environment variables, in JSON format.
+  -h, --help               Show this message and exit.
+```
+
 ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
 
