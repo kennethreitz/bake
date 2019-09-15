@@ -1,3 +1,2 @@
 .vscode/settings.json
-bashf.egg-info/*
-bashfile.egg-info/*
+bake.egg-info/*
