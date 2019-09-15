@@ -19,6 +19,15 @@ format:
 full-install: system-deps install
 install: node-deps python-deps
 
+
+argv-example:
+    set -eux
+    echo "HELLO, $WHO"
+    echo $@
+
+dangerous-example: @confirm:secure
+    rm -fr *
+
 python-deps:
     # Example of comments
     pipenv install
