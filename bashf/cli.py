@@ -3,6 +3,8 @@ import click
 import crayons
 from .bashfile import Bashfile
 
+SAFE_ENVIRONS = ["HOME"]
+
 
 def indent(line):
     return f'{" " * 4}{line}'
@@ -35,12 +37,20 @@ def indent(line):
     multiple=True,
     help="task environment variable (can be passed multiple times).",
 )
+@click.option("--yes", is_flag=True, help="Set prompts to yes.")
 @click.option(
     "--fail",
     "-x",
     is_flag=True,
     type=click.BOOL,
     help="Fail immediately, if any task fails.",
+)
+@click.option(
+    "--secure",
+    "-s",
+    is_flag=True,
+    type=click.BOOL,
+    help="Ignore parent shell's environment variables.",
 )
 @click.option(
     "--arg",
@@ -59,7 +69,19 @@ def indent(line):
     help="environment variables, in JSON format.",
 )
 def task(
-    *, task, bashfile, arg, _list, environ, fail, environ_json, shellcheck, debug, quiet
+    *,
+    task,
+    bashfile,
+    arg,
+    _list,
+    environ,
+    fail,
+    environ_json,
+    shellcheck,
+    debug,
+    quiet,
+    secure,
+    yes,
 ):
     """bashf — Bashfile runner (the familiar Bash/Make hybrid)."""
     # Default to list behavior, when no task is provided.
@@ -70,6 +92,10 @@ def task(
 
     if bashfile == "__BASHFILE__":
         bashfile = Bashfile.find(root=".")
+    if secure:
+        for key in bashfile.environ:
+            if key not in SAFE_ENVIRONS:
+                del bashfile.environ[key]
 
     if environ_json:
         bashfile.add_environ_json(environ_json)
@@ -92,27 +118,33 @@ def task(
         try:
             task = bashfile[task]
         except KeyError:
-            click.echo(crayons.red(f"Task {task!r} does not exist!"))
+            click.echo(crayons.red(f"Task {task} does not exist!"))
             sys.exit(1)
 
-        def execute_task(task):
+        def execute_task(task, *, next_task=None):
             if not quiet:
                 click.echo(
                     crayons.white(" · ")
-                    + crayons.yellow(f"Executing task {task.name!r}")
-                    + crayons.white("…")
+                    + crayons.yellow(f"Executing {task}")
+                    + crayons.white(" · ")
                 )
-            return_code = task.execute()
+            return_code = task.execute(yes=yes, next_task=next_task)
 
             if fail:
                 if not return_code == 0:
-                    click.echo(f"Task {task.name!r} failed!")
+                    click.echo(f"Task {task} failed!")
                     sys.exit(return_code)
 
-        for task in task.depends_on(recursive=True) + [task]:
-            execute_task(task)
+        tasks = task.depends_on(recursive=True) + [task]
+        for task in tasks:
+            try:
+                next_task = tasks[tasks.index(task) + 1]
+            except IndexError:
+                next_task = None
 
-        click.echo(crayons.white(" · ") + crayons.green("Done") + crayons.white("!"))
+            execute_task(task, next_task=next_task)
+
+        click.echo(crayons.white(" · ") + crayons.green("Done") + crayons.white(" · "))
         sys.exit(0)
 
 

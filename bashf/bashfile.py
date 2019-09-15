@@ -1,5 +1,9 @@
+import sys
 import os
 import json
+from random import randint
+
+import click
 
 from .bash import Bash
 
@@ -14,13 +18,60 @@ class TaskNotInBashfile(ValueError):
     pass
 
 
-class FlagNotAvailable(ValueError):
+class FilterNotAvailable(ValueError):
     pass
 
 
-class Flag:
-    def __init__(self, name):
-        self.name = name
+class TaskFilter:
+    def __init__(self, s):
+        self.source = s
+
+    def __str__(self):
+        return f"{self.source!r}"
+
+    @property
+    def name(self):
+        return self.source.split(":", 1)[0][len("@") :]
+
+    @property
+    def args(self):
+        args = {}
+
+        try:
+
+            for arg in self.source.split(":", 1)[1].split(":"):
+                split = arg.split("=", 1)
+
+                key = split[0]
+                value = split[1] if len(split) == 2 else True
+
+                args[key] = value
+        except IndexError:
+            pass
+
+        return args
+
+    def depends_on(self, **kwargs):
+        return []
+
+    @staticmethod
+    def execute_confirm(*, prompt=False, yes=False, secure=False, **kwargs):
+        if not yes:
+            if secure:
+                int1 = randint(0, 12)
+                int2 = randint(0, 12)
+
+                user_value = click.prompt(f"   What is {int1} times {int2}?")
+
+                if int(user_value) != int1 * int2:
+                    sys.exit(1)
+
+            else:
+                click.confirm("   Do you want to continue?", abort=True)
+
+    def execute(self, yes=False, **kwargs):
+        if self.name == "confirm":
+            self.execute_confirm(yes=yes, **self.args)
 
 
 class TaskScript:
@@ -34,6 +85,9 @@ class TaskScript:
     def __repr__(self):
         return f"<TaskScript name={self.name!r} depends_on={self.depends_on(recursive=True)!r}>"
 
+    def __str__(self):
+        return f"{self.name!r}"
+
     @property
     def declaration_line(self):
         for line in self.bashfile.source_lines:
@@ -41,21 +95,36 @@ class TaskScript:
                 return line
 
     def depends_on(self, *, reverse=False, recursive=False):
-        def gen_tasks():
-            task_names = self.declaration_line.split(":")[1].split()
-            task_indexes = [self.bashfile.find_chunk(task_name=n) for n in task_names]
-            for i in task_indexes:
-                yield TaskScript(bashfile=self.bashfile, chunk_index=i)
+        def gen_actions():
+            task_strings = self.declaration_line.split(":", 1)[1].split()
+            # Filter out filters.
+            # filters = [t for t in task_names if t.startswith("@")]
 
-        tasks = [t for t in gen_tasks()]
+            # for filter in filters:
+            # del task_names[task_names.index(filter)]
+
+            task_name_index_tuples = [
+                (self.bashfile.find_chunk(task_name=s), s) for s in task_strings
+            ]
+
+            for i, task_string in task_name_index_tuples:
+
+                if i is None:
+                    # Create the filter.
+                    yield TaskFilter(task_string)
+                else:
+                    # Otherwise, create the task.
+                    yield TaskScript(bashfile=self.bashfile, chunk_index=i)
+
+        actions = [t for t in gen_actions()]
 
         if recursive:
-            for i, task in enumerate(tasks[:]):
+            for i, task in enumerate(actions[:]):
                 for t in reversed(task.depends_on()):
-                    if t.name not in [task.name for task in tasks]:
-                        tasks.insert(i + 1, t)
+                    if t.name not in [task.name for task in actions]:
+                        actions.insert(i + 1, t)
 
-        return tasks
+        return actions
 
     @classmethod
     def _from_chunk_index(Class, bashfile, *, i):
@@ -68,7 +137,7 @@ class TaskScript:
             if line.startswith(indent_style):
                 return line[len(indent_style) :]
 
-    def execute(self, blocking=False):
+    def execute(self, *, blocking=False, **kwargs):
         bash = Bash(environ=self.bashfile.environ)
         return bash.command(self.source, blocking=False)
 
@@ -100,7 +169,7 @@ class TaskScript:
 class Bashfile:
     def __init__(self, *, path):
         self.path = path
-        self.environ = {}
+        self.environ = os.environ
         self._chunks = []
 
         if not os.path.exists(path):
