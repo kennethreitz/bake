@@ -7,22 +7,22 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 To be improved:
 
 ```make
-    echo:
-        cat Bashfile
-    format:
-        black .
+echo:
+    cat Bashfile
+format:
+    black .
 
-    full-install: system-deps python-deps
-    install: node-deps python-deps
+full-install: system-deps python-deps
+install: node-deps python-deps
 
-    python-deps:
-        # Example of comments
-        pipenv install
-    node-deps:
-        yarn install
+python-deps:
+    # Example of comments
+    pipenv install
+node-deps:
+    yarn install
 
-    system-deps:
-        brew install pipenv
+system-deps:
+    brew install pipenv
 ```
 
 Unlike `Makefile`s, either tabs or 4 spaces can be used.
