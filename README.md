@@ -12,7 +12,7 @@ echo:
 format:
     black .
 
-full-install: system-deps python-deps
+full-install: system-deps install
 install: node-deps python-deps
 
 python-deps:
