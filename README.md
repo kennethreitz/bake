@@ -1,5 +1,5 @@
 <p align="center">
-<h1>☿ <pre>bake<pre>the <em>strangely familiar</em> task runner.</h1>
+<h1>☿ <pre>$ bake<pre>the <em>strangely familiar</em> task runner.</h1>
 </p>
 
 <p align="center">
