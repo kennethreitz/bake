@@ -43,12 +43,15 @@ install: node-deps python-deps
 format:
     black .
 
-python-argv:
+python-example:
     #!/usr/bin/env python
-    from sys import argv
+    import os
+    import sys
+
+    print(os.environ['KEY'])
     print(argv[1:])
 
-bash-vars:
+bash-example:
     set -euxe
     echo "HELLO, $WHO"
     echo $@
@@ -70,8 +73,8 @@ dangerous-example: @confirm:secure
 
 ```console
  - format
- - python-argv
- - bash-vars
+ - python-example
+ - bash-example
  - full-install
  - install
  - argv-example
@@ -105,10 +108,11 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 ```
 
 
-### `$ bake python-argv 1 2 3`
+### `$ bake python-example KEY=VALUE 1 2 3`
 
 ```console
  + Executing 'python-argv':
+   VALUE
    ['1', '2', '3']
  + Done.
  ```
