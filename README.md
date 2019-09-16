@@ -30,6 +30,8 @@ Options:
   -h, --help               Show this message and exit.
 ```
 
+----------------
+
 ### Features 'n Things
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
