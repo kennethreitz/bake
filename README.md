@@ -44,7 +44,7 @@ format:
 python-argv:
     #!/usr/bin/env python
     from sys import argv
-    print(sys.argv)
+    print(argv)
 
 bash-vars:
     set -euxe
