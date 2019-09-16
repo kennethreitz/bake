@@ -1,6 +1,16 @@
-- name: Publish Bake on PyPI
-  if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-  uses: pypa/gh-action-pypi-publish@master
-  with:
-    user: __token__
-    password: ${{ secrets.pypi_password }}
+name: Bake PyPI Distribution™
+
+on: [push]
+if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+
+jobs:
+  build:
+    runs-on: latest-ubuntu
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Upload to PyPI
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
