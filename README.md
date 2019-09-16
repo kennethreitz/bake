@@ -51,6 +51,13 @@ install: node-deps python-deps
 format:
     black .
 
+python-deps:
+    pipenv install
+node-deps:
+    yarn install
+system-deps: @confirm
+    brew install pipenv
+    
 python-example:
     #!/usr/bin/env python
     import os
@@ -59,22 +66,9 @@ python-example:
     print(os.environ['KEY'])
     print(sys.argv[1:])
 
-bash-example:
-    set -euxe
-    echo "$KEY"
-    echo $@
-
-
-python-deps:
-    pipenv install
-node-deps:
-    yarn install
-
-system-deps: @confirm
-    brew install pipenv
-
 dangerous-example: @confirm:secure
-    rm -fr *
+    # Pretend it's deploying to production :P
+    rm -fr /
 ```
 
 
