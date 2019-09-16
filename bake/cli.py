@@ -2,7 +2,7 @@ import sys
 import click
 import json
 
-from .bakefile import Bakefile
+from .bakefile import Bakefile, NoBakefileFound
 from .clint import eng_join
 
 import pygments
@@ -23,6 +23,49 @@ SAFE_ENVIRONS = [
 
 def indent(line):
     return f'{" " * 4}{line}'
+
+
+def do_help():
+    with click.Context(entrypoint) as ctx:
+        help = entrypoint.get_help(ctx)
+        help = help.replace(
+            "  bake",
+            str(click.style(" $ ", fg="green", bold=True))
+            + str(click.style("bake", fg="yellow", bold=True)),
+        )
+        help = help.replace(
+            "the strangely familiar task–runner",
+            str(
+                click.style("the strangely familiar task–runner", fg="white", bold=True)
+            ),
+        )
+        help = help.replace(
+            "Options", str(click.style("Options", fg="white", bold=True))
+        )
+
+        help = help.replace(
+            "--insecure", str(click.style("--insecure", fg="red", bold=True))
+        )
+        help = help.replace("--yes", str(click.style("--yes", fg="red", bold=True)))
+        help = help.replace(
+            "--allow", str(click.style("--allow", fg="green", bold=True))
+        )
+        help = help.replace(
+            "--no-deps", str(click.style("--no-deps", fg="yellow", bold=True))
+        )
+        help = help.replace(
+            "--continue", str(click.style("--continue", fg="red", bold=True))
+        )
+        help = help.replace(
+            "--environ-json", str(click.style("--environ-json", fg="green", bold=True))
+        )
+        help = help.replace("-e,", str(click.style("-e", fg="green", bold=True) + ","))
+        help = help.replace(
+            "--shellcheck", str(click.style("--shellcheck", fg="magenta", bold=True))
+        )
+
+        click.echo(help, err=True)
+        sys.exit(0)
 
 
 def echo_json(obj):
@@ -62,10 +105,19 @@ def echo_json(obj):
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
+    "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
+)
+@click.option(
     "--skip-done", default=False, is_flag=True, hidden=True, envvar="BAKE_SKIP_DONE"
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
-@click.option("--shellcheck", default=False, is_flag=True, hidden=False)
+@click.option(
+    "--shellcheck",
+    default=False,
+    is_flag=True,
+    hidden=False,
+    help="Run shellcheck on Bakefile.",
+)
 @click.option(
     "--allow",
     default=False,
@@ -74,11 +126,16 @@ def echo_json(obj):
     hidden=False,
     help="Whitelist an environment variable for use.",
 )
-@click.option("--no-deps", default=False, is_flag=True, hidden=False)
+@click.option(
+    "--no-deps",
+    default=False,
+    is_flag=True,
+    hidden=False,
+    help="Do not run dependent tasks.",
+)
 @click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
 @click.option(
     "--continue",
-    "-c",
     "_continue",
     is_flag=True,
     type=click.BOOL,
@@ -130,8 +187,12 @@ def entrypoint(
     skip_done,
     no_deps,
     yes,
+    help,
 ):
     """bake — the strangely familiar task–runner."""
+
+    if help:
+        do_help
 
     # Default to list behavior, when no task is provided.
     if _json:
@@ -143,10 +204,14 @@ def entrypoint(
         _list = True
         task = None
 
-    if bakefile == "__BAKEFILE__":
-        bakefile = Bakefile.find(root=".", filename="Bakefile")
-    else:
-        bakefile = Bakefile(path=bakefile)
+    try:
+        if bakefile == "__BAKEFILE__":
+            bakefile = Bakefile.find(root=".", filename="Bakefile")
+        else:
+            bakefile = Bakefile(path=bakefile)
+    except NoBakefileFound:
+        click.echo(click.style("No Bakefile found!", fg="red"), err=True)
+        do_help()
 
     if not insecure:
         for key in bakefile.environ:
