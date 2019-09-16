@@ -134,9 +134,9 @@ Aborted.
 
 ## Advanced Usage Sample
 
+![advanced screenshot](https://github.com/kennethreitz/bake/blob/master/ext/screenshot.png?raw=true)
 
-
-
+Fancy, eh?
 
 ## Simple Installation of `bake` (**MacOS**):
 
