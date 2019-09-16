@@ -48,9 +48,8 @@ argv-example:
     echo "HELLO, $WHO"
     echo $@
 
+# This will make you do a simple math question before proceeding.
 dangerous-example: @confirm:secure
-    # This will make you do a
-    # simple math question before proceeding.
     rm -fr *
 
 python-deps:
