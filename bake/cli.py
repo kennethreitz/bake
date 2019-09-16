@@ -52,7 +52,7 @@ def echo_json(obj):
     "_list",
     default=False,
     is_flag=True,
-    help="Lists available tasks from Bakefile.",
+    help="Lists available tasks (and their dependencies).",
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--shellcheck", default=False, is_flag=True, hidden=False)
@@ -71,7 +71,7 @@ def echo_json(obj):
     "_continue",
     is_flag=True,
     type=click.BOOL,
-    help="Fail immediately, if any task fails.",
+    help="Continue, if a task fails.",
 )
 @click.option(
     "--insecure",
