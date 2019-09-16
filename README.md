@@ -62,7 +62,7 @@ system-deps:
     brew install pipenv
 ```
 
-## `$ bake`
+### `$ bake --list`
 
 ```console
  - format
@@ -77,7 +77,7 @@ system-deps:
 ```
 
 
-## `$ bake --silent format`
+### `$ bake --silent format`
 
 ```console
 All done! ✨ 🍰 ✨
@@ -85,7 +85,7 @@ All done! ✨ 🍰 ✨
 ```
 
 
-## `$ bake install`
+### `$ bake install`
 
 ```console
  · Executing 'node-deps':
@@ -100,7 +100,7 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 ```
 
 
-## `$ bake argv-example WHO=you 1 2 3`
+### `$ bake argv-example WHO=you 1 2 3`
 
 ```console
 · Executing 'argv-example':
@@ -111,7 +111,7 @@ HELLO, you
  · Done.
 ```
 
-## `$ bake dangerous-example`
+### `$ bake dangerous-example`
 
 ```console
 · Executing '@confirm:secure' ·
