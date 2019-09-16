@@ -1,10 +1,9 @@
 
 <span align="center">
-
-    <pre>
-        <code>$ bake</code><em>, n</em>:
-        <span>the strangely familiar task runner.</span>
-    </pre>  
+<pre>
+    <code>$ bake</code><em>, n</em>:
+    <span>the strangely familiar task runner.</span>
+</pre>  
 </span>
 
 --------------------
