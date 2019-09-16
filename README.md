@@ -41,6 +41,14 @@ Options:
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 - See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
+------------------
+
+## Installation of `bake`:
+
+```console
+$ pip install bake-cli
+```
+
 ---------------
 
 ## `$ cat Bakefile`
@@ -109,12 +117,6 @@ Aborted.
 ![advanced screenshot](https://github.com/kennethreitz/bake/blob/master/ext/screenshot.png?raw=true)
 
 Fancy, eh?
-
-## Simple Installation of `bake`:
-
-```console
-$ pip install bake-cli
-```
 
 <!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
 
