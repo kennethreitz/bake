@@ -276,7 +276,7 @@ def entrypoint(
             return_code = task.execute(yes=yes, debug=debug, silent=silent)
 
             if not _continue:
-                if not return_code == 0:
+                if (not return_code == 0) and (return_code is not None):
                     click.echo(click.style(f"Task {task} failed!", fg="red"), err=True)
                     sys.exit(return_code)
 

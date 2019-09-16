@@ -67,18 +67,18 @@ class TaskFilter(BaseAction):
 
     @staticmethod
     def execute_confirm(*, prompt=False, yes=False, secure=False, **kwargs):
-        if not yes:
-            if secure:
-                int1 = randint(0, 12)
-                int2 = randint(0, 12)
+        if secure:
+            int1 = randint(1, 12)
+            int2 = randint(1, 12)
 
-                user_value = click.prompt(f"   What is {int1} times {int2}?")
+            user_value = click.prompt(f"   What is {int1}×{int2}?")
 
-                if int(user_value) != int1 * int2:
-                    click.echo("Aborted!", err=True)
-                    sys.exit(1)
+            if int(user_value) != (int1 * int2):
+                click.echo("Aborted!", err=True)
+                sys.exit(1)
 
-            else:
+        else:
+            if not yes:
                 click.confirm("   Do you want to continue?", abort=True)
 
     def execute(self, yes=False, **kwargs):
