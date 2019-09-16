@@ -130,5 +130,5 @@ This repository has been brought to you, with much joy, by <a href="https://kenn
 
 <p align="center">
     <em>As above, so below.</em>
-    <h1>☿</h1>
+    <h1 align="center">☿</h1>
 </p>
