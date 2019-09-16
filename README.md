@@ -44,7 +44,7 @@ format:
 python-argv:
     #!/usr/bin/env python
     from sys import argv
-    print(argv)
+    print(argv[1:])
 
 bash-vars:
     set -euxe
@@ -103,16 +103,13 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 ```
 
 
-### `$ bake argv-example WHO=you 1 2 3`
+### `$ bake python-argv 1 2 3`
 
 ```console
- + Executing 'argv-example':
-++ echo 'HELLO, you'
-HELLO, you
-++ echo '[1,' 2, '3]'
-[1, 2, 3]
+ + Executing 'python-argv':
+   ['1', '2', '3']
  + Done.
-```
+ ```
 
 ### `$ bake dangerous-example`
 
