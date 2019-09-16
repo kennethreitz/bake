@@ -19,7 +19,7 @@ Options:
   -c, --continue           Fail immediately, if any task fails.
   --insecure               Use parent shell's environment variables.
   -s, --silent             Reduce output.
-  -e, --environ-json TEXT  environment variables, in JSON format.
+  -e, --environ-json TEXT  Environment variables, in JSON format.
   -j, --json               Output in JSON format (stdout).
   -h, --help               Show this message and exit.
 ```
