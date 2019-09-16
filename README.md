@@ -119,10 +119,12 @@ HELLO, you
 
 ## Simple Installation of `bake` (**MacOS**):
 
-![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
-
 Coming soon!
 
 ```console
 $ brew install kennethreitz/-/bake --HEAD
 ```
+
+--------------------
+
+![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
