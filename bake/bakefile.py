@@ -6,6 +6,7 @@ from random import randint
 from shlex import quote as shlex_quote
 from tempfile import mkstemp
 
+import bashlex
 import delegator
 import click
 
@@ -102,9 +103,7 @@ class TaskScript(BaseAction):
 
     @property
     def declaration_line(self):
-        for line in self.bashfile.source_lines:
-            if line.startswith(self.name):
-                return line
+        return self.chunk[0]
 
     def depends_on(self, *, reverse=False, recursive=False):
         def gen_actions():
@@ -146,11 +145,24 @@ class TaskScript(BaseAction):
 
         return line
 
-    def temp_source(self):
+    def prepare_init(self, sources=None, insert_source=None):
+
         tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
 
+        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
+        with open(stdlib_path, "r") as f:
+            stdlib = f.read()
+
+        # sources = (stdlib, self.bashfile.root_source, self.source)
+        if sources is None:
+            sources = (stdlib, self.bashfile.root_source)
+
         with open(tf, "w") as f:
-            f.write(self.source)
+            if insert_source:
+                f.write(f"#!/usr/bin/env bash\nsource {insert_source}\n")
+            for source in sources:
+                f.write(source)
+                f.write("\n\n")
 
         # Mark the temporary file as executable.
         st = os.stat(tf)
@@ -160,29 +172,22 @@ class TaskScript(BaseAction):
 
     def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
 
-        tf = self.temp_source()
+        init_tf = self.prepare_init()
+        script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
 
-        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
+        args = " ".join([shlex_quote(a) for a in self.bashfile.args])
+        script = (
+            f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} | bake-indent"
+        )
+        cmd = f"bash -c {shlex_quote(script)} {args}"
 
-        args = [shlex_quote(a) for a in self.bashfile.args]
+        c = os.system(cmd)
 
-        if silent:
-            script = shlex_quote(f"{tf} {args}")
-        else:
-            script = shlex_quote(f"{tf} {args} 2>&1 | bake-indent")
-        cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script}"
+        if not debug:
+            os.remove(script_tf)
+            os.remove(init_tf)
 
-        original_dir = os.curdir[:]
-        os.chdir(self.bashfile.home)
-        return_code = os.system(cmd)
-        os.chdir(original_dir)
-
-        if debug:
-            click.echo(f"$ {cmd}", err=True)
-        else:
-            os.remove(tf)
-
-        return return_code
+        return c
 
     def shellcheck(self, *, silent=False, debug=False, **kwargs):
         tf = self.temp_source()
@@ -326,7 +331,26 @@ class Bakefile:
 
     @staticmethod
     def _is_declaration_line(line):
-        return not (line.startswith(" ") or line.startswith("\t"))
+        if ":" in line:
+            return not (
+                line.startswith(INDENT_STYLES[0]) or line.startswith(INDENT_STYLES[1])
+            )
+
+    @staticmethod
+    def _is_shebang_line(line):
+        return line.startswith("#!")
+
+    def _is_not_task_line(line):
+        if self._is_shebang_line(line):
+            return True
+
+    @staticmethod
+    def _is_comment_line(line):
+        return line.startswith("#")
+
+    @staticmethod
+    def _comment_line(line):
+        return f"# {line}"
 
     @property
     def tasks(self):
@@ -336,3 +360,23 @@ class Bakefile:
             tasks[script.name] = script
 
         return tasks
+
+    @property
+    def root_source_lines(self):
+        source_lines = []
+        task_active = False
+        for line in self.source_lines:
+            if line:
+                if self._is_declaration_line(line):
+                    task_active = True
+                else:
+                    if not task_active:
+                        source_lines.append(line)
+            else:
+                task_active = False
+
+        return source_lines
+
+    @property
+    def root_source(self):
+        return "\n".join(self.root_source_lines)

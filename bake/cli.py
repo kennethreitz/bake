@@ -260,7 +260,7 @@ def entrypoint(
 
             if not _continue:
                 if not return_code == 0:
-                    click.echo(f"Task {task} failed!", err=True)
+                    click.echo(click.style(f"Task {task} failed!", fg="red"), err=True)
                     sys.exit(return_code)
 
         tasks = task.depends_on(recursive=True) + [task]
