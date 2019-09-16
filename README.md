@@ -1,7 +1,7 @@
-# `bake`— a Bash task runner.
+# ☿ `bake`— a strangely familiar Bash task runner.
 
 
-I love using `Makefile`s for one-off tasks in projects. The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash sytnax. This project seeks to bridge these works.
+I love using `Makefile` for one-off tasks in projects. The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash syntax. This project seeks to bridge these works.
 
 **WORK IN PROGRESS**
 
@@ -12,23 +12,30 @@ Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
   bake — a strangely familiar Bash task–runner.
 
 Options:
-  -b, --bakefile TEXT
+  -b, --bakefile PATH      The Bakefile to use.
   -l, --list               Lists available tasks from Bakefile.
-  --shellcheck
   --allow TEXT             Whitelist an environment variable for use.
   --yes                    Set medium–security prompts to yes.
   -c, --continue           Fail immediately, if any task fails.
   --insecure               Use parent shell's environment variables.
   -s, --silent             Reduce output.
-  -e, --environ-json TEXT  environment variables, in JSON format.
+  -e, --environ-json TEXT  Environment variables, in JSON format.
   -j, --json               Output in JSON format (stdout).
   -h, --help               Show this message and exit.
 ```
 
-![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
+### Features 'n Things
+
+- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- Except, you can write real bash code!
+- Environment variables are explicitly passed or whitelisted (allowed), not inherinted from the parent shell.
+- Unlike `Makefile`, either tabs or 4 spaces can be used.
+- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
+
+<!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
 
 
-## Example `Bakefile`, for use with `bake`:
+## `$ cat Bakefile`
 
 ```make
 full-install: system-deps install
@@ -55,10 +62,9 @@ system-deps:
     brew install pipenv
 ```
 
-**Running the above `Bakefile`**:
+### `$ bake --list`
 
 ```console
-$ bake
  - format
  - full-install
  - install
@@ -68,14 +74,20 @@ $ bake
  - python-deps
  - node-deps
  - system-deps
+```
 
 
-$ bake --silent format
+### `$ bake --silent format`
+
+```console
 All done! ✨ 🍰 ✨
 7 files left unchanged.
+```
 
 
-$ bake install
+### `$ bake install`
+
+```console
  · Executing 'node-deps':
 yarn install v1.17.3
 [1/4] 🔍  Resolving packages...
@@ -85,32 +97,32 @@ success Already up-to-date.
 Installing dependencies from Pipfile.lock (2ee04c)…
   🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
  · Done.
+```
 
 
-$ bake argv-example WHO=you 1 2 3
- · Executing 'argv-example':
+### `$ bake argv-example WHO=you 1 2 3`
+
+```console
+· Executing 'argv-example':
 ++ echo 'HELLO, you'
 HELLO, you
 ++ echo '[1,' 2, '3]'
 [1, 2, 3]
  · Done.
+```
 
+### `$ bake dangerous-example`
 
-$ bake dangerous-example
+```console
 · Executing '@confirm:secure' ·
    What is 10 times 2?: 7
 · Aborted.
 ```
 
-## Features
 
-- a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- except, you can write real bash code!
-- Unlike `Makefile`, either tabs or 4 spaces can be used.
+## Simple Installation of `bake` (**MacOS**):
 
-## Installation
-
-Install `bake` via:
+Coming soon!
 
 ```console
 $ brew install kennethreitz/-/bake --HEAD
