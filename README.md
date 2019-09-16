@@ -4,7 +4,7 @@
 <span align="center">
 <pre>
     <code><strong>$</strong> bake</code><em>, n</em>:
-    <em>the str☿ngely familiar task runner.</em>
+    <em>the s☿rangely familiar task runner.</em>
 </pre>  
 </span>
 
