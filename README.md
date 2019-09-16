@@ -9,6 +9,7 @@ The problem with doing this is that you can't use familiar bash–isms when doin
 -----------------
 
 <p align="center">
+    <super>ANIMATED GIF</super>
 <img src="https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true" />
 </p>
 
