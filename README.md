@@ -60,7 +60,6 @@ node-deps:
 system-deps: @confirm
     brew install pipenv
 
-# This will make you do a simple math question before proceeding.
 dangerous-example: @confirm:secure
     rm -fr *
 ```
