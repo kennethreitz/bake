@@ -26,9 +26,11 @@ Options:
 
 ### Features 'n Things
 
-- a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- except, you can write real bash code!
+- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- Except, you can write real bash code!
+- Environment variables are explicitly passed or whitelisted (allowed), not inherinted from the parent shell.
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
+- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 
 ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
