@@ -77,29 +77,6 @@ dangerous-example: @confirm:secure
     rm -fr *
 ```
 
-### `$ bake --list`
-
-```console
- - format
- - python-example
- - bash-example
- - full-install
- - install
- - argv-example
- - python-deps
- - node-deps
- - system-deps
- - dangerous-example
-```
-
-
-### `$ bake --silent format`
-
-```console
-All done! ✨ 🍰 ✨
-7 files left unchanged.
-```
-
 
 ### `$ bake install`
 
