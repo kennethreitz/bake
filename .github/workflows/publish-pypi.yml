@@ -1,8 +1,6 @@
-- name: Publish Cake wheel+sdist distribution to PyPI
+- name: Publish Bake on PyPI
   if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
   uses: pypa/gh-action-pypi-publish@master
   with:
     user: __token__
     password: ${{ secrets.pypi_password }}
-
-  
