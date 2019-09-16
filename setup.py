@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = "bake"
+NAME = "bake-cli"
 DESCRIPTION = "The familar Make / Bash hybrid."
 URL = "https://github.com/kennethreitz/bake"
 EMAIL = "me@kennethreitz.org"
@@ -99,7 +99,6 @@ setup(
     author=AUTHOR,
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
-    version=VERSION,
     url=URL,
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     # If your package is a single module, use this instead of 'packages':

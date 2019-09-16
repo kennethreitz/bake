@@ -4,3 +4,5 @@ bake.egg-info/*
 .DS_Store
 .eggs
 build
+bake_cli.egg-info/*
+dist
