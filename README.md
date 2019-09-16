@@ -3,9 +3,9 @@
 
 I love using `Makefile` for one-off tasks in projects. The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash syntax. This project seeks to bridge these worlds.
 
-It is, thus far, successful in doing so.
-
 **WORK IN PROGRESS**
+
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
 ```console
 $ bake -h
@@ -15,13 +15,13 @@ Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
 Options:
   -b, --bakefile PATH      The Bakefile to use.
-  -l, --list               Lists available tasks from Bakefile.
+  -l, --list               Lists available tasks.
   --allow TEXT             Whitelist an environment variable for use.
   --yes                    Set medium–security prompts to yes.
-  -c, --continue           Fail immediately, if any task fails.
-  --insecure               Use parent shell's environment variables.
+  -c, --continue           Continue, if a task fails.
+  --insecure               Inherit parent shell's environment variables.
   -s, --silent             Reduce output.
-  -e, --environ-json TEXT  Environment variables, in JSON format.
+  -e, --environ-json TEXT  Provide environment variables via JSON.
   -j, --json               Output in JSON format (stdout).
   -h, --help               Show this message and exit.
 ```
