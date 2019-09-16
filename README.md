@@ -41,11 +41,12 @@ install: node-deps python-deps
 format:
     black .
 
-inline-python-example:
+python-argv:
     #!/usr/bin/env python
-    print('hi')
+    from sys import argv
+    print(sys.argv)
 
-argv-example:
+bash-vars:
     set -euxe
     echo "HELLO, $WHO"
     echo $@
@@ -59,7 +60,7 @@ python-deps:
 node-deps:
     yarn install
 
-system-deps:
+system-deps: @confirm
     brew install pipenv
 ```
 
@@ -67,10 +68,10 @@ system-deps:
 
 ```console
  - format
- - inline-python-example
+ - python-argv
+ - bash-vars
  - full-install
  - install
- - env
  - argv-example
  - dangerous-example
  - python-deps
