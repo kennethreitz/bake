@@ -130,7 +130,11 @@ $ brew install kennethreitz/-/bake --HEAD
 ---------------------
 
 <p align="center">
-<em>This repository has been brought to you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a></em>.
+This repository has been brought to you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
 </p>
 
 ![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
+
+<p align="center">
+<em>As above, so below.
+</p>
