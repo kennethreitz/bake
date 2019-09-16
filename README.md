@@ -1,6 +1,6 @@
 # ☿ `bake`— the _strangely familiar_ task runner.
 
-![help image](https://github.com/kennethreitz/bake/blob/master/ext/ss.png?raw=true)
+![help image](https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true)
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
