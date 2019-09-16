@@ -43,8 +43,8 @@ def echo_json(obj):
     default="__BAKEFILE__",
     envvar="BAKEFILE_PATH",
     nargs=1,
-    # TODO: click.Path()?
-    type=click.STRING,
+    type=click.Path(),
+    help="The Bakefile to use.",
 )
 @click.option(
     "--list",
@@ -92,7 +92,7 @@ def echo_json(obj):
     "-e",
     nargs=1,
     type=click.STRING,
-    help="environment variables, in JSON format.",
+    help="Environment variables, in JSON format.",
 )
 @click.option(
     "--json",
