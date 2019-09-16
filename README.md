@@ -1,9 +1,9 @@
-![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
-
 
 <p align="center">
 <h1><pre><code>$ bake</code><em>, n</em>:<pre><em>the strangely familiar task runner</em>.</h1>
 </p>
+
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
