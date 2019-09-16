@@ -14,7 +14,6 @@ bake:indent() {
 # ---------------------
 # From: https://github.com/heroku/buildpack-stdlib/blob/master/stdlib.sh
 
-# Buildpack Steps.
 bake:step() {
     if [[ "$*" == "-" ]]; then
         read -r output
@@ -25,7 +24,6 @@ bake:step() {
     unset output
 }
 
-# Buildpack Error.
 bake:error() {
     if [[ "$*" == "-" ]]; then
         read -r output
@@ -35,7 +33,6 @@ bake:error() {
     echo -e "\\e[1m\\e[31m=!= $output\\e[0m"
 }
 
-# Buildpack Warning.
 bake:warn() {
     if [[ "$*" == "-" ]]; then
         read -r output
