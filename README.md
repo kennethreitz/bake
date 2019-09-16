@@ -9,6 +9,8 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
+-----------------
+
 ```console
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
