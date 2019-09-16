@@ -129,4 +129,4 @@ $ brew install kennethreitz/-/bake --HEAD
 
 ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
-<center>test</center>
+This repository, brought to you, with much joy, by [Kenneth Reitz](https://kennethreitz.org/).
