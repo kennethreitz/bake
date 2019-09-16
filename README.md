@@ -49,8 +49,7 @@ argv-example:
     echo $@
 
 dangerous-example: @confirm:secure
-    # This will make you do a
-    # simple math question before proceeding.
+    # This will make you do a simple math question before proceeding.
     rm -fr *
 
 python-deps:
