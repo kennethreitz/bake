@@ -265,7 +265,7 @@ def entrypoint(
 
         tasks = task.depends_on(recursive=True) + [task]
         for task in tasks:
-            execute_task(task, next_task=next_task, silent=silent)
+            execute_task(task, silent=silent)
 
         if not silent:
             click.echo(

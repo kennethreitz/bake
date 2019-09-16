@@ -192,7 +192,7 @@ class TaskScript(BaseAction):
 
     def _iter_source(self):
         try:
-            has_shebang = self.chunk[2].startswith("#!")
+            has_shebang = self._transform_line(self.chunk[1]).startswith("#!")
         except IndexError:
             has_shebang = False
 
