@@ -106,7 +106,7 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 ### `$ bake argv-example WHO=you 1 2 3`
 
 ```console
-+ Executing 'argv-example':
+ + Executing 'argv-example':
 ++ echo 'HELLO, you'
 HELLO, you
 ++ echo '[1,' 2, '3]'
