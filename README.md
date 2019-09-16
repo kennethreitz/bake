@@ -1,4 +1,4 @@
-# ☿ `bake`— a strangely familiar Bash task runner.
+# ☿ `bake`— a strangely familiar task runner.
 
 
 I love using `Makefile` for one-off tasks in projects. The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash syntax. This project seeks to bridge these worlds.
@@ -11,7 +11,7 @@ It is, thus far, successful in doing so.
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
-  bake — a strangely familiar Bash task–runner.
+  bake — a strangely familiar task–runner.
 
 Options:
   -b, --bakefile PATH      The Bakefile to use.
