@@ -119,7 +119,7 @@ HELLO, you
 ```console
 + Executing '@confirm:secure' ·
    What is 10 times 2?: 7
-· Aborted.
+Aborted.
 ```
 
 
