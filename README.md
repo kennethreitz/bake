@@ -100,7 +100,7 @@ success Already up-to-date.
  + Executing 'python-deps':
 Installing dependencies from Pipfile.lock (2ee04c)…
   🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
- · Done.
+ + Done.
 ```
 
 
