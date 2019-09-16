@@ -7,8 +7,6 @@ The problem with doing this is that you can't use familiar bash–isms when doin
 
 This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
-**WORK IN PROGRESS**
-
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
 ```console
@@ -132,7 +130,7 @@ Aborted.
 
 ## Simple Installation of `bake` (**MacOS**):
 
-Coming soon!
+**WORK IN PROGRESS**
 
 ```console
 $ brew install kennethreitz/-/bake --HEAD
