@@ -77,7 +77,7 @@ def echo_json(obj):
     "--insecure",
     is_flag=True,
     type=click.BOOL,
-    help="Use parent shell's environment variables.",
+    help="Inherit parent shell's environment variables.",
 )
 @click.argument(
     "arguments",
@@ -92,7 +92,7 @@ def echo_json(obj):
     "-e",
     nargs=1,
     type=click.STRING,
-    help="Environment variables, in JSON format.",
+    help="Provide environment variables via JSON.",
 )
 @click.option(
     "--json",

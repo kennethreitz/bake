@@ -172,7 +172,10 @@ class TaskScript(BaseAction):
             script = shlex_quote(f"{tf} {args} 2>&1 | bake-indent")
         cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script}"
 
+        original_dir = os.curdir[:]
+        os.chdir(self.bashfile.home)
         return_code = os.system(cmd)
+        os.chdir(original_dir)
 
         if debug:
             click.echo(f"$ {cmd}", err=True)
@@ -259,6 +262,10 @@ class Bakefile:
             if line:
                 if self._is_declaration_line(line):
                     yield (i, line.rstrip())
+
+    @property
+    def home(self):
+        return os.path.dirname(self.path)
 
     @property
     def chunks(self):
