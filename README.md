@@ -9,6 +9,8 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
+-----------------
+
 ```console
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
@@ -28,6 +30,8 @@ Options:
   -h, --help               Show this message and exit.
 ```
 
+----------------
+
 ### Features 'n Things
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
@@ -36,6 +40,7 @@ Options:
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 
+---------------
 
 ## `$ cat Bakefile`
 
