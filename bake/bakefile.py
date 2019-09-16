@@ -173,7 +173,10 @@ class TaskScript(BaseAction):
     def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
 
         init_tf = self.prepare_init()
-        script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
+        if self.bashfile._is_shebang_line(self.source_lines[0]):
+            script_tf = self.prepare_init(sources=[self.source])
+        else:
+            script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
         script = (
