@@ -120,7 +120,7 @@ HELLO, you
 ```
 
 
-## Simple Installation of `bake` (**MacOS**)
+## Simple Installation of `bake` (**MacOS**):
 
 Coming soon!
 
