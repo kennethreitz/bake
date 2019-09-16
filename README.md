@@ -7,6 +7,7 @@
     </pre>  
  </h1>
 </span>
+
 --------------------
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
