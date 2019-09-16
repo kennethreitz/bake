@@ -110,12 +110,10 @@ Aborted.
 
 Fancy, eh?
 
-## Simple Installation of `bake` (**MacOS**):
-
-**WORK IN PROGRESS**
+## Simple Installation of `bake`:
 
 ```console
-$ brew install kennethreitz/-/bake --HEAD
+$ pip install bake-cli
 ```
 
 <!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
