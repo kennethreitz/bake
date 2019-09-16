@@ -6,7 +6,6 @@ from random import randint
 from shlex import quote as shlex_quote
 from tempfile import mkstemp
 
-import bashlex
 import delegator
 import click
 
