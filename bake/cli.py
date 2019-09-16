@@ -9,12 +9,13 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
-
+SKIP_NEXT = False
 SAFE_ENVIRONS = [
     "HOME",
     "PATH",
     "LANG",
     "LOCALE",
+    "LANGUAGE",
     "TERM",
     "VIRTUAL_ENV",
     "BAKEFILE_PATH",
@@ -305,8 +306,6 @@ def entrypoint(
                         str(line).zfill(3), bg="black", fg="cyan", bold=True
                     )
                     colored_task = click.style(str(_task), fg="yellow", bold=True)
-                    print(locals())
-                    print(_task.source)
                     actual_line = _task.source_lines[line - 1]
 
                     click.echo(f"In {colored_task} line {line}:", err=True)
@@ -326,6 +325,7 @@ def entrypoint(
 
         sys.exit(max(__shellcheck_statuses))
     if task:
+
         try:
             task = bakefile[task]
         except KeyError:
@@ -333,19 +333,36 @@ def entrypoint(
             sys.exit(1)
 
         def execute_task(task, *, silent=False):
-            if not silent:
+            global SKIP_NEXT
+
+            if not SKIP_NEXT:
+                if not silent:
+                    click.echo(
+                        click.style(" + ", fg="white")
+                        + click.style(f"Executing {task}", fg="yellow")
+                        + click.style(":", fg="white"),
+                        err=True,
+                    )
+                return_code = task.execute(yes=yes, debug=debug, silent=silent)
+
+                if not _continue:
+                    if (not return_code == 0) and (not isinstance(return_code, tuple)):
+                        click.echo(
+                            click.style(f"Task {task} failed!", fg="red"), err=True
+                        )
+                        sys.exit(return_code)
+                    if isinstance(return_code, tuple):
+                        key, value = return_code
+                        if key == "skip" and value:
+                            SKIP_NEXT = True
+            else:
+                SKIP_NEXT = False
                 click.echo(
-                    click.style(" + ", fg="white")
-                    + click.style(f"Executing {task}", fg="yellow")
-                    + click.style(":", fg="white"),
+                    click.style(" + ", fg="green")
+                    + click.style(f"Skipping {task}", fg="white")
+                    + click.style(".", fg="white"),
                     err=True,
                 )
-            return_code = task.execute(yes=yes, debug=debug, silent=silent)
-
-            if not _continue:
-                if (not return_code == 0) and (return_code is not None):
-                    click.echo(click.style(f"Task {task} failed!", fg="red"), err=True)
-                    sys.exit(return_code)
 
         if not no_deps:
             tasks = task.depends_on(recursive=True) + [task]

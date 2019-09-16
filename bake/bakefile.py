@@ -2,6 +2,7 @@ import json
 import os
 import stat
 import sys
+from hashlib import sha256
 from random import randint
 from shlex import quote as shlex_quote
 from tempfile import mkstemp
@@ -94,9 +95,40 @@ class TaskFilter(BaseAction):
                 question = str(click.style("?", fg="green", bold=True))
                 click.confirm(f" {question} Do you want to continue?", abort=True)
 
+    @staticmethod
+    def execute_skip_if(*, key, cache=None, **kwargs):
+        if cache is None:
+            cache = f".git/bake-hash-{sha256(key.encode('utf-8')).hexdigest()}"
+
+        key_path = os.path.abspath(key)
+        cache_path = os.path.abspath(cache)
+        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+
+        if not os.path.exists(key_path):
+            return ("skip", False)
+
+        if os.path.exists(cache_path):
+            with open(cache_path, "r") as f:
+                old_hash = f.read().strip()
+        else:
+            old_hash = "NOPE"
+
+        with open(key_path, "r") as f:
+            current_hash = sha256(f.read().encode("utf-8")).hexdigest()
+
+        with open(cache_path, "w") as f:
+            f.write(current_hash)
+
+        if old_hash == current_hash:
+            return ("skip", True)
+
+        return ("skip", False)
+
     def execute(self, yes=False, **kwargs):
         if self.name == "confirm":
-            self.execute_confirm(yes=yes, **self.arguments)
+            return self.execute_confirm(yes=yes, **self.arguments)
+        elif self.name == "skip":
+            return self.execute_skip_if(yes=yes, **self.arguments)
 
 
 class TaskScript(BaseAction):
@@ -117,7 +149,7 @@ class TaskScript(BaseAction):
     def declaration_line(self):
         return self.chunk[0]
 
-    def depends_on(self, *, reverse=False, recursive=False):
+    def depends_on(self, *, recursive=False):
         def gen_actions():
             task_strings = self.declaration_line.split(":", 1)[1].split()
 
@@ -138,9 +170,9 @@ class TaskScript(BaseAction):
 
         if recursive:
             for i, task in enumerate(actions[:]):
-                for t in reversed(task.depends_on()):
+                for t in task.depends_on():
                     if t.name not in [task.name for task in actions]:
-                        actions.insert(i + 1, t)
+                        actions.insert(i - 1, t)
 
         return actions
 
@@ -196,6 +228,7 @@ class TaskScript(BaseAction):
             script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
+
         script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} 2>&1 | bake:indent"
         cmd = f"bash -c {shlex_quote(script)}"
 
