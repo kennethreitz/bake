@@ -21,4 +21,4 @@ jobs:
           sudo pipenv install --dev --system
       - name: Test with pytest
         run: |
-          pytest
+          sudo pytest
