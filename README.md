@@ -9,19 +9,19 @@ I love using `Makefile`s for one-off tasks in projects. The problem with doing t
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
-  bake — the familiar Bash/Make hybrid.
+  bake — a strangely familiar Bash task–runner.
 
 Options:
-  -b, --bakefile PATH      Custom path to a Bakefile.
+  -b, --bakefile TEXT
   -l, --list               Lists available tasks from Bakefile.
-  --whitelist TEXT         Whitelist an environment variable for
-                           use.
+  --shellcheck
+  --allow TEXT             Whitelist an environment variable for use.
   --yes                    Set medium–security prompts to yes.
-  -x, --fail               Fail immediately, if any task fails.
+  -c, --continue           Fail immediately, if any task fails.
   --insecure               Use parent shell's environment variables.
-  --no-color               Disable colors.
   -s, --silent             Reduce output.
-  -j, --environ-json TEXT  Environment variables, in JSON format.
+  -e, --environ-json TEXT  environment variables, in JSON format.
+  -j, --json               Output in JSON format (stdout).
   -h, --help               Show this message and exit.
 ```
 

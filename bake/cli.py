@@ -118,7 +118,7 @@ def entrypoint(
     _json,
     yes,
 ):
-    """bake — the familiar Bash/Make hybrid."""
+    """bake — a strangely familiar Bash task–runner."""
 
     # Default to list behavior, when no task is provided.
     if _json:
