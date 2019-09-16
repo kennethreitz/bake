@@ -51,17 +51,18 @@ bash-vars:
     echo "HELLO, $WHO"
     echo $@
 
-# This will make you do a simple math question before proceeding.
-dangerous-example: @confirm:secure
-    rm -fr *
 
 python-deps:
     pipenv install
 node-deps:
     yarn install
-
+    
 system-deps: @confirm
     brew install pipenv
+
+# This will make you do a simple math question before proceeding.
+dangerous-example: @confirm:secure
+    rm -fr *
 ```
 
 ### `$ bake --list`
@@ -73,10 +74,10 @@ system-deps: @confirm
  - full-install
  - install
  - argv-example
- - dangerous-example
  - python-deps
  - node-deps
  - system-deps
+ - dangerous-example
 ```
 
 
