@@ -120,9 +120,9 @@ HELLO, you
 ```
 
 
-## Installation
+## Simple Installation of `bake` (**MacOS**)
 
-Install `bake` via (soon):
+Coming soon!
 
 ```console
 $ brew install kennethreitz/-/bake --HEAD
