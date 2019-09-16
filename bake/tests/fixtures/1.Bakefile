@@ -2,9 +2,12 @@ test1: test2 test3
     source ./
 test2: test3
     echo '2'
-test3:
-    echo '3'
+test3: echo
+    echo 'hm'
 
+python:
+    #!/usr/bin/env python
+    print('wow!')
 
 echo:
     echo 'hi, kenneth!'

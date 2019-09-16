@@ -144,6 +144,8 @@ class TaskScript(BaseAction):
             if line.startswith(indent_style):
                 return line[len(indent_style) :]
 
+        return line
+
     def temp_source(self):
         tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
 
@@ -170,17 +172,27 @@ class TaskScript(BaseAction):
             script = shlex_quote(f"{tf} {args} 2>&1 | bake-indent")
         cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script}"
 
+        return_code = os.system(cmd)
+
         if debug:
             click.echo(f"$ {cmd}", err=True)
+        else:
+            os.remove(tf)
 
-        return os.system(cmd)
+        return return_code
 
     def shellcheck(self, *, silent=False, debug=False, **kwargs):
         tf = self.temp_source()
         cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
+
+        c = delegator.run(cmd)
+
         if debug:
             click.echo(f"$ {cmd}", err=True)
-        return delegator.run(cmd)
+        else:
+            os.remove(tf)
+
+        return c
 
     @property
     def name(self):
