@@ -1,7 +1,6 @@
 name: Bake PyPI Distribution™
 
 on: [push]
-if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
 
 jobs:
   build:
