@@ -32,7 +32,7 @@ Options:
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 
-![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
+<!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) 
 
 
 ## `$ cat Bakefile`
