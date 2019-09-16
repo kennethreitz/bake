@@ -27,7 +27,7 @@ Options:
 ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
 
-## Introducing `Bakefile`, for your next project:
+## `$ cat Bakefile`
 
 ```make
 full-install: system-deps install
