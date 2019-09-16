@@ -11,7 +11,15 @@ import pygments.lexers
 import pygments.formatters
 
 
-SAFE_ENVIRONS = ["HOME", "PATH", "LANG", "LOCALE", "TERM", "VIRTUAL_ENV"]
+SAFE_ENVIRONS = [
+    "HOME",
+    "PATH",
+    "LANG",
+    "LOCALE",
+    "TERM",
+    "VIRTUAL_ENV",
+    "BAKEFILE_PATH",
+]
 
 
 def indent(line):
@@ -54,6 +62,9 @@ def echo_json(obj):
     is_flag=True,
     help="Lists available tasks (and their dependencies).",
 )
+@click.option(
+    "--skip-done", default=False, is_flag=True, hidden=True, envvar="BAKE_SKIP_DONE"
+)
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--shellcheck", default=False, is_flag=True, hidden=False)
 @click.option(
@@ -64,6 +75,7 @@ def echo_json(obj):
     hidden=False,
     help="Whitelist an environment variable for use.",
 )
+@click.option("--no-deps", default=False, is_flag=True, hidden=False)
 @click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
 @click.option(
     "--continue",
@@ -116,6 +128,8 @@ def entrypoint(
     insecure,
     allow,
     _json,
+    skip_done,
+    no_deps,
     yes,
 ):
     """bake — the strangely familiar task–runner."""
@@ -176,6 +190,10 @@ def entrypoint(
 
         for _task in bakefile.tasks:
             depends_on = bakefile[_task].depends_on(recursive=True)
+
+            if no_deps:
+                depends_on = ()
+
             if depends_on:
                 deps = []
                 for dep in depends_on:
@@ -256,18 +274,22 @@ def entrypoint(
                     + click.style(":", fg="white"),
                     err=True,
                 )
-            return_code = task.execute(yes=yes, silent=silent)
+            return_code = task.execute(yes=yes, debug=debug, silent=silent)
 
             if not _continue:
                 if not return_code == 0:
                     click.echo(click.style(f"Task {task} failed!", fg="red"), err=True)
                     sys.exit(return_code)
 
-        tasks = task.depends_on(recursive=True) + [task]
+        if not no_deps:
+            tasks = task.depends_on(recursive=True) + [task]
+        else:
+            tasks = [task]
+
         for task in tasks:
             execute_task(task, silent=silent)
 
-        if not silent:
+        if not silent and not skip_done:
             click.echo(
                 click.style(" + ", fg="white")
                 + click.style("Done", fg="green")

@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
 if [ "$(uname)" == Darwin ]; then
-    bake-sed() { command sed -l "$@"; }
+    bake:sed() { command sed -l "$@"; }
 else
-    bake-sed() { command sed -u "$@"; }
+    bake:sed() { command sed -u "$@"; }
 fi
 
 # Syntax sugar.
-bake-indent() {
-    bake-sed "s/^/   /"
+bake:indent() {
+    bake:sed "s/^/   /"
 }
 
 # ---------------------
 # From: https://github.com/heroku/buildpack-stdlib/blob/master/stdlib.sh
 
 # Buildpack Steps.
-bake-step() {
+bake:step() {
     if [[ "$*" == "-" ]]; then
         read -r output
     else
@@ -26,7 +26,7 @@ bake-step() {
 }
 
 # Buildpack Error.
-bake-error() {
+bake:error() {
     if [[ "$*" == "-" ]]; then
         read -r output
     else
@@ -36,7 +36,7 @@ bake-error() {
 }
 
 # Buildpack Warning.
-bake-warn() {
+bake:warn() {
     if [[ "$*" == "-" ]]; then
         read -r output
     else
@@ -44,3 +44,11 @@ bake-warn() {
     fi
     echo -e "\\e[1m\\e[33m=!= $output\\e[0m"
 }
+
+# bake:eng_join() {
+#     for word in ${@}; do
+#         echo $word
+#     end
+
+
+# }

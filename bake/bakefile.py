@@ -155,7 +155,7 @@ class TaskScript(BaseAction):
 
         # sources = (stdlib, self.bashfile.root_source, self.source)
         if sources is None:
-            sources = (stdlib, self.bashfile.root_source)
+            sources = (stdlib, self.bashfile.funcs_source, self.bashfile.root_source)
 
         with open(tf, "w") as f:
             if insert_source:
@@ -175,14 +175,21 @@ class TaskScript(BaseAction):
         init_tf = self.prepare_init()
         if self.bashfile._is_shebang_line(self.source_lines[0]):
             script_tf = self.prepare_init(sources=[self.source])
+            if self.source_lines[0] == "#!/usr/bin/env bash":
+                with open(script_tf, "r") as f:
+                    lines = f.readlines()
+                lines.insert(1, f"source {init_tf}")
+                with open(script_tf, "w") as f:
+                    f.write("\n".join(lines))
         else:
             script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
-        script = (
-            f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} | bake-indent"
-        )
-        cmd = f"bash -c {shlex_quote(script)} {args}"
+        script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} | bake:indent"
+        cmd = f"bash -c {shlex_quote(script)}"
+
+        if debug:
+            click.echo(f" $ {cmd}", err=True)
 
         c = os.system(cmd)
 
@@ -245,6 +252,9 @@ class Bakefile:
 
         if not os.path.exists(path):
             raise NoBakefileFound()
+
+        os.environ["BAKEFILE_PATH"] = self.path
+        os.environ["BAKE_SKIP_DONE"] = "1"
 
         self.chunks
 
@@ -335,17 +345,12 @@ class Bakefile:
     @staticmethod
     def _is_declaration_line(line):
         if ":" in line:
-            return not (
-                line.startswith(INDENT_STYLES[0]) or line.startswith(INDENT_STYLES[1])
-            )
+            line = line.replace("\t", " " * 4)
+            return bool(len(line[:4].strip()))
 
     @staticmethod
     def _is_shebang_line(line):
         return line.startswith("#!")
-
-    def _is_not_task_line(line):
-        if self._is_shebang_line(line):
-            return True
 
     @staticmethod
     def _is_comment_line(line):
@@ -375,11 +380,23 @@ class Bakefile:
                 else:
                     if not task_active:
                         source_lines.append(line)
-            else:
-                task_active = False
+            # else:
+            # task_active = False
 
         return source_lines
 
     @property
     def root_source(self):
         return "\n".join(self.root_source_lines)
+
+    @property
+    def funcs_source(self):
+        source = []
+
+        for task in self.tasks:
+            task = self[task]
+            source.append(
+                f"task:{task.name}()" + " { " + f"bake --silent {task.name} $@;" + "}"
+            )
+
+        return "\n".join(source)
