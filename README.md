@@ -132,6 +132,11 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 Aborted.
 ```
 
+## Advanced Usage Sample
+
+
+
+
 
 ## Simple Installation of `bake` (**MacOS**):
 
