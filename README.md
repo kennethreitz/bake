@@ -39,6 +39,7 @@ Options:
 - Environment variables are explicitly passed or whitelisted (allowed), not inherinted from the parent shell.
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
+- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
 ---------------
 
@@ -50,6 +51,13 @@ install: node-deps python-deps
 format:
     black .
 
+python-deps:
+    pipenv install
+node-deps:
+    yarn install
+system-deps: @confirm
+    brew install pipenv
+    
 python-example:
     #!/usr/bin/env python
     import os
@@ -58,45 +66,9 @@ python-example:
     print(os.environ['KEY'])
     print(sys.argv[1:])
 
-bash-example:
-    set -euxe
-    echo "$KEY"
-    echo $@
-
-
-python-deps:
-    pipenv install
-node-deps:
-    yarn install
-
-system-deps: @confirm
-    brew install pipenv
-
 dangerous-example: @confirm:secure
-    rm -fr *
-```
-
-### `$ bake --list`
-
-```console
- - format
- - python-example
- - bash-example
- - full-install
- - install
- - argv-example
- - python-deps
- - node-deps
- - system-deps
- - dangerous-example
-```
-
-
-### `$ bake --silent format`
-
-```console
-All done! ✨ 🍰 ✨
-7 files left unchanged.
+    # <insert deploy to production here>
+    exit 0
 ```
 
 
@@ -134,9 +106,9 @@ Aborted.
 
 ## Advanced Usage Sample
 
+![advanced screenshot](https://github.com/kennethreitz/bake/blob/master/ext/screenshot.png?raw=true)
 
-
-
+Fancy, eh?
 
 ## Simple Installation of `bake` (**MacOS**):
 
