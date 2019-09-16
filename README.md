@@ -5,6 +5,8 @@ I love using `Makefile` for one-off tasks in projects. The problem with doing th
 
 It is, thus far, successful in doing so.
 
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
+
 **WORK IN PROGRESS**
 
 ```console
