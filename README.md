@@ -67,8 +67,8 @@ python-example:
     print(sys.argv[1:])
 
 dangerous-example: @confirm:secure
-    # Pretend it's deploying to production :P
-    rm -fr /
+    # <insert deploy to production here>
+    exit 0
 ```
 
 
