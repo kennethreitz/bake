@@ -1,5 +1,6 @@
 # ☿ `bake`— the _strangely familiar_ task runner.
 
+![help image](https://github.com/kennethreitz/bake/blob/master/ext/ss.png?raw=true)
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
@@ -8,10 +9,6 @@ The problem with doing this is that you can't use familiar bash–isms when doin
 This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
-
------------------
-
-![help image](https://github.com/kennethreitz/bake/blob/master/ext/ss.png?raw=true)
 
 ----------------
 
