@@ -211,7 +211,7 @@ class TaskScript(BaseAction):
         return c
 
     def shellcheck(self, *, silent=False, debug=False, **kwargs):
-        tf = self.temp_source()
+        tf = self.prepare_init(sources=[self.source])
         cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
 
         c = delegator.run(cmd)

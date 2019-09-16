@@ -305,6 +305,8 @@ def entrypoint(
                         str(line).zfill(3), bg="black", fg="cyan", bold=True
                     )
                     colored_task = click.style(str(_task), fg="yellow", bold=True)
+                    print(locals())
+                    print(_task.source)
                     actual_line = _task.source_lines[line - 1]
 
                     click.echo(f"In {colored_task} line {line}:", err=True)
