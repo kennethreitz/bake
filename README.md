@@ -3,7 +3,9 @@
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
-The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash syntax, or use abritrary scripting languages (e.g. Python) easily. This project seeks to bridge these worlds into a single entrypoint — ideal for cross–language repositories.
+The problem with doing this, is you can't use familiar bash–isms when doing so, as GNU Make doesn't use the familiar Bash syntax, or use abritrary scripting languages (e.g. Python) easily. 
+
+This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
 **WORK IN PROGRESS**
 
