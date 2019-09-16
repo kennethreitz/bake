@@ -11,7 +11,7 @@ import pygments.lexers
 import pygments.formatters
 
 
-SAFE_ENVIRONS = ["HOME", "PATH"]
+SAFE_ENVIRONS = ["HOME", "PATH", "LANG", "LOCALE", "TERM", "VIRTUAL_ENV"]
 
 
 def indent(line):
@@ -171,7 +171,7 @@ def entrypoint(
 
     bakefile.add_args(*argv)
 
-    if _list:
+    if _list and not shellcheck:
         __list_json = {"tasks": {}}
 
         for _task in bakefile.tasks:
@@ -202,6 +202,45 @@ def entrypoint(
 
         sys.exit(0)
 
+    if shellcheck:
+        __shellcheck_statuses = []
+        for _task in bakefile.tasks:
+            _task = bakefile[_task]
+            c = _task.shellcheck(silent=silent, debug=debug)
+            __shellcheck_statuses.append(c.return_code)
+            if not c.ok:
+                # click.echo(click.style("Shellcheck failed!", fg="red"), err=True)
+                if _json:
+                    echo_json(json.loads(c.out))
+
+                for report in json.loads(c.out):
+                    level = report["level"]
+                    code = report["code"]
+                    message = report["message"]
+                    line = report["line"]
+                    column = (report["column"], report["endColumn"])
+                    colored_line_n = click.style(
+                        str(line).zfill(3), bg="black", fg="cyan", bold=True
+                    )
+                    colored_task = click.style(str(_task), fg="yellow", bold=True)
+                    actual_line = _task.source_lines[line - 1]
+
+                    click.echo(f"In {colored_task} line {line}:", err=True)
+                    click.echo(f"{colored_line_n} {actual_line}", err=True)
+
+                    length = column[1] - column[0]
+                    if not length:
+                        length = len(actual_line)
+
+                    underline = (" " * 4) + (" " * column[0]) + "^" + "-" * (length - 1)
+                    underline += f"SC{code}: {message}"
+                    underline = click.style(level, fg="magenta") + click.style(
+                        underline[len(level) :], fg="red", bold=True
+                    )
+
+                    click.echo(underline, err=True)
+
+        sys.exit(max(__shellcheck_statuses))
     if task:
         try:
             task = bakefile[task]
@@ -209,7 +248,7 @@ def entrypoint(
             click.echo(click.style(f"Task {task} does not exist!", fg="red"))
             sys.exit(1)
 
-        def execute_task(task, *, next_task=None, silent=False):
+        def execute_task(task, *, silent=False):
             if not silent:
                 click.echo(
                     click.style(" + ", fg="white")
@@ -217,7 +256,7 @@ def entrypoint(
                     + click.style(":", fg="white"),
                     err=True,
                 )
-            return_code = task.execute(yes=yes, next_task=next_task, silent=silent)
+            return_code = task.execute(yes=yes, silent=silent)
 
             if not _continue:
                 if not return_code == 0:
@@ -226,11 +265,6 @@ def entrypoint(
 
         tasks = task.depends_on(recursive=True) + [task]
         for task in tasks:
-            try:
-                next_task = tasks[tasks.index(task) + 1]
-            except IndexError:
-                next_task = None
-
             execute_task(task, next_task=next_task, silent=silent)
 
         if not silent:

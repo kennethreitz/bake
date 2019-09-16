@@ -11,3 +11,6 @@ system-install: @confirm
 
 pypi-upload: python-dev-deps
     pipenv run setup.py upload
+
+test:
+    echo $@

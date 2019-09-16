@@ -1,8 +1,12 @@
-import sys
-import os
 import json
+import os
+import stat
+import sys
 from random import randint
+from shlex import quote as shlex_quote
+from tempfile import mkstemp
 
+import delegator
 import click
 
 from .bash import Bash
@@ -140,11 +144,7 @@ class TaskScript(BaseAction):
             if line.startswith(indent_style):
                 return line[len(indent_style) :]
 
-    def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
-        from tempfile import mkstemp
-        import stat
-        from shlex import quote as shlex_quote
-
+    def temp_source(self):
         tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
 
         with open(tf, "w") as f:
@@ -153,6 +153,12 @@ class TaskScript(BaseAction):
         # Mark the temporary file as executable.
         st = os.stat(tf)
         os.chmod(tf, st.st_mode | stat.S_IEXEC)
+
+        return tf
+
+    def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
+
+        tf = self.temp_source()
 
         stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
 
@@ -163,10 +169,18 @@ class TaskScript(BaseAction):
         else:
             script = shlex_quote(f"{tf} {args} 2>&1 | bake-indent")
         cmd = f"bash --init-file {shlex_quote(stdlib_path)} -i -c {script}"
+
         if debug:
-            print(cmd)
+            click.echo(f"$ {cmd}", err=True)
 
         return os.system(cmd)
+
+    def shellcheck(self, *, silent=False, debug=False, **kwargs):
+        tf = self.temp_source()
+        cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
+        if debug:
+            click.echo(f"$ {cmd}", err=True)
+        return delegator.run(cmd)
 
     @property
     def name(self):
@@ -177,6 +191,14 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
+        try:
+            has_shebang = self.chunk[2].startswith("#!")
+        except IndexError:
+            has_shebang = False
+
+        if not has_shebang:
+            yield "#!/usr/bin/env bash"
+
         for line in self.chunk[1:]:
             line = self._transform_line(line)
             if line:
@@ -188,9 +210,7 @@ class TaskScript(BaseAction):
 
     @property
     def source_lines(self):
-        def gen():
-            for line in self.bashfile.source_lines:
-                pass
+        return [s for s in self._iter_source()]
 
 
 class Bakefile:
