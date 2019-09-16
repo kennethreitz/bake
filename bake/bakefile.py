@@ -196,7 +196,7 @@ class TaskScript(BaseAction):
             script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
-        script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} | bake:indent"
+        script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} 2>&1 | bake:indent"
         cmd = f"bash -c {shlex_quote(script)}"
 
         if debug:
