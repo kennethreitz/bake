@@ -24,7 +24,7 @@ Options:
   -h, --help               Show this message and exit.
 ```
 
-### Features & Such
+### Features 'n Things
 
 - a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
 - except, you can write real bash code!
