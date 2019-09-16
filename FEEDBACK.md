@@ -1,2 +1,2 @@
-- @skip-if-hash:=./Pipfile.lock
+- `@skip-if-hash:=./Pipfile.lock`
     (hash-tracking?)
