@@ -25,7 +25,7 @@ def indent(line):
     return f'{" " * 4}{line}'
 
 
-def do_help():
+def do_help(exit=0):
     with click.Context(entrypoint) as ctx:
         help = entrypoint.get_help(ctx)
         help = help.replace(
@@ -65,7 +65,7 @@ def do_help():
         )
 
         click.echo(help, err=True)
-        sys.exit(0)
+        sys.exit(exit)
 
 
 def echo_json(obj):
@@ -192,7 +192,7 @@ def entrypoint(
     """bake — the strangely familiar task–runner."""
 
     if help:
-        do_help
+        do_help(0)
 
     # Default to list behavior, when no task is provided.
     if _json:
@@ -211,7 +211,7 @@ def entrypoint(
             bakefile = Bakefile(path=bakefile)
     except NoBakefileFound:
         click.echo(click.style("No Bakefile found!", fg="red"), err=True)
-        do_help()
+        do_help(1)
 
     if not insecure:
         for key in bakefile.environ:
