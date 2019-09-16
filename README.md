@@ -2,8 +2,7 @@
 <span align="center">
 <h1>
     <pre>
-        <code>$ bake</code>
-        <em>, n</em>:
+        <code>$ bake</code><em>, n</em>:
 <!--         <pre> -->
             <em>the strangely familiar task runner</em>.
          
