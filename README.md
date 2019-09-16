@@ -14,7 +14,6 @@ Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 Options:
   -b, --bakefile TEXT
   -l, --list               Lists available tasks from Bakefile.
-  --shellcheck
   --allow TEXT             Whitelist an environment variable for use.
   --yes                    Set medium–security prompts to yes.
   -c, --continue           Fail immediately, if any task fails.
