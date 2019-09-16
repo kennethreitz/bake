@@ -3,7 +3,6 @@ import click
 import json
 
 from .bakefile import Bakefile
-from .config import config
 from .clint import eng_join
 
 import pygments
