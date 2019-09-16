@@ -21,5 +21,5 @@ jobs:
           sudo pipenv install --dev --system
       - name: Test with pytest
         run: |
-          sudo lsof | grep /usr/bin/env
+          sudo killall shell
           sudo pytest
