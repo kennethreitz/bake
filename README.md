@@ -5,6 +5,7 @@
 <pre>
     <code><strong>$</strong> bake</code><em>, n</em>:
     <em>the strangely familiar task runner.</em>
+        <h1 align="center">☿</h1>
 </pre>  
 </span>
 
@@ -138,5 +139,4 @@ This repository has been brought to you, with much joy, by <a href="https://kenn
 
 <p align="center">
     <em>As above, so below.</em>
-    <h1 align="center">☿</h1>
 </p>
