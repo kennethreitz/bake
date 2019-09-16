@@ -1,4 +1,6 @@
-# ☿ `bake`— the _strangely familiar_ task runner.
+<p align="center">
+<h1>☿ <pre>bake<pre>— the <em>strangely familiar</em> task runner.</h1>
+</p>
 
 <p align="center">
 <img src="https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true" />
