@@ -91,7 +91,8 @@ class TaskFilter(BaseAction):
 
         else:
             if not yes:
-                click.confirm("   Do you want to continue?", abort=True)
+                question = str(click.style("?", fg="green", bold=True))
+                click.confirm(f" {question} Do you want to continue?", abort=True)
 
     def execute(self, yes=False, **kwargs):
         if self.name == "confirm":
