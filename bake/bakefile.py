@@ -67,15 +67,27 @@ class TaskFilter(BaseAction):
 
     @staticmethod
     def execute_confirm(*, prompt=False, yes=False, secure=False, **kwargs):
+        def abort(msg="Aborted!"):
+            msg = click.style(msg, fg="red")
+            dash = click.style(" - ", fg="white", bold=True)
+
+            click.echo(f"{dash}{msg}", err=True)
+            sys.exit(1)
+
         if secure:
             int1 = randint(1, 12)
             int2 = randint(1, 12)
 
-            user_value = click.prompt(f"   What is {int1}×{int2}?")
+            user_value = click.prompt(
+                f" {click.style('?', fg='green')}  ({int1} × {int2})",
+                prompt_suffix=" = ",
+            )
 
-            if int(user_value) != (int1 * int2):
-                click.echo("Aborted!", err=True)
-                sys.exit(1)
+            try:
+                if int(user_value) != (int1 * int2):
+                    abort(msg="Wrong answer!")
+            except ValueError:
+                abort(msg="Please provide a valid number.")
 
         else:
             if not yes:
