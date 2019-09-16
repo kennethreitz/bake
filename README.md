@@ -39,6 +39,7 @@ Options:
 - Environment variables are explicitly passed or whitelisted (allowed), not inherinted from the parent shell.
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
+— See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
 ---------------
 
