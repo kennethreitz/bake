@@ -11,7 +11,7 @@ It is, thus far, successful in doing so.
 $ bake -h
 Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
 
-  bake — a strangely familiar task–runner.
+  bake — the strangely familiar task–runner.
 
 Options:
   -b, --bakefile PATH      The Bakefile to use.
