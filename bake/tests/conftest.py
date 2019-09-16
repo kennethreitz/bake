@@ -1,5 +1,7 @@
 import os
 
+os.environ["PYTHONUNBUFFERED"] = "1"
+
 import pytest
 import delegator
 

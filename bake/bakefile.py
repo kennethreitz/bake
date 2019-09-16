@@ -22,12 +22,19 @@ class FilterNotAvailable(ValueError):
     pass
 
 
-class TaskFilter:
+class BaseAction:
+    @property
+    def is_filter(self):
+        if not hasattr(self, "_chunk_index"):
+            return True
+
+
+class TaskFilter(BaseAction):
     def __init__(self, s):
         self.source = s
 
     def __str__(self):
-        return f"{self.source!r}"
+        return f"{self.source}"
 
     @property
     def name(self):
@@ -64,6 +71,7 @@ class TaskFilter:
                 user_value = click.prompt(f"   What is {int1} times {int2}?")
 
                 if int(user_value) != int1 * int2:
+                    click.echo("Aborted!", err=True)
                     sys.exit(1)
 
             else:
@@ -74,7 +82,7 @@ class TaskFilter:
             self.execute_confirm(yes=yes, **self.arguments)
 
 
-class TaskScript:
+class TaskScript(BaseAction):
     def __init__(self, bashfile, chunk_index=None):
         self.bashfile = bashfile
         self._chunk_index = chunk_index
@@ -86,7 +94,7 @@ class TaskScript:
         return f"<TaskScript name={self.name!r} depends_on={self.depends_on(recursive=True)!r}>"
 
     def __str__(self):
-        return f"{self.name!r}"
+        return f"{self.name}"
 
     @property
     def declaration_line(self):
