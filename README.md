@@ -1,14 +1,26 @@
-# ☿ `bake`— the _strangely familiar_ task runner.
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
-![help image](https://github.com/kennethreitz/bake/blob/master/ext/ss.png?raw=true)
+
+<span align="center">
+<pre>
+    <code>$ <strong>bake</strong></code><em>, n</em>:
+    <em>the s☿rangely familiar task runner.</em>
+</pre>  
+</span>
+
+--------------------
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
-The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of abritrary scripting languages (e.g. **Python**). 
+The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of abritrary scripting languages (e.g. **Python**).
 
 This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
-![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
+-----------------
+
+<p align="center">
+<img src="https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true" />
+</p>
 
 ----------------
 
@@ -125,5 +137,5 @@ This repository has been brought to you, with much joy, by <a href="https://kenn
 ![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
 
 <p align="center">
-<em>As above, so below.
+    <em>As above, so below.</em>
 </p>
