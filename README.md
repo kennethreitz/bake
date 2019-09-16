@@ -1,3 +1,5 @@
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
+
 
 <span align="center">
 <pre>
@@ -7,8 +9,6 @@
 </span>
 
 --------------------
-
-![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
