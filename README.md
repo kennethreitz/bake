@@ -53,7 +53,7 @@ python-example:
 
 bash-example:
     set -euxe
-    echo "HELLO, $WHO"
+    echo "$KEY"
     echo $@
 
 
@@ -61,7 +61,7 @@ python-deps:
     pipenv install
 node-deps:
     yarn install
-    
+
 system-deps: @confirm
     brew install pipenv
 
