@@ -32,8 +32,6 @@ Options:
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 
-<!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
-
 
 ## `$ cat Bakefile`
 
@@ -126,3 +124,15 @@ Coming soon!
 ```console
 $ brew install kennethreitz/-/bake --HEAD
 ```
+
+--------------------
+
+![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
+
+---------------------
+
+<p align="center">
+<em>This repository has been brought to you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a></em>.
+</p>
+
+![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
