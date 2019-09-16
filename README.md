@@ -1,5 +1,6 @@
 # ☿ `bake`— the _strangely familiar_ task runner.
 
+![help image](https://github.com/kennethreitz/bake/blob/master/ext/ss.png?raw=true)
 
 I love using `Makefile` for one-off **tasks** in projects. 
 
@@ -8,27 +9,6 @@ The problem with doing this is that you can't use familiar bash–isms when doin
 This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
-
------------------
-
-```console
-$ bake -h
-Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
-
-  bake — the strangely familiar task–runner.
-
-Options:
-  -b, --bakefile PATH      The Bakefile to use.
-  -l, --list               Lists available tasks.
-  --allow TEXT             Whitelist an environment variable for use.
-  --yes                    Set medium–security prompts to yes.
-  -c, --continue           Continue, if a task fails.
-  --insecure               Inherit parent shell's environment variables.
-  -s, --silent             Reduce output.
-  -e, --environ-json TEXT  Provide environment variables via JSON.
-  -j, --json               Output in JSON format (stdout).
-  -h, --help               Show this message and exit.
-```
 
 ----------------
 
