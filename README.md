@@ -5,7 +5,7 @@
 <pre>
     <code><strong>$</strong> bake</code><em>, n</em>:
     <em>the strangely familiar task runner.</em>
-        <h1 align="center">☿</h1>
+        <large align="center">☿</large>
 </pre>  
 </span>
 
