@@ -52,6 +52,7 @@ $ brew install kennethreitz/-/bake
 ==> Installing bake from kennethreitz/-
 …
 🍺  /usr/local/Cellar/bake/19-09-16: 1,563 files, 16.7MB, built in 11 seconds
+```
 
 **Linux**:
 
