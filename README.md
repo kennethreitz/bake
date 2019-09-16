@@ -12,7 +12,7 @@ Usage: bake [OPTIONS] [TASK] [ARGUMENTS]...
   bake — a strangely familiar Bash task–runner.
 
 Options:
-  -b, --bakefile TEXT      The Bakefile to use.
+  -b, --bakefile PATH      The Bakefile to use.
   -l, --list               Lists available tasks from Bakefile.
   --allow TEXT             Whitelist an environment variable for use.
   --yes                    Set medium–security prompts to yes.
