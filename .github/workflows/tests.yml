@@ -14,7 +14,7 @@ jobs:
       - name: Install Pipenv!
         run: |
           curl -s --retry 3 https://bootstrap.pypa.io/get-pip.py > /tmp/get-pip.py
-          python3 /tmp/get-pip.py pipenv > /dev/null
+          sudo python3 /tmp/get-pip.py pipenv > /dev/null
           rm -fr /tmp/get-pip.py
       - name: Install dependencies
         run: |
