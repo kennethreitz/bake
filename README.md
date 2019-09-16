@@ -129,5 +129,6 @@ This repository has been brought to you, with much joy, by <a href="https://kenn
 ![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
 
 <p align="center">
-<em>As above, so below.
+    <em>As above, so below.</em>
+    <h1>☿</h1>
 </p>
