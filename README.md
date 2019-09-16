@@ -109,7 +109,7 @@ $ bake dangerous-example
 
 ## Installation
 
-Install `bake` via:
+Install `bake` via (soon):
 
 ```console
 $ brew install kennethreitz/-/bake --HEAD
