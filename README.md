@@ -125,9 +125,7 @@ Coming soon!
 $ brew install kennethreitz/-/bake --HEAD
 ```
 
---------------------
-
-![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
+<!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
 
 ---------------------
 
