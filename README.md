@@ -1,7 +1,7 @@
 
-
-<h1 align="center"><pre><code>$ bake</code><em>, n</em>:<pre><em>the strangely familiar task runner</em>.</h1>
-
+<span align="center">
+<h1><pre><code>$ bake</code><em>, n</em>:<pre><em>the strangely familiar task runner</em>.</h1>
+</span>
 --------------------
 
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
