@@ -43,11 +43,27 @@ Options:
 
 ------------------
 
-## Installation of `bake`:
+## Installing `$ bake`
+
+**MacOS**:
 
 ```console
-$ pip install bake-cli
+$ brew install kennethreitz/-/bake
+==> Installing bake from kennethreitz/-
+…
+🍺  /usr/local/Cellar/bake/19-09-16: 1,563 files, 16.7MB, built in 11 seconds
 ```
+
+**Various Linux Distributions** (Python 3.6+):
+
+```console
+$ pip3 install bake-cli
+Collecting bake-cli
+…
+Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0
+```
+
+✨🍰✨
 
 ---------------
 
