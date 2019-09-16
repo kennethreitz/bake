@@ -1,6 +1,6 @@
 name: Bake PyPI Distribution™
 
-on: [push]
+on: [tag]
 
 jobs:
   build:
