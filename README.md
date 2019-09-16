@@ -41,6 +41,10 @@ install: node-deps python-deps
 format:
     black .
 
+inline-python-example:
+    #!/usr/bin/env python
+    print('hi')
+
 argv-example:
     set -euxe
     echo "HELLO, $WHO"
@@ -63,6 +67,7 @@ system-deps:
 
 ```console
  - format
+ - inline-python-example
  - full-install
  - install
  - env
@@ -85,12 +90,12 @@ All done! ✨ 🍰 ✨
 ### `$ bake install`
 
 ```console
- · Executing 'node-deps':
+ + Executing 'node-deps':
 yarn install v1.17.3
 [1/4] 🔍  Resolving packages...
 success Already up-to-date.
 ✨  Done in 0.03s.
- · Executing 'python-deps':
+ + Executing 'python-deps':
 Installing dependencies from Pipfile.lock (2ee04c)…
   🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
  · Done.
@@ -100,18 +105,18 @@ Installing dependencies from Pipfile.lock (2ee04c)…
 ### `$ bake argv-example WHO=you 1 2 3`
 
 ```console
-· Executing 'argv-example':
++ Executing 'argv-example':
 ++ echo 'HELLO, you'
 HELLO, you
 ++ echo '[1,' 2, '3]'
 [1, 2, 3]
- · Done.
+ + Done.
 ```
 
 ### `$ bake dangerous-example`
 
 ```console
-· Executing '@confirm:secure' ·
++ Executing '@confirm:secure' ·
    What is 10 times 2?: 7
 · Aborted.
 ```
