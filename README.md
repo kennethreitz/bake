@@ -49,7 +49,7 @@ python-example:
     import sys
 
     print(os.environ['KEY'])
-    print(argv[1:])
+    print(sys.argv[1:])
 
 bash-example:
     set -euxe
