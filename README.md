@@ -24,6 +24,12 @@ Options:
   -h, --help               Show this message and exit.
 ```
 
+### Features & Such
+
+- a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- except, you can write real bash code!
+- Unlike `Makefile`, either tabs or 4 spaces can be used.
+
 ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
 
@@ -54,10 +60,9 @@ system-deps:
     brew install pipenv
 ```
 
-**Running the above `Bakefile`**:
+## `$ bake`
 
 ```console
-$ bake
  - format
  - full-install
  - install
@@ -67,14 +72,20 @@ $ bake
  - python-deps
  - node-deps
  - system-deps
+```
 
 
-$ bake --silent format
+## `$ bake --silent format`
+
+```console
 All done! ✨ 🍰 ✨
 7 files left unchanged.
+```
 
 
-$ bake install
+## `$ bake install`
+
+```console
  · Executing 'node-deps':
 yarn install v1.17.3
 [1/4] 🔍  Resolving packages...
@@ -84,28 +95,28 @@ success Already up-to-date.
 Installing dependencies from Pipfile.lock (2ee04c)…
   🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
  · Done.
+```
 
 
-$ bake argv-example WHO=you 1 2 3
- · Executing 'argv-example':
+## `$ bake argv-example WHO=you 1 2 3`
+
+```console
+· Executing 'argv-example':
 ++ echo 'HELLO, you'
 HELLO, you
 ++ echo '[1,' 2, '3]'
 [1, 2, 3]
  · Done.
+```
 
+## `$ bake dangerous-example`
 
-$ bake dangerous-example
+```console
 · Executing '@confirm:secure' ·
    What is 10 times 2?: 7
 · Aborted.
 ```
 
-## Features
-
-- a `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- except, you can write real bash code!
-- Unlike `Makefile`, either tabs or 4 spaces can be used.
 
 ## Installation
 
