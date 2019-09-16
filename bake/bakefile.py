@@ -152,7 +152,6 @@ class TaskScript(BaseAction):
         with open(stdlib_path, "r") as f:
             stdlib = f.read()
 
-        # sources = (stdlib, self.bashfile.root_source, self.source)
         if sources is None:
             sources = (stdlib, self.bashfile.funcs_source, self.bashfile.root_source)
 
