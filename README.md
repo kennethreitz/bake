@@ -3,7 +3,7 @@
 <h1>
     <pre>
         <code>$ bake</code><em>, n</em>:
-        <h5>the strangely familiar task runner</h5>.
+        <pre>the strangely familiar task runner</pre>.
     </pre>  
  </h1>
 </span>
