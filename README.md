@@ -43,7 +43,7 @@ Options:
 
 ------------------
 
-## Installation of `bake`:
+## Installing `$ bake`
 
 **MacOS**:
 
