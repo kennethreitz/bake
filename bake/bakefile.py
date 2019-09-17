@@ -198,7 +198,7 @@ class TaskScript(BaseAction):
         if recursive:
             actions = []
             _last_action = None
-            for _, action in list(networkx.dfs_edges(self.bashfile.graph, self))[:]:
+            for _, action in list(networkx.dfs_edges(self.bashfile.graph, self)):
                 if _last_action != action:
                     actions.append(action)
                 _last_action = action
