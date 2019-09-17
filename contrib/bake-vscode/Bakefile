@@ -1,0 +1,9 @@
+render/syntax: @test
+    cat $HELLO
+	npx js-yaml syntaxes/bakefile.tmLanguage.yaml > syntaxes/bakefile.tmLanguage.json
+
+install/code:
+    set -ex && code --install-extension kennethreitz.bake "$PWD"
+
+install/system:
+    yarn add -g yo generator-code

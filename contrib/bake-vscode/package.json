@@ -1,0 +1,37 @@
+{
+    "name": "kennethreitz.bake",
+    "displayName": "bake",
+    "description": "Hilighting for Bake: a strangely familiar task runner.",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.38.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "bakefile",
+                "aliases": [
+                    "Bakefile",
+                    "bakefile"
+                ],
+                "extensions": [
+                    "Bakefile"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "bakefile",
+                "scopeName": "source.bakefile",
+                "path": "./syntaxes/Bakefile.syntax.json",
+                "embeddedLanguages": {
+                    "task": "source.shell"
+                }
+            }
+        ]
+    }
+}

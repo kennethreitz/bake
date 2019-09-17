@@ -1,16 +1,17 @@
-full-install: system-install python-deps
+task: @confirm install-deps
+    echo "hi, $1"
 
-python-deps:
+install-deps: @skip:key=./Pipfile.lock system-deps
     pipenv install
 
-python-dev-deps:
-    pipenv install --dev
+system-deps: install-jq
+    set -ex
 
-system-install: @confirm
-    brew install python pipenv
+    brew install pipenv
 
-pypi-upload: python-dev-deps
-    pipenv run setup.py upload
+    if ! brew info --installed --json | jq 'map(.name) | index( "pipenv" )'; then
+        brew install pipenv
+    fi
 
-test:
-    echo $@
+install-jq:
+    brew install jq
