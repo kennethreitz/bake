@@ -41,7 +41,15 @@ class TaskFilter(BaseAction):
         self.bashfile = bashfile
 
     def __str__(self):
-        return f"{str(click.style(self.source[:1], fg='yellow'))}{self.source[1:]}"
+        split = self.source.split(":", 1)
+        extra = ")" if len(split) > 1 else ""
+        source = "(".join(split) + extra
+
+        source = (
+            click.style(source[: len(split[0])], fg="yellow") + source[len(split[0]) :]
+        )
+
+        return source
 
     def __hash__(self):
         return hash((self.bashfile, self.source))
