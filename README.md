@@ -33,6 +33,11 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 - See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
+
+### Community / Contrib
+
+- [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=kennethreitz.bake) — highlights `Bakefile`.
+
 ------------------
 
 ## Installing `$ bake`
