@@ -11,7 +11,7 @@ def test_confirm_secure(bake):
     c.expect(":", timeout=0.5)
     c.send("4222\n")
     c.block()
-    assert "Aborted!" in c.out
+    assert "Wrong answer!" in c.out
 
 
 def test_confirm_dep(bake):
@@ -27,4 +27,4 @@ def test_confirm_secure(bake):
     c.expect(":", timeout=0.5)
     c.send("4222\n")
     c.block()
-    assert "Aborted!" in c.out
+    assert "Wrong answer!" in c.out

@@ -9,6 +9,7 @@ from tempfile import mkstemp
 
 import delegator
 import click
+import networkx
 
 from .bash import Bash
 
@@ -35,11 +36,19 @@ class BaseAction:
 
 
 class TaskFilter(BaseAction):
-    def __init__(self, s):
+    def __init__(self, s, bashfile):
         self.source = s
+        self.bashfile = bashfile
 
     def __str__(self):
         return f"{self.source}"
+
+    def __hash__(self):
+        return hash((self.bashfile, self.source))
+
+    def __eq__(self, other):
+        if hasattr(other, "source"):
+            return other.source == self.source
 
     @property
     def name(self):
@@ -131,6 +140,15 @@ class TaskFilter(BaseAction):
             return self.execute_skip_if(yes=yes, **self.arguments)
 
 
+class FakeTaskScript(BaseAction):
+    def __init__(self, s, bashfile):
+        self.source = s
+        self.bashfile = bashfile
+
+    def __str__(self):
+        return str(click.style(self.source, fg="red"))
+
+
 class TaskScript(BaseAction):
     def __init__(self, bashfile, chunk_index=None):
         self.bashfile = bashfile
@@ -140,10 +158,17 @@ class TaskScript(BaseAction):
             raise TaskNotInBashfile()
 
     def __repr__(self):
-        return f"<TaskScript name={self.name!r} depends_on={self.depends_on(recursive=True)!r}>"
+        return f"<TaskScript name={self.name!r}>"
 
     def __str__(self):
         return f"{self.name}"
+
+    def __hash__(self):
+        return hash((self.bashfile, self._chunk_index))
+
+    def __eq__(self, other):
+        if hasattr(other, "_chunk_index"):
+            return other._chunk_index == self._chunk_index
 
     @property
     def declaration_line(self):
@@ -159,20 +184,24 @@ class TaskScript(BaseAction):
 
             for i, task_string in task_name_index_tuples:
 
-                if i is None:
+                if task_string.startswith("@"):
+                    yield TaskFilter(task_string, bashfile=self.bashfile)
+                elif i is None:
                     # Create the filter.
-                    yield TaskFilter(task_string)
+                    yield FakeTaskScript(task_string, bashfile=self.bashfile)
                 else:
                     # Otherwise, create the task.
-                    yield TaskScript(bashfile=self.bashfile, chunk_index=i)
+                    yield TaskScript(chunk_index=i, bashfile=self.bashfile)
 
         actions = [t for t in gen_actions()]
 
         if recursive:
-            for i, task in enumerate(actions[:]):
-                for t in task.depends_on():
-                    if t.name not in [task.name for task in actions]:
-                        actions.insert(i - 1, t)
+            actions = []
+            _last_action = None
+            for _, action in list(networkx.dfs_edges(self.bashfile.graph, self))[:]:
+                if _last_action != action:
+                    actions.append(action)
+                _last_action = action
 
         return actions
 
@@ -301,6 +330,28 @@ class Bakefile:
         os.environ["BAKE_SKIP_DONE"] = "1"
 
         self.chunks
+        self._tasks = None
+        self._graph = None
+
+    @property
+    def graph(self):
+        if self._graph:
+            return self._graph
+
+        g = networkx.OrderedDiGraph()
+
+        for task in self.tasks.values():
+            if task not in g:
+                g.add_node(task)
+
+            for dep in task.depends_on():
+                if dep not in g:
+                    g.add_node(dep)
+
+                g.add_edge(task, dep)
+
+        self._graph = g
+        return self.graph
 
     def __repr__(self):
         return f"<Bakefile path={self.path!r}>"
@@ -386,11 +437,11 @@ class Bakefile:
     def source_lines(self):
         return self.source.split("\n")
 
-    @staticmethod
-    def _is_declaration_line(line):
-        if ":" in line:
-            line = line.replace("\t", " " * 4)
-            return bool(len(line[:4].strip()))
+    def _is_declaration_line(self, line):
+        if not self._is_comment_line(line):
+            if ":" in line:
+                line = line.replace("\t", " " * 4)
+                return bool(len(line[:4].strip()))
 
     @staticmethod
     def _is_shebang_line(line):
@@ -406,12 +457,16 @@ class Bakefile:
 
     @property
     def tasks(self):
+        if self._tasks:
+            return self._tasks
+
         tasks = {}
         for i, chunk in enumerate(self.chunks):
             script = TaskScript._from_chunk_index(bashfile=self, i=i)
             tasks[script.name] = script
 
-        return tasks
+        self._tasks = tasks
+        return self.tasks
 
     @property
     def root_source_lines(self):

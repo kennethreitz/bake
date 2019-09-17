@@ -265,7 +265,7 @@ def entrypoint(
                     if dep.is_filter:
                         dep = click.style(str(dep), fg="yellow")
                     deps.append(str(dep))
-                deps = f"\n    {click.style('+', fg='yellow', bold=True)} {eng_join(deps)}."
+                deps = f"\n    {click.style('+', fg='yellow', bold=True)} {eng_join(deps, conj='and finally')}."
             else:
                 deps = ""
             colon = "" if not deps else "…"
