@@ -112,6 +112,8 @@ class TaskFilter(BaseAction):
                 question = str(click.style("?", fg="green", bold=True))
                 click.confirm(f" {question} Do you want to continue?", abort=True)
 
+        return ("confirmed", True)
+
     @staticmethod
     def execute_skip_if(*, key, cache=None, **kwargs):
         if cache is None:
