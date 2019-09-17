@@ -2,7 +2,7 @@ import sys
 import click
 import json
 
-from .bakefile import Bakefile, NoBakefileFound
+from .bakefile import Bakefile, TaskFilter, NoBakefileFound
 from .clint import eng_join
 
 import pygments
@@ -377,6 +377,13 @@ def entrypoint(
 
         if not no_deps:
             tasks = task.depends_on(recursive=True) + [task]
+
+            # Re-order tasks, because.
+            for i, task in enumerate(tasks[:]):
+                if isinstance(task, TaskFilter):
+                    t = tasks.pop(i)
+                    tasks.insert(i - 1, t)
+
         else:
             tasks = [task]
 
