@@ -1,8 +1,10 @@
 {
-    "name": "kennethreitz.bake",
+    "name": "bake",
     "displayName": "bake",
     "description": "Hilighting for Bake: a strangely familiar task runner.",
     "version": "0.0.1",
+    "publisher": "kennethreitz",
+    "repository": "https://github.com/kennethreitz/bake.git",
     "engines": {
         "vscode": "^1.38.0"
     },
@@ -33,5 +35,9 @@
                 }
             }
         ]
+    },
+    "dependencies": {
+        "generator-code": "^1.2.6",
+        "vsce": "^1.66.0"
     }
 }

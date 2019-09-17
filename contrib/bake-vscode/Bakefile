@@ -1,9 +1,10 @@
-render/syntax: @test
-    cat $HELLO
-	npx js-yaml syntaxes/bakefile.tmLanguage.yaml > syntaxes/bakefile.tmLanguage.json
+ms/publish: ms/package
+    vsce publish
 
-install/code:
-    set -ex && code --install-extension kennethreitz.bake "$PWD"
+ms/package: install/system
+    cp ../../README.md README.md
+    vsce package
 
 install/system:
-    yarn add -g yo generator-code
+    npm install -g yo generator-code vsce
+vnfpzyctwdml75il7y5prfe3637lbvr4wpkje3mtecgbqbm3fhmq

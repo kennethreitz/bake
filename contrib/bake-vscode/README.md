@@ -1,65 +1,141 @@
-# bake README
+![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
-This is the README for your extension "bake". After writing up a brief description, we recommend including the following sections.
 
-## Features
+<span align="center">
+<pre>
+    <code>$ <strong>bake</strong></code><em>, n</em>:
+    <em>the s☿rangely familiar task runner.</em>
+</pre>  
+</span>
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+--------------------
 
-For example if there is an image subfolder under your extension project workspace:
+I love using `Makefile` for one-off **tasks** in projects. 
 
-\!\[feature X\]\(images/feature-x.png\)
+The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
 
-## Requirements
+-----------------
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+<p align="center">
+<img src="https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true" />
+</p>
 
-## Extension Settings
+----------------
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Features 'n Things
 
-For example:
+- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- Except, you can write real bash code!
+- Environment variables are explicitly passed or whitelisted (allowed), not inherited from the parent shell.
+- Unlike `Makefile`, either tabs or 4 spaces can be used.
+- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
+- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
-This extension contributes the following settings:
+------------------
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+## Installing `$ bake`
 
-## Known Issues
+**MacOS**:
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+```console
+$ brew install kennethreitz/-/bake
+==> Installing bake from kennethreitz/-
+…
+🍺  /usr/local/Cellar/bake/19-09-16: 1,563 files, 16.7MB, built in 11 seconds
+```
 
-## Release Notes
+**Various Linux Distributions** (Python 3.6+):
 
-Users appreciate release notes as you update your extension.
+```console
+$ pip3 install bake-cli
+Collecting bake-cli
+…
+Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0
+```
 
-### 1.0.0
+✨🍰✨
 
-Initial release of ...
+---------------
 
-### 1.0.1
+## `$ cat Bakefile`
 
-Fixed issue #.
+```make
+full-install: system-deps install
+install: node-deps python-deps
+format:
+    black .
 
-### 1.1.0
+python-deps: @skip:key=Pipfile.lock
+    pipenv install
+node-deps: @skip:key=yarn.lock
+    yarn install
+system-deps: @confirm
+    brew install pipenv
+    
+python-example:
+    #!/usr/bin/env python
+    import os
+    import sys
 
-Added features X, Y, and Z.
+    print(os.environ['KEY'])
+    print(sys.argv[1:])
 
------------------------------------------------------------------------------------------------------------
+dangerous-example: @confirm:secure
+    # <insert deploy to production here>
+    exit 0
+```
 
-## Working with Markdown
 
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+### `$ bake install`
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
+```console
+ + Executing 'node-deps':
+yarn install v1.17.3
+[1/4] 🔍  Resolving packages...
+success Already up-to-date.
+✨  Done in 0.03s.
+ + Executing 'python-deps':
+Installing dependencies from Pipfile.lock (2ee04c)…
+  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
+ + Done.
+```
 
-### For more information
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+### `$ bake python-example KEY=VALUE 1 2 3`
 
-**Enjoy!**
+```console
+ + Executing 'python-argv':
+   VALUE
+   ['1', '2', '3']
+ + Done.
+ ```
+
+### `$ bake dangerous-example`
+
+```console
++ Executing '@confirm:secure' ·
+   What is 10 times 2?: 7
+Aborted.
+```
+
+## Advanced Usage Sample
+
+![advanced screenshot](https://github.com/kennethreitz/bake/blob/master/ext/screenshot.png?raw=true)
+
+Fancy, eh?
+
+<!-- ![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true) -->
+
+---------------------
+
+<p align="center">
+This repository has been brought to you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
+</p>
+
+![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
+
+<p align="center">
+    <em>As above, so below.</em>
+</p>

@@ -1,0 +1,32 @@
+{
+  "name": "fast-plist",
+  "version": "0.1.2",
+  "description": "A fast PLIST parser",
+  "author": "Microsoft Corporation",
+  "main": "./release/src/main.js",
+  "typings": "./release/src/main.d.ts",
+  "scripts": {
+    "watch": "tsc -w",
+    "test": "mocha release/test/test",
+    "test-travis": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R spec release/test/test",
+    "prepublish": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/node-fast-plist.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Microsoft/node-fast-plist/issues"
+  },
+  "homepage": "https://github.com/Microsoft/node-fast-plist#readme",
+  "devDependencies": {
+    "coveralls": "^2.11.12",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.0.2",
+    "remap-istanbul": "^0.6.4",
+    "sax": "^1.2.1",
+    "typescript": "^1.8.10",
+    "typings": "^1.3.2"
+  }
+}
