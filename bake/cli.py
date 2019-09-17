@@ -144,6 +144,13 @@ def echo_json(obj):
     help="Continue, if a task fails.",
 )
 @click.option(
+    "--interactive",
+    "-i",
+    is_flag=True,
+    type=click.BOOL,
+    help="Run in interactive mode.",
+)
+@click.option(
     "--insecure",
     is_flag=True,
     type=click.BOOL,
@@ -188,6 +195,7 @@ def entrypoint(
     _json,
     skip_done,
     no_deps,
+    interactive,
     yes,
     help,
 ):
@@ -344,7 +352,9 @@ def entrypoint(
                         + click.style(":", fg="white"),
                         err=True,
                     )
-                return_code = task.execute(yes=yes, debug=debug, silent=silent)
+                return_code = task.execute(
+                    yes=yes, debug=debug, silent=silent, interactive=interactive
+                )
 
                 if not _continue:
                     if (not return_code == 0) and (not isinstance(return_code, tuple)):

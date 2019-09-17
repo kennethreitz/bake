@@ -252,7 +252,9 @@ class TaskScript(BaseAction):
 
         return tf
 
-    def execute(self, *, blocking=False, debug=False, silent=False, **kwargs):
+    def execute(
+        self, *, blocking=False, debug=False, interactive=False, silent=False, **kwargs
+    ):
 
         init_tf = self.prepare_init()
         if self.bashfile._is_shebang_line(self.source_lines[0]):
@@ -268,7 +270,11 @@ class TaskScript(BaseAction):
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
 
-        script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} 2>&1 | bake:indent"
+        if interactive:
+            script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args}"
+        else:
+            script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} 2>&1 | bake:indent"
+
         cmd = f"bash -c {shlex_quote(script)}"
 
         if debug:
