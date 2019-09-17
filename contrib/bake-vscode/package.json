@@ -1,43 +1,48 @@
 {
-    "name": "bake",
-    "displayName": "bake",
-    "description": "Hilighting for Bake: a strangely familiar task runner.",
-    "version": "0.0.1",
-    "publisher": "kennethreitz",
-    "repository": "https://github.com/kennethreitz/bake.git",
-    "engines": {
-        "vscode": "^1.38.0"
-    },
-    "categories": [
-        "Programming Languages"
-    ],
-    "contributes": {
-        "languages": [
-            {
-                "id": "bakefile",
-                "aliases": [
-                    "Bakefile",
-                    "bakefile"
-                ],
-                "extensions": [
-                    "Bakefile"
-                ],
-                "configuration": "./language-configuration.json"
-            }
-        ],
-        "grammars": [
-            {
-                "language": "bakefile",
-                "scopeName": "source.bakefile",
-                "path": "./syntaxes/Bakefile.syntax.json",
-                "embeddedLanguages": {
-                    "task": "source.shell"
-                }
-            }
-        ]
-    },
-    "dependencies": {
-        "generator-code": "^1.2.6",
-        "vsce": "^1.66.0"
-    }
+	"name": "bake",
+	"displayName": "bake",
+	"description": "Hilighting for Bake: a strangely familiar task runner.",
+	"version": "0.0.1",
+	"publisher": "kennethreitz",
+	"repository": "https://github.com/kennethreitz/bake.git",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "bakefile",
+				"aliases": [
+					"Bakefile",
+					"bakefile"
+				],
+				"extensions": [
+					"Bakefile"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "bakefile",
+				"scopeName": "source.bakefile",
+				"path": "./syntaxes/Bakefile.syntax.json",
+				"embeddedLanguages": {
+					"task": "source.shell"
+				}
+			}
+		]
+	},
+	"dependencies": {
+		"generator-code": "^1.2.6",
+		"vsce": "^1.66.0"
+	},
+	"__metadata": {
+		"id": "9c773cc4-328c-4e24-84c9-3cc5ba85b3d0",
+		"publisherDisplayName": "kennethreitz",
+		"publisherId": "7bf106b0-2ddb-49af-9b16-bbd0067cf5a9"
+	}
 }

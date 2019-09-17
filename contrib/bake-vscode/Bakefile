@@ -12,4 +12,3 @@ ms/package: install/system
 
 install/system:
     npm install -g yo generator-code vsce
-vnfpzyctwdml75il7y5prfe3637lbvr4wpkje3mtecgbqbm3fhmq

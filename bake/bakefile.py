@@ -206,12 +206,26 @@ class TaskScript(BaseAction):
         actions = [t for t in gen_actions()]
 
         if recursive:
+            graph = {}
             actions = []
-            _last_action = None
-            for _, action in list(networkx.dfs_edges(self.bashfile.graph, self)):
-                if _last_action != action:
-                    actions.append(action)
-                _last_action = action
+
+            edge_view = networkx.edge_dfs(
+                self.bashfile.graph, self, orientation="original"
+            )
+
+            for parent, child, _ in edge_view:
+                if parent not in graph:
+                    graph[parent] = [child]
+                else:
+                    graph[parent].append(child)
+
+            for task in graph:
+                for action in graph[task]:
+                    for dep_action in graph.get(action, []):
+                        if dep_action not in actions:
+                            actions.append(dep_action)
+                    if action not in actions:
+                        actions.append(action)
 
         return actions
 
@@ -357,13 +371,9 @@ class Bakefile:
         g = networkx.OrderedDiGraph()
 
         for task in self.tasks.values():
-            if task not in g:
-                g.add_node(task)
-
+            g.add_node(task)
             for dep in task.depends_on():
-                if dep not in g:
-                    g.add_node(dep)
-
+                g.add_node(dep)
                 g.add_edge(task, dep)
 
         self._graph = g
