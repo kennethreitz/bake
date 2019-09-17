@@ -67,9 +67,9 @@ install: node-deps python-deps
 format:
     black .
 
-python-deps:
+python-deps: @skip:key=Pipfile.lock
     pipenv install
-node-deps:
+node-deps: @skip:key=yarn.lock
     yarn install
 system-deps: @confirm
     brew install pipenv
