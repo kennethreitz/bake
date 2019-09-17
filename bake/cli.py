@@ -16,6 +16,7 @@ SAFE_ENVIRONS = [
     "LANG",
     "LOCALE",
     "LANGUAGE",
+    "USER",
     "TERM",
     "VIRTUAL_ENV",
     "BAKEFILE_PATH",
