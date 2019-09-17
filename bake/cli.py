@@ -263,7 +263,9 @@ def entrypoint(
         __list_json = {"tasks": {}}
 
         for _task in bakefile.tasks:
-            depends_on = bakefile[_task].depends_on(recursive=True)
+            depends_on = bakefile[_task].depends_on(
+                include_filters=False, recursive=False
+            )
 
             if no_deps:
                 depends_on = ()
@@ -343,9 +345,19 @@ def entrypoint(
             sys.exit(1)
 
         def execute_task(task, *, silent=False):
-            global SKIP_NEXT
+            try:
+                edges = list(bakefile.graph.out_edges(task))[0]
+            except IndexError:
+                edges = list()
 
-            if not SKIP_NEXT:
+            skips = []
+            for edge in edges:
+                if edge.do_skip is not None:
+                    skips.append(edge.do_skip)
+
+            if not all(skips or [False]):
+                if "@" in f"{task}":
+                    silent = True
                 if not silent:
                     click.echo(
                         click.style(" + ", fg="white")
@@ -365,10 +377,7 @@ def entrypoint(
                         sys.exit(return_code)
                     if isinstance(return_code, tuple):
                         key, value = return_code
-                        if key == "skip" and value:
-                            SKIP_NEXT = True
             else:
-                SKIP_NEXT = False
                 click.echo(
                     click.style(" + ", fg="green")
                     + click.style(f"Skipping {task}", fg="white")
@@ -378,12 +387,6 @@ def entrypoint(
 
         if not no_deps:
             tasks = task.depends_on(recursive=True) + [task]
-
-            # Re-order tasks, because.
-            for i, task in enumerate(tasks[:]):
-                if isinstance(task, TaskFilter):
-                    t = tasks.pop(i)
-                    tasks.insert(i - 1, t)
 
         else:
             tasks = [task]

@@ -6,7 +6,7 @@ from hashlib import sha256
 from random import randint
 from shlex import quote as shlex_quote
 from tempfile import mkstemp
-
+from uuid import uuid4
 import delegator
 import click
 import networkx
@@ -29,6 +29,8 @@ class FilterNotAvailable(ValueError):
 
 
 class BaseAction:
+    do_skip = None
+
     @property
     def is_filter(self):
         if not hasattr(self, "_chunk_index"):
@@ -39,6 +41,8 @@ class TaskFilter(BaseAction):
     def __init__(self, s, bashfile):
         self.source = s
         self.bashfile = bashfile
+        self.__uuid = uuid4().hex
+        self.do_skip = None
 
     def __str__(self):
         split = self.source.split(":", 1)
@@ -52,11 +56,10 @@ class TaskFilter(BaseAction):
         return source
 
     def __hash__(self):
-        return hash((self.bashfile, self.source))
+        return hash((self.bashfile, self.source, self.__uuid))
 
-    def __eq__(self, other):
-        if hasattr(other, "source"):
-            return other.source == self.source
+    # def __eq__(self, other):
+    #     return
 
     @property
     def name(self):
@@ -114,8 +117,7 @@ class TaskFilter(BaseAction):
 
         return ("confirmed", True)
 
-    @staticmethod
-    def execute_skip_if(*, key, cache=None, **kwargs):
+    def execute_skip_if(self, *, key, cache=None, **kwargs):
         if cache is None:
             cache = f".git/bake-hash-{sha256(key.encode('utf-8')).hexdigest()}"
 
@@ -124,6 +126,7 @@ class TaskFilter(BaseAction):
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
 
         if not os.path.exists(key_path):
+            self.do_skip = False
             return ("skip", False)
 
         if os.path.exists(cache_path):
@@ -139,8 +142,10 @@ class TaskFilter(BaseAction):
             f.write(current_hash)
 
         if old_hash == current_hash:
+            self.do_skip = True
             return ("skip", True)
 
+        self.do_skip = False
         return ("skip", False)
 
     def execute(self, yes=False, **kwargs):
@@ -184,8 +189,8 @@ class TaskScript(BaseAction):
     def declaration_line(self):
         return self.chunk[0]
 
-    def depends_on(self, *, recursive=False):
-        def gen_actions():
+    def depends_on(self, *, include_filters=True, recursive=False):
+        def gen_actions(include_filters=include_filters):
             task_strings = self.declaration_line.split(":", 1)[1].split()
 
             task_name_index_tuples = [
@@ -195,7 +200,8 @@ class TaskScript(BaseAction):
             for i, task_string in task_name_index_tuples:
 
                 if task_string.startswith("@"):
-                    yield TaskFilter(task_string, bashfile=self.bashfile)
+                    if include_filters:
+                        yield TaskFilter(task_string, bashfile=self.bashfile)
                 elif i is None:
                     # Create the filter.
                     yield FakeTaskScript(task_string, bashfile=self.bashfile)
@@ -217,15 +223,14 @@ class TaskScript(BaseAction):
                 if parent not in graph:
                     graph[parent] = [child]
                 else:
-                    graph[parent].append(child)
+                    if child not in graph[parent]:
+                        graph[parent].append(child)
 
             for task in graph:
                 for action in graph[task]:
                     for dep_action in graph.get(action, []):
-                        if dep_action not in actions:
-                            actions.append(dep_action)
-                    if action not in actions:
-                        actions.append(action)
+                        actions.append(dep_action)
+                    actions.append(action)
 
         return actions
 
@@ -373,8 +378,8 @@ class Bakefile:
         for task in self.tasks.values():
             g.add_node(task)
             for dep in task.depends_on():
-                g.add_node(dep)
-                g.add_edge(task, dep)
+                if dep not in g:
+                    g.add_edge(task, dep)
 
         self._graph = g
         return self.graph
