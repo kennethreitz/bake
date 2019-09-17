@@ -1,5 +1,10 @@
-ms/publish: ms/package
+ms/publish: ms/package ms/login
     vsce publish
+    rm -fr bake-*.vsix
+
+ms/login: install/system
+    set +e
+    vsce login kennethreitz
 
 ms/package: install/system
     cp ../../README.md README.md
