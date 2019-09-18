@@ -24,7 +24,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 <p>&nbsp;</p>
 <p align="center"><strong>What's in the oven?</strong></p>
-<span align="center><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></span>
+<span align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></span>
 <pre>
 
     <div align="left">
