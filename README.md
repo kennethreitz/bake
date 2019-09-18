@@ -33,7 +33,7 @@
 <ul>
     <li>A <code>Bakefile</code>, which <strong>looks</strong> and <strong>feels</strong> like the good parts of a <code>Makefile</code>.</li>
     <li>Except, you can write real <code><strong>bash</strong></code> code!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any and all syntax is accepted — no magic going on here. ;)</li>
-<li>Unlike a <code><strong>Makefile</strong></code>, you can use either <code><strong>\t</strong></code> or <code><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></code> (<code>4×<a href="https://unicode.org/cldr/utility/character.jsp?a=0020">U+0020</a> (' ', <em>a.k.a.</em> “space”)</code>), at your discretion.</li>
+<li>Unlike a <code><strong>Makefile</strong></code>, you can use either <code><strong>\t</strong></code> or <code><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></code> <strong>[</strong><code>4×<a href="https://unicode.org/cldr/utility/character.jsp?a=0020">U+0020</a> (' ', <em>a.k.a.</em> “space”)</code><strong>]</strong>, at your adult discretion.</li>
     <li>Environment variables are explicitly passed or whitelisted (<code>--allow</code>), not inherited from the parent shell.</li>
 <li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
 <li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
