@@ -42,16 +42,10 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ## Installing `$ bake`
 
-**MacOS**:
-
-```console
-$ brew install kennethreitz/-/bake
-==> Installing bake from kennethreitz/-
-…
-🍺  /usr/local/Cellar/bake/19-09-16: 1,563 files, 16.7MB, built in 11 seconds
-```
 
 **Various Linux Distributions** (Python 3.6+):
+
+The primary installation method of `bake`, today, is via `pip`:
 
 ```console
 $ pip3 install bake-cli
@@ -60,7 +54,48 @@ Collecting bake-cli
 Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0
 ```
 
+This will always work, but it will not be the default recommendation.
+
+**MacOS**:
+
+Installation of `bake` will (soon) be very easy, with Homebrew. The formula needs a subtle adjustment — if you want to help, [here's the repo](http://github.com/kennethreitz/homebrew--)!
+
+```console
+$ brew install kennethreitz/-/bake
+==> Installing bake from kennethreitz/-
+…
+🍺  /usr/local/Cellar/bake/19-09-16: 1,563 files, 16.7MB, built in 11 seconds
+```
+
+Homebrew will be the primary installation target of `bake`.
+
 ✨🍰✨
+
+**Docker**
+
+You an also run `bake` via Docker! An official image has been made available:
+
+```console
+$ docker run kennethreitz/bake                                                                                                                                                                       Wed Sep 18 10:11:01 2019
+No Bakefile found!
+Usage:  [OPTIONS] [TASK] [ARGUMENTS]...
+
+ $ bake — the strangely familiar task–runner.
+
+Options:
+  -b, --bakefile PATH      The Bakefile to use.
+  -l, --list               Lists available tasks (and their dependencies).
+  -h, --help               Show this message and exit.
+  --shellcheck             Run shellcheck on Bakefile.
+  --allow TEXT             Whitelist an environment variable for use.
+  --no-deps                Do not run dependent tasks.
+  --yes                    Set medium–security prompts to yes.
+  --continue               Continue, if a task fails.
+  -i, --interactive        Run in interactive mode.
+  --insecure               Inherit parent shell's environment variables.
+  -s, --silent             Reduce output.
+  -e, --environ-json TEXT  Provide environment variables via JSON.
+  -j, --json               Output in JSON format (stdout).
 
 ---------------
 
