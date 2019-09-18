@@ -29,7 +29,6 @@
     exit 0</code>                                              
     </div>                                                     
 </pre>
-
 <p align="center"><small><a href="https://github.com/kennethreitz/bake/blob/master/Bakefile">see <strong>bake</strong>'s own <code><strong>Bakefile</strong></code></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small></p>
 
 ## What's in the oven?
