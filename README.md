@@ -30,6 +30,8 @@
     </div>                                                     
 </pre>
 
+<p align="center"><small><a href="https://github.com/kennethreitz/bake/blob/master/Bakefile">see <code>bake</code>'s own <code><strong>Bakefile</strong></code></a>&nbsp;&nbsp;</small></p>
+
 ## What's in the oven?
 
 <ul>
