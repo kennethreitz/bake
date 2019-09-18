@@ -52,7 +52,8 @@ I love using `Makefile` for one-off **tasks** in projects.
 
 The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
 
-This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories
+
+project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories
 
 -------------------
 
@@ -119,7 +120,7 @@ Options:
 - **`Bakefile`** is expected to live at **`/app/Bakefile`**. 
 - If you inherit from this image, **`ONBUILD`** directives will automatically copy your application code (build context) into the container, into **`/app`**.
 
-**Bonus Points**: This image is also available on the GitHub Package Registry ([link](https://github.com/kennethreitz/bake/packages/24444)).
+**Bonus Points**: this image is also available on the GitHub Package Registry ([link](https://github.com/kennethreitz/bake/packages/24444)).
 
 ---------------
 
