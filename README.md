@@ -26,7 +26,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 <p align="center"><strong>What's in the oven?</strong></p>
 
-<span align="center"><pre><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
+<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
 
 <pre>
 
