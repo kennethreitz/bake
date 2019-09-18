@@ -26,10 +26,10 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 <span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
 
-<p align="center"><code>$ <strong>bake</strong></code></p>
+<p align="center"><code>$ <strong>bake&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></code></p>
 <pre>
 
-    <div align="left">
+<div align="left">
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                          + <strong>Executing install/node</strong>:
     echo 'All ready!'                                           |  yarn install v1.17.3
