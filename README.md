@@ -34,7 +34,7 @@
 <li>A <code>Bakefile</code>, which looks and feels like the good parts of a <code>Makefile</code>.</li>
 <li>Except, you can write real <code>bash</code> code! Any and all syntax is accepted — no magic going on here.</li>
 <li>Unlike a <code>Makefile</code>, you can use either <code>\t</code> or <code>&nbsp;&nbsp;&nbsp;&nbsp;</code> (<code>4×' '</code>), at your discretion.</li>
-<li>Environment variables are explicitly passed or whitelisted (`--allow`), not inherited from the parent shell.</li>
+    <li>Environment variables are explicitly passed or whitelisted (<code>--allow</code>), not inherited from the parent shell.</li>
 <li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
 <li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
 </ul>
