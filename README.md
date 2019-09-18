@@ -34,7 +34,6 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 - See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
 <pre>
-    <a href="https://2.python-requests.org/"><img src="https://raw.githubusercontent.com/psf/requests/master/ext/deepmind-kr.jpg" align="center" /></a>
     <div align="left">
     <p></p>
     <code>$ cat Bakefile`
