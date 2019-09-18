@@ -31,11 +31,11 @@
 ## What's in the oven?
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- Except, you can write real bash code!
+- Except, you can write real `bash` code!
 - Environment variables are explicitly passed or whitelisted (allowed), not inherited from the parent shell.
 - Unlike `Makefile`, either tabs or 4 spaces can be used.
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
-- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
+- There are many other benefits to this design, that have yet to be expressed in this document.
 
 ------------------
 
