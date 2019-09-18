@@ -40,7 +40,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ### Community / Contrib
 
-- [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=kennethreitz.bake) — highlights `Bakefile`.
+- [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=kennethreitz.bake) — highlights `Bakefile`, *adequately*.
 
 ------------------
 
