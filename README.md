@@ -45,13 +45,20 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
     exit 0</code>                                              
     </div>                                                     
                                                             
-    <p align="center">                                         
-This software has been designed for you, with much joy, 
-by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.  
-   </p>
-<p>&nbsp;</p>
+ 
 
 </pre>
+
+<p>&nbsp;</p>
+<p align="center"><strong>What's in the oven?</strong></p>
+<p>&nbsp;</p>
+
+- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
+- Except, you can write real bash code!
+- Environment variables are explicitly passed or whitelisted (allowed), not inherited from the parent shell.
+- Unlike `Makefile`, either tabs or 4 spaces can be used.
+- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
+- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
 ### Community / Contrib
 
@@ -187,9 +194,10 @@ Fancy, eh?
 ---------------------
 
 <p align="center">
-This repository has been brought to you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
+This software has been designed for you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
 </p>
 
+<p>&nbsp;</p>
 ![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
 
 <p align="center">
