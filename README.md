@@ -57,7 +57,7 @@ project seeks to bridge all of these worlds into a single entrypoint — ideal 
 
 -------------------
 
-## Bootstraping `bake` — &nbsp;&nbsp;Local Workflows
+## Bootstraping `bake` — &nbsp;&nbsp;&nbsp;&nbsp;for Local Development Workflows
 
 
 #### **Various `*`nix Distributions** (Python 3.6+):
