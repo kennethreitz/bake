@@ -26,7 +26,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 <span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
 
-<p align="center"><code>$ <strong>bake&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></code></p>
+<p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
 
 <div align="left">
