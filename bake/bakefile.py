@@ -232,6 +232,7 @@ class TaskScript(BaseAction):
                         actions.append(dep_action)
                     actions.append(action)
 
+        # Remove filters, if requested to do so.
         if not include_filters:
             _actions = []
             for action in actions:
@@ -239,6 +240,14 @@ class TaskScript(BaseAction):
                     _actions.append(action)
 
             actions = _actions
+
+        # Remove duplicates from the list.
+        _actions = []
+        for action in actions:
+            if action not in _actions:
+                _actions.append(action)
+        actions = _actions
+
         return actions
 
     @classmethod
@@ -516,8 +525,6 @@ class Bakefile:
                 else:
                     if not task_active:
                         source_lines.append(line)
-            # else:
-            # task_active = False
 
         return source_lines
 
