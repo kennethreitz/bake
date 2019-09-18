@@ -8,7 +8,7 @@
 <p align="center"><small>~ under development ~&nbsp;&nbsp;</small></p>
 
 <div align="left">
-<code>$ <strong>cat Bakefile</strong>                                                 $ <strong> bake install</strong>
+<code>$ <strong>cat Bakefile</strong>                                                $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                            + <strong>Executing install/node</strong>:
     echo 'All ready!'                                           |  yarn install v1.17.3
 <strong>install/full</strong>: install/system install                            |  info No lockfile found.
