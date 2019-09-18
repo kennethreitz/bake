@@ -22,20 +22,8 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ----------------
 
-<p>&nbsp;</p>
-<p align="center"><strong>What's in the oven?</strong></p>
-<p>&nbsp;</p>
-
-- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- Except, you can write real bash code!
-- Environment variables are explicitly passed or whitelisted (allowed), not inherited from the parent shell.
-- Unlike `Makefile`, either tabs or 4 spaces can be used.
-- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
-- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
-
 <pre>
     <div align="left">
-    <p></p>
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                          + <strong>Executing install/node</strong>:
     echo 'All ready!'            |  yarn install v1.17.3
