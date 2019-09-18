@@ -1,3 +1,6 @@
+### Automate Workflows—Bootstrap Development Environments—Commit The Tasks (*i.e.* `git`) 
+
+
 ![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
 
 
@@ -10,7 +13,6 @@
 
 --------------------
 
-### Automate Workflows—Bootstrap Development Environments—Commit The Tasks (*i.e.* `git`) 
 
 I love using `Makefile` for one-off **tasks** in projects.
 
