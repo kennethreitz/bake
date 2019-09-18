@@ -166,7 +166,7 @@ $ bake install
 
 Neat, eh?
 
-### Passing Values (Arguments & Parameters)
+### Arguments & Parameters: Passing Values In
 
 ```console
 $ bake utils/argv KEY=VALUE 1 2 3
@@ -175,7 +175,7 @@ $ bake utils/argv KEY=VALUE 1 2 3
  + Done.
  ```
 
-### Added Peace of Mind
+### (Optional) Non-Deterministic Confirmation Dialouges
 
 ```console
 $ bake utils/deploy
