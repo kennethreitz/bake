@@ -22,6 +22,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <p align="center">
 <img src="https://github.com/kennethreitz/bake/blob/master/ext/screencast.gif?raw=true" />
 </p>
+<p>&nbsp;</p>
 
 ----------------
 
