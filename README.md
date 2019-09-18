@@ -5,7 +5,7 @@
 <p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
 
-<p align="center"><small>under development.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small></p>
+<p align="center"><small>under development.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</small></p>
 
 <div align="left">
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
