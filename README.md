@@ -5,12 +5,12 @@
 <pre>
     <code>$ <strong>bake</strong></code><em>, n</em>:
     <em>the s☿rangely familiar task runner.</em>
-</pre>  
+</pre>
 </span>
 
 --------------------
 
-I love using `Makefile` for one-off **tasks** in projects. 
+I love using `Makefile` for one-off **tasks** in projects.
 
 The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
 
@@ -67,60 +67,71 @@ Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyproces
 ## `$ cat Bakefile`
 
 ```make
-full-install: system-deps install
-install: node-deps python-deps
-format:
+install: install/node install/python
+install/full: install/system install
+
+install/python: @skip:key=Pipfile.lock
+    pipenv install
+install/node: @skip:key=yarn.lock
+    yarn install
+install/system: @confirm
+    brew install pipenv yarn
+
+python/format:
     black .
 
-python-deps: @skip:key=Pipfile.lock
-    pipenv install
-node-deps: @skip:key=yarn.lock
-    yarn install
-system-deps: @confirm
-    brew install pipenv
-    
-python-example:
-    #!/usr/bin/env python
-    import os
-    import sys
+utils/argv:
+    set -u && echo "$HELLO: $@"
 
-    print(os.environ['KEY'])
-    print(sys.argv[1:])
-
-dangerous-example: @confirm:secure
-    # <insert deploy to production here>
+utils/deploy: @confirm:secure
     exit 0
 ```
 
 
-### `$ bake install`
+### Team & Workflow Management
 
 ```console
- + Executing 'node-deps':
-yarn install v1.17.3
-[1/4] 🔍  Resolving packages...
-success Already up-to-date.
-✨  Done in 0.03s.
- + Executing 'python-deps':
-Installing dependencies from Pipfile.lock (2ee04c)…
-  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 8/8 — 00:00:01
+$ bake install
+ + Executing install/node:
+ |  yarn install v1.17.3
+ |  info No lockfile found.
+ |  [1/4] Resolving packages...
+ |  [2/4] Fetching packages...
+ |  [3/4] Linking dependencies...
+ |  [4/4] Building fresh packages...
+ |  success Saved lockfile.
+ |  Done in 0.05s.
+ + Executing install/python:
+ |  Installing dependencies from Pipfile.lock (f10bb0)…
+ + Executing install:
  + Done.
 ```
 
-
-### `$ bake python-example KEY=VALUE 1 2 3`
+### Skip Steps, Automatically
 
 ```console
- + Executing 'python-argv':
-   VALUE
-   ['1', '2', '3']
+$ bake install
+ + Skipping install/node:
+ + Skipping install/python.
+ + Executing install:
+ + Done.
+```
+
+Neat, eh?
+
+### Passing Values (Arguments & Parameters)
+
+```console
+$ bake utils/argv KEY=VALUE 1 2 3
+ + Executing utils/argv:
+ |  WORLD: 1 2 3
  + Done.
  ```
 
-### `$ bake dangerous-example`
+### Added Peace of Mind
 
 ```console
-+ Executing '@confirm:secure' ·
+$ bake utils/deploy
    What is 10 times 2?: 7
 Aborted.
 ```
