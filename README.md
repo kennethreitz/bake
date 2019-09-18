@@ -120,7 +120,7 @@ Options:
 - **`Bakefile`** is expected to live at **`/app/Bakefile`**. 
 - If you inherit from this image, **`ONBUILD`** directives will automatically copy your application code (build context) into the container, into **`/app`**.
 
-**Bonus Points**: this image is also available on the GitHub Package Registry ([link](https://github.com/kennethreitz/bake/packages/24444)).
+**Bonus Points**: this image is also [available on the GitHub Package Registry](https://github.com/kennethreitz/bake/packages/24444) (beta).
 
 ---------------
 
