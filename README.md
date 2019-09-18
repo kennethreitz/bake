@@ -2,7 +2,7 @@
 
 <span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.jpg?raw=true" /></pre></span>
 
-<p align="center"><code>$ <strong>bake</strong> — a strangely familiar workflow utlity. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
+<p align="center"><code>$ <strong>bake</strong> — a s☿rangely familiar workflow utlity. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
 
 <p align="center"><small>~ under development ~&nbsp;&nbsp;</small></p>
