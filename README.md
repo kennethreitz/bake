@@ -31,7 +31,7 @@
 ## What's in the oven?
 
 <ul>
-    <li>A <code>Bakefile</code>, which <em>looks</em> and <em>feels</em> like the good parts of a <code>Makefile</code>.</li>
+    <li>A <code>Bakefile</code>, which <strong>looks</strong> and <strong>feels</strong> like the good parts of a <code>Makefile</code>.</li>
 <li>Except, you can write real <code>bash</code> code!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any and all syntax is accepted — no magic going on here.</li>
 <li>Unlike a <code>Makefile</code>, you can use either <code>\t</code> or <code>&nbsp;&nbsp;&nbsp;&nbsp;</code> (<code>4×' '</code>), at your discretion.</li>
     <li>Environment variables are explicitly passed or whitelisted (<code>--allow</code>), not inherited from the parent shell.</li>
