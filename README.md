@@ -91,7 +91,7 @@ Homebrew will be the primary installation target of `bake`.
 
 #### Containers! *e.g.* Docker.
 
-You an also run `bake` via Docker! An official image has been made available:
+You an also run `bake` via Docker! An official image has been made available [on DockerHub](https://cloud.docker.com/u/kennethreitz/repository/docker/kennethreitz/bake):
 
 ```console
 $ docker run kennethreitz/bake                                                                                                                                                                       Wed Sep 18 10:11:01 2019
@@ -115,6 +115,11 @@ Options:
   -e, --environ-json TEXT  Provide environment variables via JSON.
   -j, --json               Output in JSON format (stdout).
 ```
+
+- **`Bakefile`** is expected to live at **`/app/Bakefile`**. 
+- If you inherit from this image, **`ONBUILD`** directives will automatically copy your application code (build context) into the container, into **`/app`**.
+
+**Bonus Points**: This image is also available on the GitHub Package Registry ([link](https://github.com/kennethreitz/bake/packages/24444)).
 
 ---------------
 
