@@ -191,7 +191,7 @@ Aborted.
 <p>&nbsp;</p>
 
 <p align="center">
-This software has been designed for you, with much joy, by:
+    This open source software has been designed, for <strong>you</strong>, with much joy, by the hands of:
 </p>
 
 <p>&nbsp;</p>
