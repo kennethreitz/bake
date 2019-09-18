@@ -2,6 +2,8 @@
 
 <span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.jpg?raw=true" /></pre></span>
 
+<p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
+<pre>
 
 <p align="center"><small>under development.&nbsp;&nbsp;</small></p>
 
@@ -27,10 +29,6 @@
     exit 0</code>                                              
     </div>                                                     
 </pre>
-
-<p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
-<pre>
-
 
 ## What's in the oven?
 
