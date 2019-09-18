@@ -189,8 +189,8 @@ class TaskScript(BaseAction):
     def declaration_line(self):
         return self.chunk[0]
 
-    def depends_on(self, *, include_filters=True, recursive=False):
-        def gen_actions(include_filters=include_filters):
+    def depends_on(self, *, include_filters=True, recursive=False, include_fakes=True):
+        def gen_actions(include_filters=include_filters, include_fakes=include_fakes):
             task_strings = self.declaration_line.split(":", 1)[1].split()
 
             task_name_index_tuples = [
@@ -203,8 +203,8 @@ class TaskScript(BaseAction):
                     if include_filters:
                         yield TaskFilter(task_string, bashfile=self.bashfile)
                 elif i is None:
-                    # Create the filter.
-                    yield FakeTaskScript(task_string, bashfile=self.bashfile)
+                    if include_fakes:
+                        yield FakeTaskScript(task_string, bashfile=self.bashfile)
                 else:
                     # Otherwise, create the task.
                     yield TaskScript(chunk_index=i, bashfile=self.bashfile)
@@ -232,6 +232,13 @@ class TaskScript(BaseAction):
                         actions.append(dep_action)
                     actions.append(action)
 
+        if not include_filters:
+            _actions = []
+            for action in actions:
+                if not isinstance(action, TaskFilter):
+                    _actions.append(action)
+
+            actions = _actions
         return actions
 
     @classmethod
@@ -378,8 +385,7 @@ class Bakefile:
         for task in self.tasks.values():
             g.add_node(task)
             for dep in task.depends_on():
-                if dep not in g:
-                    g.add_edge(task, dep)
+                g.add_edge(task, dep)
 
         self._graph = g
         return self.graph

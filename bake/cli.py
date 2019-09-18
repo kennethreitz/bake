@@ -264,18 +264,13 @@ def entrypoint(
 
         for _task in bakefile.tasks:
             depends_on = bakefile[_task].depends_on(
-                include_filters=False, recursive=False
+                include_filters=False, recursive=True
             )
 
             if no_deps:
                 depends_on = ()
 
             if depends_on:
-                # deps = []
-                # for dep in depends_on:
-                #     if dep.is_filter:
-                #         dep = click.style(str(dep), fg="yellow")
-                #     deps.append(str(dep))
                 deps = [str(a) for a in depends_on]
                 deps = f"\n    {click.style('+', fg='yellow', bold=True)} {eng_join(deps, conj='&')}."
             else:
