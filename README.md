@@ -36,24 +36,24 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <pre>
     <div align="left">
     <p></p>
-    <code>$ cat Bakefile`
-install: install/node install/python
-install/full: install/system install
+<code>$ <strong>cat Bakefile</strong>
+<strong>install</strong>: install/node install/python
+<strong>install/full</strong>: install/system install
 
-install/python: @skip:key=Pipfile.lock
+<strong>install/python</strong>: @skip:key=Pipfile.lock
     pipenv install
-install/node: @skip:key=yarn.lock
+<strong>install/node</strong>: @skip:key=yarn.lock
     yarn install
-install/system: @confirm
+<strong>install/system</strong>: @confirm
     brew install pipenv yarn
 
-python/format:
+<strong>python/format</strong>:
     black .
 
-utils/argv:
+<strong>utils/argv</strong>:
     set -u && echo "$HELLO: $@"
 
-utils/deploy: @confirm:secure
+<strong>utils/deploy</strong>: @confirm:secure
     exit 0</code>
     </div>
     
