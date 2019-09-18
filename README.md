@@ -1,4 +1,4 @@
-<p>&nbsp;</p>
+<p align="center"><strong>P.S.</strong>—this project is under active construction.</p>
 
 <span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.jpg?raw=true" /></pre></span>
 
