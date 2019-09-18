@@ -9,7 +9,6 @@
     <code>$ <strong>bake</strong></code><em>, n</em>:
     <em>the s☿rangely familiar task runner.</em>
 </pre>
-    <img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" />
 </span>
 
 --------------------
@@ -27,6 +26,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <p align="center"><strong>What's in the oven?</strong></p>
 
 <pre>
+<img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" />
     <div align="left">
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                          + <strong>Executing install/node</strong>:
