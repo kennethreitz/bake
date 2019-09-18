@@ -124,10 +124,6 @@ Options:
 
 ---------------
 
-### Community / Contrib
-
-- [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=kennethreitz.bake) — highlights `Bakefile`— adequately.
-
 
 ### Team & Workflow Management
 
@@ -184,6 +180,13 @@ Aborted.
 ```
 
 ---------------------
+
+
+### Community / Contrib
+
+- [Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=kennethreitz.bake) — highlights `Bakefile`— adequately.
+
+----------------------
 
 <p align="center">
 This software has been designed for you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
