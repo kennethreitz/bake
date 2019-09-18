@@ -41,6 +41,13 @@
 
 ### Automate Workflows — Bootstrap Development Environments — Commit The Tasks
 
+
+I love using `Makefile` for one-off **tasks** in projects.
+
+The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
+
+This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories
+
 -------------------
 
 ## Installing `$ bake`
