@@ -22,6 +22,10 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ----------------
 
+<p>&nbsp;</p>
+<p align="center"><strong>What's in the oven?</strong></p>
+<p>&nbsp;</p>
+
 <pre>
     <div align="left">
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
@@ -46,9 +50,6 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
     </div>                                                     
 </pre>
 
-<p>&nbsp;</p>
-<p align="center"><strong>What's in the oven?</strong></p>
-<p>&nbsp;</p>
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
 - Except, you can write real bash code!
