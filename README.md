@@ -35,7 +35,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <strong>install/system</strong>: @confirm                                        |  success Saved lockfile.
     brew install pipenv yarn                                    |  Done in 0.05s.
                                                                 + <strong>Executing install/python</strong>:
-<strong>python/format</strong>:                                                  |  Installing dependencies from Pipfile.lock (f10bb0)…
+<strong>python/format</strong>:                                                  |  Installing dependencies from …
     black .                                                     + <strong>Executing install</strong>:
                                                                 |  All ready!
 <strong>utils/argv</strong>:                                                     + <strong>Done</strong>.
