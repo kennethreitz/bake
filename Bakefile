@@ -15,14 +15,14 @@ docker/login:
 
     # Login to GitHub Package Registry.
     echo 'Maybe visit: https://github.com/settings/tokens'
-    set -ex && docker login {$REGISTRY:=-docker.pkg.github.com}" --username "{$USERNAME:=-kennethreitz}"
+    set -ex && docker login {REGISTRY:=-docker.pkg.github.com}" --username "{USERNAME:=-kennethreitz}"
 
     # Login to DockerHub.
     docker login
 docker/build: install/system
 
-    REGISTRY="{$REGISTRY:=-docker.pkg.github.com}"
-    USERNAME="{$USERNAME:=-kennethreitz}"
+    REGISTRY="{REGISTRY:=-docker.pkg.github.com}"
+    USERNAME="{USERNAME:=-kennethreitz}"
 
     set -u
 
