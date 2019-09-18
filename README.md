@@ -63,7 +63,7 @@ This software has been designed for you, with much joy,
 by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.  
    </p>
 <p>&nbsp;</p>
-<img src="https://github.com/psf/requests/blob/master/ext/flourish.jpg?raw=true" />
+
 </pre>
 
 ### Community / Contrib
