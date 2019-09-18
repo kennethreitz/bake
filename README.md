@@ -191,7 +191,7 @@ Aborted.
 <p>&nbsp;</p>
 
 <p align="center">
-This software has been designed for you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
+This software has been designed for you, with much joy, by:
 </p>
 
 <p>&nbsp;</p>
