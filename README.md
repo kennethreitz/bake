@@ -53,7 +53,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 -------------------
 
-## Bootstraping `bake`, locally
+## Bootstraping `bake` for Local Workflows
 
 
 #### **Various `*`nix Distributions** (Python 3.6+):
@@ -83,6 +83,8 @@ $ brew install kennethreitz/-/bake
 Homebrew will be the primary installation target of `bake`.
 
 ✨🍰✨
+
+## Bootstraping `bake` for Production Workflows
 
 #### Containers! *e.g.* Docker.
 
