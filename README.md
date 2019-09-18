@@ -1,33 +1,11 @@
-### Automate Workflows—Bootstrap Development Environments—Commit The Tasks (*i.e.* `git`) 
-
-
-![vanity image](https://github.com/kennethreitz/bake/blob/master/ext/img.jpg?raw=true)
-
-
-<span align="center">
-<pre>
-    <code>$ <strong>bake</strong></code><em>, n</em>:
-    <em>the s☿rangely familiar task runner.</em>
-</pre>
-</span>
-
---------------------
-
-
-I love using `Makefile` for one-off **tasks** in projects.
-
-The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
-
-This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories.
-
-----------------
-
 <p>&nbsp;</p>
-<p align="center"><strong>What's in the oven?</strong></p>
 
+<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
+
+<p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
-<img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" />
-    <div align="left">
+
+<div align="left">
 <code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                          + <strong>Executing install/node</strong>:
     echo 'All ready!'                                           |  yarn install v1.17.3
@@ -50,20 +28,35 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
     </div>                                                     
 </pre>
 
+## What's in the oven?
 
-- A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
-- Except, you can write real bash code!
-- Environment variables are explicitly passed or whitelisted (allowed), not inherited from the parent shell.
-- Unlike `Makefile`, either tabs or 4 spaces can be used.
-- Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
-- See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
+<ul>
+    <li>A <code>Bakefile</code>, which <strong>looks</strong> and <strong>feels</strong> like the good parts of a <code>Makefile</code>.</li>
+    <li>Except, you can write real <code><strong>bash</strong></code> code!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any and all syntax is accepted — no magic going on here. ;)</li>
+<li>Unlike <code><strong>Makefile</strong></code>, you may utilize either <code><strong>\t</strong></code> or <code><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></code> <strong>[</strong><code>4×<a href="https://unicode.org/cldr/utility/character.jsp?a=0020">U+0020</a> (“space”)</code><strong>]</strong>, at your full adult discretion.</li>
+    <li>Environment variables are explicitly passed or whitelisted (<code><strong>--allow</strong></code>), not inherited from the parent shell.</li>
+<li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
+<li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
+</ul>
+
 
 ------------------
 
-## Installing `$ bake`
+### Automate Workflows — Bootstrap Development Environments — Commit The Tasks
 
 
-### **Various `*`nix Distributions** (Python 3.6+):
+I love using `Makefile` for one-off **tasks** in projects.
+
+The problem with doing this is that you can't use familiar bash–isms when doing so, as **GNU Make** doesn't use the familiar **Bash** syntax, nor does it allow for simple ad–hoc use of arbitrary scripting languages (e.g. **Python**).
+
+This project seeks to bridge all of these worlds into a single entrypoint — ideal for cross–language repositories
+
+-------------------
+
+## Bootstraping `bake`, locally
+
+
+#### **Various `*`nix Distributions** (Python 3.6+):
 
 The primary installation method of `bake`, today, is via `pip`:
 
@@ -76,7 +69,7 @@ Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyproces
 
 This will always work, but it will not be the default recommendation.
 
-## MacOS (Previously known as OS X)
+#### MacOS (Previously known as OS X)
 
 Installation of `bake` will (soon) be very easy, with Homebrew. The formula needs a subtle adjustment — if you want to help, [here's the repo](http://github.com/kennethreitz/homebrew--)!
 
@@ -91,7 +84,7 @@ Homebrew will be the primary installation target of `bake`.
 
 ✨🍰✨
 
-## Containers! *e.g.* Docker.
+#### Containers! *e.g.* Docker.
 
 You an also run `bake` via Docker! An official image has been made available:
 
@@ -186,8 +179,7 @@ This software has been designed for you, with much joy, by <a href="https://kenn
 </p>
 
 <p>&nbsp;</p>
-![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
 
 <p align="center">
-    <em>As above, so below.</em>
+    <large>☿</large>
 </p>
