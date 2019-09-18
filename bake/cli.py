@@ -1,6 +1,7 @@
 import sys
 import click
 import json
+import random
 
 from .bakefile import Bakefile, TaskFilter, NoBakefileFound
 from .clint import eng_join
@@ -20,6 +21,8 @@ SAFE_ENVIRONS = [
     "TERM",
     "VIRTUAL_ENV",
     "BAKEFILE_PATH",
+    "PYTHONUNBUFFERED",
+    "PYTHONDONTWRITEBYTECODE",
 ]
 
 
@@ -120,6 +123,7 @@ def echo_json(obj):
     hidden=False,
     help="Run shellcheck on Bakefile.",
 )
+@click.option("--source", default=False, nargs=1, hidden=True)
 @click.option(
     "--allow",
     default=False,
@@ -198,6 +202,7 @@ def entrypoint(
     interactive,
     yes,
     help,
+    source,
 ):
     """bake — the strangely familiar task–runner."""
 
@@ -205,15 +210,18 @@ def entrypoint(
         do_help(0)
 
     # Default to list behavior, when no task is provided.
-    if _json:
+    if _json or source:
         silent = True
 
+    # Allow explicitly–passed environment variables.
     SAFE_ENVIRONS.extend(allow)
 
+    # Enable list functionality, by default.
     if task == "__LIST_ALL__":
         _list = True
         task = None
 
+    # Establish the Bakefile.
     try:
         if bakefile == "__BAKEFILE__":
             bakefile = Bakefile.find(root=".", filename="Bakefile")
@@ -222,6 +230,29 @@ def entrypoint(
     except NoBakefileFound:
         click.echo(click.style("No Bakefile found!", fg="red"), err=True)
         do_help(1)
+
+    # --source (internal API)
+    if source:
+
+        def echo_generator(g):
+            for g in g:
+                click.echo(g)
+
+        if source == "__init__":
+            source = random.choice(list(bakefile.tasks.keys()))
+            source = bakefile.tasks[source].gen_source(remove_comments=True)
+        else:
+            task = bakefile.tasks[source]
+            source = task.gen_source(
+                sources=[task.source],
+                remove_comments=True,
+                insert_source="__init__",
+                include_shebang=True,
+            )
+        for source_line in source:
+            # print(source_line)
+            click.echo(source_line)
+        sys.exit(0)
 
     if not insecure:
         for key in bakefile.environ:
@@ -360,18 +391,25 @@ def entrypoint(
                         + click.style(":", fg="white"),
                         err=True,
                     )
-                return_code = task.execute(
+                usually_bash = task.execute(
                     yes=yes, debug=debug, silent=silent, interactive=interactive
                 )
 
                 if not _continue:
-                    if (not return_code == 0) and (not isinstance(return_code, tuple)):
-                        click.echo(
-                            click.style(f"Task {task} failed!", fg="red"), err=True
-                        )
-                        sys.exit(return_code)
-                    if isinstance(return_code, tuple):
-                        key, value = return_code
+                    if hasattr(usually_bash, "ok"):
+
+                        if usually_bash.return_code > 0:
+                            if not silent:
+                                click.echo(
+                                    click.style(f"Task {task} failed!", fg="red"),
+                                    err=True,
+                                )
+                            sys.exit(usually_bash.return_code)
+
+                    elif isinstance(usually_bash, tuple):
+                        key, value = (
+                            usually_bash
+                        )  # But, in this instance, clearly isn't.
             else:
                 click.echo(
                     click.style(" + ", fg="green")

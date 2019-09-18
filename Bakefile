@@ -1,17 +1,30 @@
-task: @confirm install-deps
-    echo "hi, $1"
 
-install-deps: @skip:key=./Pipfile.lock system-deps
+install: install/system install/python
+install/python: install/system @skip:key=./Pipfile.lock
     pipenv install
 
-system-deps: install-jq
-    set -ex
+install/system:
+    lazy-brew jq docker-compose
 
-    brew install pipenv
+docker/bash: docker/build install/system
+    docker-compose run --entrypoint=bash bake
+docker/release: docker/build install/system
+    docker-compose push
+docker/build: install/system
+    docker-compose build
 
-    if ! brew info --installed --json | jq 'map(.name) | index( "pipenv" )'; then
-        brew install pipenv
+lazy-brew() {
+    set -e
+    # Install jq if it's not available.
+
+    if ! which jq > /dev/null; then
+        set -ex && brew install jq > /dev/null
     fi
 
-install-jq:
-    brew install jq
+    # Install requested packages, if they aren't installed.
+    for PACKAGE in "$@"; do
+        if ! brew info --installed --json | jq 'map(.name) | index( "$PACKAGE" )' > /dev/null; then
+            set -ex && brew install "$PACKAGE" > /dev/null
+        fi
+    done
+}

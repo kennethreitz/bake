@@ -263,68 +263,69 @@ class TaskScript(BaseAction):
 
         return line
 
-    def prepare_init(self, sources=None, insert_source=None):
-
-        tf = mkstemp(suffix=".sh", prefix="bashf-")[1]
+    def gen_source(
+        self,
+        sources=None,
+        insert_source=None,
+        remove_comments=False,
+        include_shebang=True,
+    ):
 
         stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
         with open(stdlib_path, "r") as f:
             stdlib = f.read()
 
+        _sources = [stdlib, self.bashfile.funcs_source, self.bashfile.root_source]
+
         if sources is None:
-            sources = (stdlib, self.bashfile.funcs_source, self.bashfile.root_source)
+            sources = []
 
-        with open(tf, "w") as f:
-            if insert_source:
-                f.write(f"#!/usr/bin/env bash\nsource {insert_source}\n")
-            for source in sources:
-                f.write(source)
-                f.write("\n\n")
+        _sources.extend(sources)
+        sources = _sources
 
-        # Mark the temporary file as executable.
-        st = os.stat(tf)
-        os.chmod(tf, st.st_mode | stat.S_IEXEC)
+        source = "\n".join(sources)
+        first_natural_line = source.split("\n")[0]
 
-        return tf
+        if Bakefile._is_shebang_line(first_natural_line) and include_shebang:
+            yield first_natural_line
+
+        if insert_source:
+            yield f". <(bake --source {insert_source})"
+
+        for sourceline in source.split("\n"):
+            if not (
+                remove_comments
+                and Bakefile._is_comment_line(sourceline, exclude_shebang=False)
+            ):
+                if sourceline:
+                    yield sourceline
+
+        yield "\n"
 
     def execute(
         self, *, blocking=False, debug=False, interactive=False, silent=False, **kwargs
     ):
 
-        init_tf = self.prepare_init()
-        if self.bashfile._is_shebang_line(self.source_lines[0]):
-            script_tf = self.prepare_init(sources=[self.source])
-            if self.source_lines[0] == "#!/usr/bin/env bash":
-                with open(script_tf, "r") as f:
-                    lines = f.readlines()
-                lines.insert(1, f"source {init_tf}")
-                with open(script_tf, "w") as f:
-                    f.write("\n".join(lines))
-        else:
-            script_tf = self.prepare_init(sources=[self.source], insert_source=init_tf)
-
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
 
-        if interactive:
-            script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args}"
-        else:
-            script = f"source {shlex_quote(init_tf)}; {shlex_quote(script_tf)} {args} 2>&1 | bake:indent"
-
-        cmd = f"bash -c {shlex_quote(script)}"
+        script_suffix = (
+            "2>&1  | sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
+            if not (interactive or silent)
+            else ""
+        )
+        script_debug = "--verbose -x" if debug else ""
+        # --init-file <(bake --source __init__)
+        # --init-file <(bake --source __init__)
+        script = f"bash --noprofile {script_debug} <(bake --source {self.name})  {args} {script_suffix}"
 
         if debug:
-            click.echo(f" $ {cmd}", err=True)
+            click.echo(f" {click.style('$', fg='green')} {script}", err=True)
 
-        c = os.system(cmd)
-
-        if not debug:
-            os.remove(script_tf)
-            os.remove(init_tf)
-
-        return c
+        bash = Bash()
+        return bash.command(script, quote=False)
 
     def shellcheck(self, *, silent=False, debug=False, **kwargs):
-        tf = self.prepare_init(sources=[self.source])
+        tf = self.gen_source(sources=[self.source])
         cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
 
         c = delegator.run(cmd)
@@ -345,13 +346,13 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        try:
-            has_shebang = self._transform_line(self.chunk[1]).startswith("#!")
-        except IndexError:
-            has_shebang = False
+        # try:
+        #     has_shebang = self._transform_line(self.chunk[1]).startswith("#!")
+        # except IndexError:
+        #     has_shebang = False
 
-        if not has_shebang:
-            yield "#!/usr/bin/env bash"
+        # if not has_shebang:
+        #     yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
             line = self._transform_line(line)
@@ -379,6 +380,7 @@ class Bakefile:
 
         os.environ["BAKEFILE_PATH"] = self.path
         os.environ["BAKE_SKIP_DONE"] = "1"
+        os.environ["PYTHONUNBUFFERED"] = "1"
 
         self.chunks
         self._tasks = None
@@ -489,13 +491,20 @@ class Bakefile:
                 line = line.replace("\t", " " * 4)
                 return bool(len(line[:4].strip()))
 
+    def _is_task_line(self, line):
+        if line.startswith(INDENT_STYLES[0]) or line.startswith(INDENT_STYLES[1]):
+            return True
+
     @staticmethod
     def _is_shebang_line(line):
         return line.startswith("#!")
 
     @staticmethod
-    def _is_comment_line(line):
-        return line.startswith("#")
+    def _is_comment_line(line, *, exclude_shebang=True):
+        if exclude_shebang:
+            return line.strip().startswith("#") and not line.startswith("#!")
+        else:
+            return line.strip().startswith("#")
 
     @staticmethod
     def _comment_line(line):
@@ -523,6 +532,9 @@ class Bakefile:
                 if self._is_declaration_line(line):
                     task_active = True
                 else:
+                    if not self._is_task_line(line):
+                        task_active = False
+
                     if not task_active:
                         source_lines.append(line)
 
@@ -536,10 +548,13 @@ class Bakefile:
     def funcs_source(self):
         source = []
 
-        for task in self.tasks:
-            task = self[task]
-            source.append(
-                f"task:{task.name}()" + " { " + f"bake --silent {task.name} $@;" + "}"
-            )
+        # for task in self.tasks:
+        #     task = self[task]
+        #     source.append(
+        #         f"{task.name.replace('/', '_')}()"
+        #         + " { "
+        #         + f"bake --silent {task.name} $@"
+        #         + "}"
+        #     )
 
         return "\n".join(source)
