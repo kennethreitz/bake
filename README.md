@@ -28,6 +28,7 @@
     </div>                                                     
 </pre>
 
+## What's in the oven?
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
 - Except, you can write real bash code!
