@@ -1,0 +1,28 @@
+# This docker-compose setup is intented for development, testing, and CI purposes.
+# -- Make changes with extreme caution!
+
+# Note: CircleCI Docker runners don't support volumes.
+
+version: "3.4"
+
+# Services are meant to be interchangeble between running them locally or
+# inside a container. That is why all of them export their server port to the host.
+
+# Images that are built here are the same used in production.
+services:
+  core:
+    image: kennethreitz/bake:core
+    build:
+      context: .
+      dockerfile: ./docker/core.Dockerfile
+
+  bake:
+    image: kennethreitz/bake:${DOCKER_RELEASE:-latest}
+    build:
+      context: .
+      dockerfile: ./docker/bake.Dockerfile
+    depends_on:
+      - core
+    volumes:
+      - ./Bakefile:/app/Bakefile
+      - .:/app
