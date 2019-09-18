@@ -177,8 +177,6 @@ This software has been designed for you, with much joy, by <a href="https://kenn
 
 <p>&nbsp;</p>
 
-![kr soul icon](https://github.com/kennethreitz/bake/blob/master/ext/tattoo-design.jpg?raw=true)
-
 <p align="center">
-    <em>As above, so below.</em>
+    <large>☿</large>
 </p>
