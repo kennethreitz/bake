@@ -1,6 +1,6 @@
 <p>&nbsp;</p>
 
-<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
+<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.jpg?raw=true" /></pre></span>
 
 <p align="center"><code>$ <strong>bake</strong> — the strangely familiar task–runner. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
