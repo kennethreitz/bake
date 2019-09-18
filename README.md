@@ -109,6 +109,12 @@ $ bake install
 
 ### Skip Steps, Automatically
 
+Because we configured `yarn.lock` and `Pipfile.lock` as cache keys,
+bake will automatically skip the configured steps— only running them
+when the files are changed!
+
+So, let's run that command again :)
+
 ```console
 $ bake install
  + Skipping install/node:
