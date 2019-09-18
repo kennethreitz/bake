@@ -1,4 +1,3 @@
-
 install: install/system install/python
 install/python: install/system @skip:key=./Pipfile.lock
     pipenv install
@@ -8,28 +7,15 @@ install/system:
 
 docker/bash: docker/build install/system
     docker-compose run --entrypoint=bash bake
-docker/release: docker/build install/system docker/login
+docker/release: docker/build install/system docker/release/github
     docker-compose push
-docker/login:
-    # -- this task must be run with -i mode.
+docker/release/github: install/system docker/build
+    REGISTRY=${REGISTRY:-docker.pkg.github.com}
+    USERNAME=${USERNAME:-kennethreitz}
 
-    # Login to GitHub Package Registry.
-    echo 'Maybe visit: https://github.com/settings/tokens'
-    set -ex && docker login {REGISTRY:=-docker.pkg.github.com}" --username "{USERNAME:=-kennethreitz}"
-
-    # Login to DockerHub.
-    docker login
-docker/build: install/system
-
-    REGISTRY="{REGISTRY:=-docker.pkg.github.com}"
-    USERNAME="{USERNAME:=-kennethreitz}"
-
-    set -u
+    set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
-
-    # Build the images.
-    docker-compose build
 
     for IMAGE in "${IMAGES[@]}"; do
         REMOTE_IMAGE="$REGISTRY/$USERNAME/bake/$IMAGE"
@@ -40,6 +26,10 @@ docker/build: install/system
         # Push the images to GitHub.
         docker push "$REMOTE_IMAGE"
     done
+
+docker/build: install/system
+    # Build the images.
+    set -ex && docker-compose build
 
 
 lazy-brew() {
