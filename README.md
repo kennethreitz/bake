@@ -18,7 +18,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 -----------------
 
-### Automate Workflows — Bootstrap Development Environments — Commit Your Tasks (e.g. `git`) 
+### Automate Workflows—Bootstrap Development Environments—Commit The Tasks (*e.g.* `git`) 
 
 <p>&nbsp;</p>
 <p align="center">
