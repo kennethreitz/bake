@@ -9,6 +9,7 @@
     <code>$ <strong>bake</strong></code><em>, n</em>:
     <em>the s☿rangely familiar task runner.</em>
 </pre>
+    <img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" />
 </span>
 
 --------------------
@@ -177,9 +178,6 @@ $ bake utils/deploy
    What is 10 times 2?: 7
 Aborted.
 ```
-
-
-![bake icon](https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true)
 
 ---------------------
 
