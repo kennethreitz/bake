@@ -24,7 +24,6 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 <p>&nbsp;</p>
 <p align="center"><strong>What's in the oven?</strong></p>
-<p>&nbsp;</p>
 
 <pre>
     <div align="left">
