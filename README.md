@@ -36,7 +36,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <pre>
     <div align="left">
     <p></p>
-<code>$ <strong>cat Bakefile</strong>                                              $ <strong> bake install</strong>
+<code>$ <strong>cat Bakefile</strong>                                               $ <strong> bake install</strong>
 <strong>install</strong>: install/node install/python                          + Executing install/node:
     echo 'Your system is now setup for development!'            |  yarn install v1.17.3
 <strong>install/full</strong>: install/system install                            |  info No lockfile found.
