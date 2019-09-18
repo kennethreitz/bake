@@ -50,7 +50,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 -------------------
 
-# Installing `$ bake`
+# Bootstraping `bake` 
 
 
 ### **Various `*`nix Distributions** (Python 3.6+):
