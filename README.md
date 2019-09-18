@@ -50,10 +50,10 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 -------------------
 
-# Bootstraping `bake` 
+## Bootstraping `bake` 
 
 
-### **Various `*`nix Distributions** (Python 3.6+):
+#### **Various `*`nix Distributions** (Python 3.6+):
 
 The primary installation method of `bake`, today, is via `pip`:
 
@@ -66,7 +66,7 @@ Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyproces
 
 This will always work, but it will not be the default recommendation.
 
-## MacOS (Previously known as OS X)
+#### MacOS (Previously known as OS X)
 
 Installation of `bake` will (soon) be very easy, with Homebrew. The formula needs a subtle adjustment — if you want to help, [here's the repo](http://github.com/kennethreitz/homebrew--)!
 
@@ -81,7 +81,7 @@ Homebrew will be the primary installation target of `bake`.
 
 ✨🍰✨
 
-## Containers! *e.g.* Docker.
+#### Containers! *e.g.* Docker.
 
 You an also run `bake` via Docker! An official image has been made available:
 
