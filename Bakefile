@@ -1,4 +1,5 @@
 install: install/system install/python
+
 install/python: install/system @skip:key=./Pipfile.lock
     pipenv install
 
@@ -7,8 +8,10 @@ install/system:
 
 docker/bash: docker/build install/system
     docker-compose run --entrypoint=bash bake
+    
 docker/release: docker/build install/system docker/release/github
     docker-compose push
+    
 docker/release/github: install/system docker/build
     REGISTRY=${REGISTRY:-docker.pkg.github.com}
     USERNAME=${USERNAME:-kennethreitz}
