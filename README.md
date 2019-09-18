@@ -192,7 +192,9 @@ Aborted.
 This software has been designed for you, with much joy, by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.
 </p>
 
-<p>&nbsp;</p>
+<p align="center">
+        <a href="https://kennethreitz.org/" rel="nofollow"><img src="https://raw.githubusercontent.com/psf/requests/master/ext/kr.png" align="center" style="max-width:100%;"></a>
+</p>
 
 <p align="center">
     <large>☿</large>
