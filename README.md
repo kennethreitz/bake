@@ -50,7 +50,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <strong>python/format</strong>:                                                  |  Installing dependencies from Pipfile.lock (f10bb0)…
     black .                                                     + <strong>Executing install</strong>:
                                                                 |  All ready!
-<strong>utils/argv</strong>:                                                     + Done.
+<strong>utils/argv</strong>:                                                     + <strong>Done</strong>.
     set -u && echo "$HELLO: $@"                                 
                                                                 Rinse and repeat…
 <strong>utils/deploy</strong>: @confirm:secure                 
