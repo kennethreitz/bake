@@ -33,6 +33,38 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 - Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root (e.g. location of the `Bakefile`).
 - See [advanced example](https://github.com/kennethreitz/bake#advanced-usage-sample) for further, juicy, details.
 
+<pre>
+    <a href="https://2.python-requests.org/"><img src="https://raw.githubusercontent.com/psf/requests/master/ext/deepmind-kr.jpg" align="center" /></a>
+    <div align="left">
+    <p></p>
+    <code>$ cat Bakefile`
+install: install/node install/python
+install/full: install/system install
+
+install/python: @skip:key=Pipfile.lock
+    pipenv install
+install/node: @skip:key=yarn.lock
+    yarn install
+install/system: @confirm
+    brew install pipenv yarn
+
+python/format:
+    black .
+
+utils/argv:
+    set -u && echo "$HELLO: $@"
+
+utils/deploy: @confirm:secure
+    exit 0</code>
+    </div>
+    
+    <p align="center">
+This software has been designed for you, with much joy, 
+by <a href="https://kennethreitz.org/">Kenneth Reitz</a>.  
+   </p>
+<p>&nbsp;</p>
+<img src="https://github.com/psf/requests/blob/master/ext/flourish.jpg?raw=true" />
+</pre>
 
 ### Community / Contrib
 
@@ -96,31 +128,11 @@ Options:
   -s, --silent             Reduce output.
   -e, --environ-json TEXT  Provide environment variables via JSON.
   -j, --json               Output in JSON format (stdout).
+```
 
 ---------------
 
-## `$ cat Bakefile`
 
-```make
-install: install/node install/python
-install/full: install/system install
-
-install/python: @skip:key=Pipfile.lock
-    pipenv install
-install/node: @skip:key=yarn.lock
-    yarn install
-install/system: @confirm
-    brew install pipenv yarn
-
-python/format:
-    black .
-
-utils/argv:
-    set -u && echo "$HELLO: $@"
-
-utils/deploy: @confirm:secure
-    exit 0
-```
 
 
 ### Team & Workflow Management
