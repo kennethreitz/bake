@@ -18,7 +18,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 -----------------
 
-### Automate Workflows — Bootstrap Development Environments — Serialize All Tasks
+### Automate Workflows — Bootstrap Development Environments — Serialize all Tasks
 
 <p>&nbsp;</p>
 <p align="center">
