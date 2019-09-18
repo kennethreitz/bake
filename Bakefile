@@ -8,10 +8,36 @@ install/system:
 
 docker/bash: docker/build install/system
     docker-compose run --entrypoint=bash bake
-docker/release: docker/build install/system
+docker/release: docker/build install/system docker/login
     docker-compose push
+docker/login:
+    set -u
+
+    # Login to GitHub Package Registry.
+    echo 'Maybe visit: https://github.com/settings/tokens'
+    set -ex && docker login docker.pkg.github.com --username "$1"
+
+    # Login to DockerHub.
+    docker login
 docker/build: install/system
+    set -u
+
+    REGISTRY="docker.pkg.github.com"
+    declare -a IMAGES=('bake:core' 'bake:latest')
+
+    # Build the images.
     docker-compose build
+
+    for IMAGE in "${IMAGES[@]}"; do
+        REMOTE_IMAGE="$REGISTRY/kennethreitz/bake/$IMAGE"
+
+        # Tag the images for GitHub Registry.
+        docker tag "kennethreitz/$IMAGE" "$REMOTE_IMAGE"
+
+        # Push the images to GitHub.
+        docker push "$REMOTE_IMAGE"
+    done
+
 
 lazy-brew() {
     set -e
