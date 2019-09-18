@@ -24,7 +24,7 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 
 ----------------
 
-### Features 'n Things
+<p align="center"><strong>What's in the oven?</strong></P
 
 - A `Bakefile`, which looks and feels like the good parts of a `Makefile`.
 - Except, you can write real bash code!
