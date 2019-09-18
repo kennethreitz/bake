@@ -44,9 +44,6 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <strong>utils/deploy</strong>: @confirm:secure                 
     exit 0</code>                                              
     </div>                                                     
-                                                            
- 
-
 </pre>
 
 <p>&nbsp;</p>
