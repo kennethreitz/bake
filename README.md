@@ -36,21 +36,21 @@ This project seeks to bridge all of these worlds into a single entrypoint — i
 <pre>
     <div align="left">
     <p></p>
-<code>$ <strong>cat Bakefile</strong>                         $ <strong> bake install</strong>
-<strong>install</strong>: install/node install/python           + Executing install/node:
+<code>$ <strong>cat Bakefile</strong>                                         $ <strong> bake install</strong>
+<strong>install</strong>: install/node install/python                          + Executing install/node:
     echo 'Your system is now setup for development!'            |  yarn install v1.17.3
-<strong>install/full</strong>: install/system install           |  info No lockfile found.
-<strong>install/python</strong>: @skip:key=Pipfile.lock         |  [1/4] Resolving packages...
+<strong>install/full</strong>: install/system install                          |  info No lockfile found.
+<strong>install/python</strong>: @skip:key=Pipfile.lock                        |  [1/4] Resolving packages...
     pipenv install                                              |  [2/4] Fetching packages...
-<strong>install/node</strong>: @skip:key=yarn.lock              |  [3/4] Linking dependencies...
+<strong>install/node</strong>: @skip:key=yarn.lock                             |  [3/4] Linking dependencies...
     yarn install                                                |  [4/4] Building fresh packages...
-<strong>install/system</strong>: @confirm                       |  success Saved lockfile.
+<strong>install/system</strong>: @confirm                                      |  success Saved lockfile.
     brew install pipenv yarn                                    |  Done in 0.05s.
                                                                 + Executing install/python:
-<strong>python/format</strong>:                                 |  Installing dependencies from Pipfile.lock (f10bb0)…
+<strong>python/format</strong>:                                                |  Installing dependencies from Pipfile.lock (f10bb0)…
     black .                                                     + Executing install:
                                                                 |  Your system is now setup for development!
-<strong>utils/argv</strong>:                                    + Done.
+<strong>utils/argv</strong>:                                                   + Done.
     set -u && echo "$HELLO: $@"                                 
                                                                 Rinse and repeat…
 <strong>utils/deploy</strong>: @confirm:secure                 
