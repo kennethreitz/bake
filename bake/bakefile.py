@@ -343,28 +343,13 @@ class TaskScript(BaseAction):
             if not (interactive or silent)
             else ""
         )
-        script_debug = "-v" if debug else ""
-        env_flags = "-v" if debug else ""
-        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && env {script_debug} $t {args} {sed_magic} && rm -fr $t"
+        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} {sed_magic} ; rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
 
         bash = Bash()
         return bash.command(script, quote=False)
-
-    def shellcheck(self, *, silent=False, debug=False, **kwargs):
-        tf = self.gen_source(sources=[self.source])
-        cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
-
-        c = delegator.run(cmd)
-
-        if debug:
-            click.echo(f"$ {cmd}", err=True)
-        else:
-            os.remove(tf)
-
-        return c
 
     @property
     def name(self):
@@ -375,7 +360,10 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        if not Bakefile._is_shebang_line(self.chunk[1]):
+        try:
+            if not Bakefile._is_shebang_line(self.chunk[1]):
+                yield "#!/usr/bin/env bash"
+        except IndexError:
             yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
@@ -602,19 +590,20 @@ class Bakefile:
     def funcs_source(self):
         source = []
 
-        for task in self.tasks:
-            task = self[task]
-            f_name = task.name.replace("/", "_")
-            f_name = f_name.replace("-", "_")
-            f_name = f"bake_{f_name}"
+        # TODO: this can cause bugs.
+        # for task in self.tasks:
+        #     task = self[task]
+        #     f_name = task.name.replace("/", "_")
+        #     f_name = f_name.replace("-", "_")
+        #     f_name = f"bake_{f_name}"
 
-            source.append(
-                # Replace / namespacing with _ namespacing, for functions.
-                f"function {f_name}"
-                + " { \n"
-                + f"    bake --silent {task.name} $@;\n"
-                + "}\n"
-                + f"declare -x {f_name};"
-            )
+        #     source.append(
+        #         # Replace / namespacing with _ namespacing, for functions.
+        #         f"function {f_name}"
+        #         + " { \n"
+        #         + f"    bake --silent {task.name} $@;\n"
+        #         + "}\n"
+        #         + f"declare -x {f_name};"
+        #     )
 
         return "\n".join(source)

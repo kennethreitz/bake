@@ -16,7 +16,6 @@ def test_second_level_dep(bake):
     assert "kenneth" in c.err
 
 
-@pytest.mark.skip
 def test_python_invocation(bake):
     c = bake("python", fixture="1")
     assert "wow" in c.err

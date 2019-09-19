@@ -1,6 +1,6 @@
 
 
-<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.jpg?raw=true" /></pre></span>
+<span align="center"><pre align="center"><img src="https://github.com/kennethreitz/bake/blob/master/ext/bake.png?raw=true" /></pre></span>
 
 <p align="center"><code>$ <strong>bake</strong> — a s☿rangely familiar workflow utlity. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code></p>
 <pre>
@@ -36,7 +36,7 @@
 <ul>
     <li>A <code>Bakefile</code>, which <strong>looks</strong> and <strong>feels</strong> like the good parts of a <code><strong>Makefile</strong></code>.</li>
     <li>Except, you can write real <code><strong>bash</strong></code> code!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Any and all syntax is accepted — no magic going on here. ;)</li>
-<li>Unlike <code><strong>Makefile</strong></code>, you may utilize either <code><strong>\t</strong></code> or <code><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></code> <strong>[</strong><code> 4 × <a href="https://unicode.org/cldr/utility/character.jsp?a=0020">U+0020</a> <em>a.k.a.</em> “space”</code><strong>]</strong>, at your full adult discretion.</li>
+<li>Unlike <code><strong>Makefile</strong></code>, you may utilize <code><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong></code> <strong>[</strong><code> 4 × <a href="https://unicode.org/cldr/utility/character.jsp?a=0020">U+0020</a> <em>a.k.a.</em> “spaces”</code><strong>]</strong> for indentation.</li>
     <li>Environment variables are explicitly passed or whitelisted (<code><strong>--allow</strong></code>), not inherited from the parent shell.</li>
 <li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
 <li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
@@ -70,6 +70,7 @@ Collecting bake-cli
 …
 Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0
 ```
+
 
 This will always work, but it will not be the default recommendation.
 
@@ -105,7 +106,6 @@ Options:
   -b, --bakefile PATH      The Bakefile to use.
   -l, --list               Lists available tasks (and their dependencies).
   -h, --help               Show this message and exit.
-  --shellcheck             Run shellcheck on Bakefile.
   --allow TEXT             Whitelist an environment variable for use.
   --no-deps                Do not run dependent tasks.
   --yes                    Set medium–security prompts to yes.
@@ -127,6 +127,10 @@ Options:
 
 
 ### Team & Workflow Management
+
+You can use `bake` to bootstrap your team's development environments, ensuring a smooth and optimal workflow & local development experience.
+
+Here's an example, using the `Bakefile` provided above:
 
 ```console
 $ bake install
