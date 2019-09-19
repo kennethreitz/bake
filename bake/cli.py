@@ -247,7 +247,7 @@ def entrypoint(
             task = bakefile.tasks[source]
             source = task.gen_source(
                 sources=[task.source],
-                remove_comments=False,
+                remove_comments=True,
                 insert_source="__init__",
                 include_shebang=True,
             )
