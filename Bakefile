@@ -3,7 +3,9 @@
     USERNAME=${USERNAME:-kennethreitz}
 
 install: install/system install/python
+
 test: python/test docker/test
+# bake -i release v0.0.0
 release: pypi/publish docker/release
 
 python/test:
