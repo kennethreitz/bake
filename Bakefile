@@ -1,21 +1,22 @@
-install: install/system install/python
 
-install/python: install/system @skip:key=./Pipfile.lock
-    pipenv install
-
-install/system:
-    lazy-brew jq docker-compose
-
-docker/bash: docker/build install/system
-    docker-compose run --entrypoint=bash bake
-    
-docker/release: docker/build install/system docker/release/github
-    docker-compose push
-    
-docker/release/github: install/system docker/build
     REGISTRY=${REGISTRY:-docker.pkg.github.com}
     USERNAME=${USERNAME:-kennethreitz}
 
+install: install/system install/python
+
+install/python: install/system @skip:key=Pipfile.lock
+    pipenv install
+
+install/system:
+    lazy_brew pipenv
+
+docker/test: docker/build
+    docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
+
+docker/release: docker/build/full docker/release/github
+    docker-compose push
+
+docker/release/github: docker/build/full
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -30,17 +31,33 @@ docker/release/github: install/system docker/build
         docker push "$REMOTE_IMAGE"
     done
 
-docker/build: install/system
+docker/build:
     # Build the images.
     set -ex && docker-compose build
 
+docker/build/full:
+    # Build the images.
+    set -ex && docker-compose build --no-cache
 
-lazy-brew() {
+ci: ci/setup
+    set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
+
+ci/setup: @skip:key=Pipfile.lock
+    pipenv install --dev --deploy --system
+
+random/python:
+    #!/usr/bin/env python
+    import site
+    print(site)
+
+
+
+lazy_brew() {
     set -e
     # Install jq if it's not available.
 
     if ! which jq > /dev/null; then
-        set -ex && brew install jq > /dev/null
+        set -ex && brew install jq
     fi
 
     # Install requested packages, if they aren't installed.

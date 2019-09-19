@@ -6,7 +6,7 @@ test3: echo
     echo 'hm'
 
 python:
-    #!/usr/bin/env python
+    #!/usr/bin/env python3
     print('wow!')
 
 echo:

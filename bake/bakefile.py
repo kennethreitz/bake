@@ -296,40 +296,37 @@ class TaskScript(BaseAction):
 
         return line
 
-    def gen_source(
-        self,
-        sources=None,
-        insert_source=None,
-        remove_comments=False,
-        include_shebang=True,
-    ):
+    def gen_source(self, *, sources):
 
-        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
-        with open(stdlib_path, "r") as f:
-            stdlib = f.read()
+        source_container = []
 
-        _sources = [stdlib, self.bashfile.funcs_source, self.bashfile.root_source]
+        # Grab the first source line, for shebang comparison.
+        try:
+            # Last script comes first.
+            first_natural_line = sources[-1].split("\n", 1)[0]
+        except IndexError:
+            first_natural_line = "#!/usr/bin/env bash"
 
-        if sources is None:
-            sources = []
+        # Check if there's a shebang. If so, disable injection.
+        if Bakefile._is_shebang_line(first_natural_line):
+            shebang = first_natural_line
+            yield shebang
 
-        _sources.extend(sources)
-        sources = _sources
+            source_offset_index = (
+                None if Bakefile._is_safe_to_inject(shebang=shebang) else -1
+            )
+            source_container.extend(sources[source_offset_index:])
 
-        source = "\n".join(sources)
-        first_natural_line = source.split("\n")[0]
+        else:
+            shebang = "#!/usr/bin/env bash"
+            yield shebang
 
-        if Bakefile._is_shebang_line(first_natural_line) and include_shebang:
-            yield first_natural_line
+            source_container += [self.bashfile.funcs_source, self.bashfile.root_source]
 
-        if insert_source:
-            yield f"source <(bake --source {insert_source})"
+        main_source = "\n".join(source_container)
 
-        for sourceline in source.split("\n"):
-            if not (
-                remove_comments
-                and Bakefile._is_comment_line(sourceline, exclude_shebang=False)
-            ):
+        for sourceline in main_source.split("\n"):
+            if not Bakefile._is_comment_line(sourceline, exclude_shebang=False):
                 if sourceline:
                     yield sourceline
 
@@ -341,13 +338,14 @@ class TaskScript(BaseAction):
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
 
-        script_suffix = (
+        sed_magic = (
             "2>&1  | sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
             if not (interactive or silent)
             else ""
         )
-        script_debug = "--verbose -x" if debug else ""
-        script = f"bash --noprofile {script_debug} <(bake --source {self.name})  {args} {script_suffix}"
+        script_debug = "-v" if debug else ""
+        env_flags = "-v" if debug else ""
+        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && env {script_debug} $t {args} {sed_magic} && rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
@@ -377,7 +375,8 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        yield "#!/usr/bin/env bash"
+        if not Bakefile._is_shebang_line(self.chunk[1]):
+            yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
             line = self._transform_line(line)
@@ -433,21 +432,38 @@ class Bakefile:
         return self.tasks[key]
 
     def _iter_chunks(self):
-        task_lines = [tl for tl in self._iter_task_lines()]
+        all_chunks = [tl for tl in self._iter_chunk_task_lines()]
+        task_lines = [tl if tl[1] else None for tl in self._iter_chunk_task_lines()]
+
+        # Unsort / resort.
+        task_lines = list(set(task_lines))
+        try:
+            task_lines.pop(task_lines.index(None))
+        except ValueError:
+            pass
+        task_lines = sorted(task_lines, key=lambda x: x[0])
 
         for i, (index, declaration_line) in enumerate(task_lines):
             try:
                 end_index = task_lines[i + 1][0]
+
             except IndexError:
-                end_index = None
+                i = all_chunks.index((index, declaration_line))
+                try:
+                    end_index = all_chunks[i + 1][0]
+                except IndexError:
+                    end_index = None
 
             yield self.source_lines[index:end_index]
 
-    def _iter_task_lines(self):
+    def _iter_chunk_task_lines(self):
         for i, line in enumerate(self.source_lines):
             if line:
-                if self._is_declaration_line(line):
-                    yield (i, line.rstrip())
+                if self._is_declaration_line(line, collect_all=True):
+                    if self._is_declaration_line(line, collect_all=False):
+                        yield (i, line.rstrip())
+                    else:
+                        yield (i, None)
 
     @property
     def home(self):
@@ -510,11 +526,24 @@ class Bakefile:
     def source_lines(self):
         return self.source.split("\n")
 
-    def _is_declaration_line(self, line):
+    def _is_declaration_line(self, line, collect_all=False):
+        line = line.replace("\t", " " * 4)
+
+        if not len(line[0].strip()):
+            return False
+
         if not self._is_comment_line(line):
-            if ":" in line:
-                line = line.replace("\t", " " * 4)
+            if not collect_all:
+                if ":" in line:
+                    return bool(len(line[:4].strip()))
+            else:
                 return bool(len(line[:4].strip()))
+
+    @staticmethod
+    def _is_safe_to_inject(shebang):
+        # --- Note: This is kind of a clever hack, as this matches both
+        # bash and sh (and many other potentially–compatible shells).
+        return shebang.strip().endswith("sh")
 
     def _is_task_line(self, line):
         if line.startswith(INDENT_STYLES[0]) or line.startswith(INDENT_STYLES[1]):
@@ -522,7 +551,7 @@ class Bakefile:
 
     @staticmethod
     def _is_shebang_line(line):
-        return line.startswith("#!")
+        return line.lstrip().startswith("#!")
 
     @staticmethod
     def _is_comment_line(line, *, exclude_shebang=True):
@@ -575,14 +604,17 @@ class Bakefile:
 
         for task in self.tasks:
             task = self[task]
+            f_name = task.name.replace("/", "_")
+            f_name = f_name.replace("-", "_")
+            f_name = f"bake_{f_name}"
+
             source.append(
-                # Replace / namespacing with : namespacing, for functions.
-                f"function bake_{task.name.replace('/', '_')}"
-                # f"bake/{task.name}()"
+                # Replace / namespacing with _ namespacing, for functions.
+                f"function {f_name}"
                 + " { \n"
                 + f"    bake --silent {task.name} $@;\n"
                 + "}\n"
-                + f"declare -x bake_{task.name.replace('/', '_')};"
+                + f"declare -x {f_name};"
             )
 
         return "\n".join(source)
