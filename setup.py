@@ -18,7 +18,7 @@ URL = "https://github.com/kennethreitz/bake"
 EMAIL = "me@kennethreitz.org"
 AUTHOR = "Kenneth Reitz"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "0.8.2"
+VERSION = "0.8.3"
 
 # What packages are required for this module to be executed?
 REQUIRED = ["click", "delegator.py", "pygments", "networkx"]
