@@ -340,8 +340,7 @@ class TaskScript(BaseAction):
             else ""
         )
         script_debug = "-v" if debug else ""
-        script = f"sh --noprofile {script_debug} <(bake --source {self.name}) {args} {sed_magic}"
-
+        env_flags = "-v" if debug else ""
         script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && env {script_debug} $t {args} {sed_magic} && rm -fr $t"
 
         if debug:
