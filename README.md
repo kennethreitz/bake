@@ -106,7 +106,6 @@ Options:
   -b, --bakefile PATH      The Bakefile to use.
   -l, --list               Lists available tasks (and their dependencies).
   -h, --help               Show this message and exit.
-  --shellcheck             Run shellcheck on Bakefile.
   --allow TEXT             Whitelist an environment variable for use.
   --no-deps                Do not run dependent tasks.
   --yes                    Set medium–security prompts to yes.
