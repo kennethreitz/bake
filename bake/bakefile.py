@@ -548,13 +548,15 @@ class Bakefile:
     def funcs_source(self):
         source = []
 
-        # for task in self.tasks:
-        #     task = self[task]
-        #     source.append(
-        #         f"{task.name.replace('/', '_')}()"
-        #         + " { "
-        #         + f"bake --silent {task.name} $@"
-        #         + "}"
-        #     )
+        for task in self.tasks:
+            task = self[task]
+            source.append(
+                # Replace / namespacing with : namespacing, for functions.
+                f"{task.name.replace('/', ':')}()"
+                + " { "
+                + f"bake --silent {task.name} $@"
+                + "}"
+            )
 
         return "\n".join(source)
+}
