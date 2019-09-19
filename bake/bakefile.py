@@ -320,8 +320,7 @@ class TaskScript(BaseAction):
             if insert_source and Bakefile._is_safe_to_inject(shebang=shebang):
                 init_source = f"source <(bake --source {insert_source})"
                 yield init_source
-            else:
-                source_container.extend(sources)
+            source_container.extend(sources)
 
         else:
             shebang = "#!/usr/bin/env bash"
