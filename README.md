@@ -64,12 +64,11 @@ project seeks to bridge all of these worlds into a single entrypoint — ideal 
 
 The primary installation method of `bake`, today, is via `pip`:
 
-```console
-$ pip3 install bake-cli
+<pre class="console"><code>$ <strong>pip3 install bake-cli</strong>
 Collecting bake-cli
 …
-Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0
-```
+Successfully installed bake-cli-0.2.0 delegator.py-0.1.1 pexpect-4.7.0 ptyprocess-0.6.0</code></pre>
+
 
 This will always work, but it will not be the default recommendation.
 
