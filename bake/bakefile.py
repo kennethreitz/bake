@@ -359,7 +359,7 @@ class TaskScript(BaseAction):
         try:
             if not Bakefile._is_shebang_line(self.chunk[1]):
                 yield "#!/usr/bin/env bash"
-        except IndexErrpr:
+        except IndexError:
             yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
