@@ -319,7 +319,7 @@ class TaskScript(BaseAction):
             yield first_natural_line
 
         if insert_source:
-            yield f". <(bake --source {insert_source})"
+            yield f"source <(bake --source {insert_source})"
 
         for sourceline in source.split("\n"):
             if not (
@@ -373,6 +373,8 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
+        yield "#!/usr/bin/env bash"
+
         for line in self.chunk[1:]:
             line = self._transform_line(line)
             if line:
@@ -571,10 +573,12 @@ class Bakefile:
             task = self[task]
             source.append(
                 # Replace / namespacing with : namespacing, for functions.
-                f"{task.name.replace('/', ':')}()"
-                + " { "
-                + f"bake --silent {task.name} $@"
-                + "}"
+                f"function bake_{task.name.replace('/', '_')}"
+                # f"bake/{task.name}()"
+                + " { \n"
+                + f"    bake --silent {task.name} $@;\n"
+                + "}\n"
+                + f"declare -x bake_{task.name.replace('/', '_')};"
             )
 
         return "\n".join(source)
