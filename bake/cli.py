@@ -305,7 +305,7 @@ def entrypoint(
             if not silent:
                 click.echo(
                     f" {click.style('-', fg='green', bold=True)} {click.style(_task, bold=True)}{colon}{deps}",
-                    err=True,
+                    err=False,
                 )
 
         if _json:
