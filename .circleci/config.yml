@@ -32,4 +32,7 @@ jobs:
       # https://nose.readthedocs.io
       - run:
           name: $ pytest
-          command: pytest
+          command: pytest --junitxml=report.xml
+
+      - store_test_results:
+          path: report.xml
