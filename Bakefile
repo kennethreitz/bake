@@ -13,10 +13,10 @@ install/system:
 docker/test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
 
-docker/release: docker/build docker/release/github
+docker/release: docker/build/full docker/release/github
     docker-compose push
 
-docker/release/github: docker/build
+docker/release/github: docker/build/full
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -31,14 +31,20 @@ docker/release/github: docker/build
         docker push "$REMOTE_IMAGE"
     done
 
-docker/build: install/system
+docker/build:
     # Build the images.
     set -ex && docker-compose build
+
+docker/build/full:
+    # Build the images.
+    set -ex && docker-compose build --no-cache
 
 random/python:
     #!/usr/bin/env python
     import site
     print(site)
+
+
 
 lazy_brew() {
     set -e
@@ -46,8 +52,6 @@ lazy_brew() {
 
     if ! which jq > /dev/null; then
         set -ex && brew install jq
-    else
-        echo 'jq is already installed!'
     fi
 
     # Install requested packages, if they aren't installed.
