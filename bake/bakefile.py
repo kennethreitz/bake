@@ -339,9 +339,7 @@ class TaskScript(BaseAction):
             if not (interactive or silent)
             else ""
         )
-        script_debug = "-v" if debug else ""
-        env_flags = "-v" if debug else ""
-        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && env {script_debug} $t {args} {sed_magic} && rm -fr $t"
+        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} {sed_magic} ; rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
