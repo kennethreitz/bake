@@ -307,7 +307,8 @@ class TaskScript(BaseAction):
 
         # Grab the first source line, for shebang comparison.
         try:
-            first_natural_line = sources[0].split("\n", 1)[0]
+            # Last script comes first.
+            first_natural_line = sources[-1].split("\n", 1)[0]
         except IndexError:
             # TODO: maybe not.
             first_natural_line = "#!/usr/bin/env bash"
@@ -318,7 +319,7 @@ class TaskScript(BaseAction):
             yield shebang
 
             if insert_source and Bakefile._is_safe_to_inject(shebang=shebang):
-                init_source = f"source <(bake --source {insert_source})"
+                init_source = f". <(bake --source {insert_source})"
                 yield init_source
             source_container.extend(sources)
 
