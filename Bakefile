@@ -1,4 +1,6 @@
 
+    REGISTRY=${REGISTRY:-docker.pkg.github.com}
+    USERNAME=${USERNAME:-kennethreitz}
 
 install: install/system install/python
 
@@ -6,18 +8,15 @@ install/python: install/system @skip:key=./Pipfile.lock
     pipenv install
 
 install/system:
-    lazy_brew jq docker-compose
+    lazy_brew pipenv
 
-docker/bash: docker/build install/system
-    docker-compose run --entrypoint=bash bake
+docker/test: docker/build
+    docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
 
-docker/release: docker/build install/system docker/release/github
+docker/release: docker/build docker/release/github
     docker-compose push
 
-docker/release/github: install/system docker/build
-    REGISTRY=${REGISTRY:-docker.pkg.github.com}
-    USERNAME=${USERNAME:-kennethreitz}
-
+docker/release/github: docker/build
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -36,8 +35,12 @@ docker/build: install/system
     # Build the images.
     set -ex && docker-compose build
 
+random/python:
+    #!/usr/bin/env python
+    import site
+    print(site)
 
-function lazy_brew {
+lazy_brew() {
     set -e
     # Install jq if it's not available.
 
@@ -54,4 +57,3 @@ function lazy_brew {
         fi
     done
 }
-export lazy_brew
