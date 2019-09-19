@@ -38,6 +38,8 @@ class BaseAction:
 
 
 class TaskFilter(BaseAction):
+    """A filter, which can be applied to a task."""
+
     def __init__(self, s, bashfile):
         self.source = s
         self.bashfile = bashfile
@@ -45,6 +47,7 @@ class TaskFilter(BaseAction):
         self.do_skip = None
 
     def __str__(self):
+        """Used for terminal display."""
         split = self.source.split(":", 1)
         extra = ")" if len(split) > 1 else ""
         source = "(".join(split) + extra
@@ -56,17 +59,22 @@ class TaskFilter(BaseAction):
         return source
 
     def __hash__(self):
+        """Important for (networkx) graph traversal."""
         return hash((self.bashfile, self.source, self.__uuid))
-
-    # def __eq__(self, other):
-    #     return
 
     @property
     def name(self):
+        """Whoami?"""
         return self.source.split(":", 1)[0][len("@") :]
 
     @property
     def arguments(self):
+        """Parsed arguments, in the following format:
+
+            @filter:key1:key2=value
+
+        Pretty sure…
+        """
         arguments = {}
 
         try:
@@ -84,10 +92,13 @@ class TaskFilter(BaseAction):
         return arguments
 
     def depends_on(self, **kwargs):
+        """Here for API compatibility with TaskScripts."""
         return []
 
     @staticmethod
     def execute_confirm(*, prompt=False, yes=False, force=False, secure=False, **kwargs):
+        """Executes a confirm dialouge for the user, interactively."""
+
         def abort(msg="Aborted!"):
             msg = click.style(msg, fg="red")
             dash = click.style(" - ", fg="white", bold=True)
@@ -118,12 +129,15 @@ class TaskFilter(BaseAction):
         return ("confirmed", True)
 
     def execute_skip_if(self, *, key, cache=None, force=False, **kwargs):
+        """Determines if it is appropriate to skip the dependent TaskScript."""
         if force:
             print('forcing')
             self.do_skip = False
             return ("skip", False)
 
         if cache is None:
+            # I'm cheating here, and shoving stuff into the git folder (which I assume is there).
+            # TODO: Improve this — look into $ git config --local (shell) use instead.
             cache = f".git/bake-hash-{sha256(key.encode('utf-8')).hexdigest()}"
 
         key_path = os.path.abspath(key)
@@ -154,6 +168,10 @@ class TaskFilter(BaseAction):
         return ("skip", False)
 
     def execute(self, yes=False, force=False, **kwargs):
+        """This should probably be two different classes…
+
+        …but I was too tired to approach that problem. I continue to be.
+        """
         if self.name == "confirm":
             return self.execute_confirm(yes=yes, force=force, **self.arguments)
         elif self.name == "skip":
@@ -161,15 +179,26 @@ class TaskFilter(BaseAction):
 
 
 class FakeTaskScript(BaseAction):
+    """A task that is referenced (as a dependency), but doesn't actually exist.
+
+    Ussually typos. They display red in the terminal. Neat.
+    """
+
     def __init__(self, s, bashfile):
         self.source = s
         self.bashfile = bashfile
 
     def __str__(self):
+        """The color red, as mentioned above."""
         return str(click.style(self.source, fg="red"))
 
 
 class TaskScript(BaseAction):
+    """The primary iteraction point of the entire bake system. Pay close attention.
+
+    You're pretty witty & intelligent — you can infer what this class is for, based on its name.
+    """
+
     def __init__(self, bashfile, chunk_index=None):
         self.bashfile = bashfile
         self._chunk_index = chunk_index
@@ -319,8 +348,6 @@ class TaskScript(BaseAction):
             else ""
         )
         script_debug = "--verbose -x" if debug else ""
-        # --init-file <(bake --source __init__)
-        # --init-file <(bake --source __init__)
         script = f"bash --noprofile {script_debug} <(bake --source {self.name})  {args} {script_suffix}"
 
         if debug:
@@ -351,14 +378,6 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        # try:
-        #     has_shebang = self._transform_line(self.chunk[1]).startswith("#!")
-        # except IndexError:
-        #     has_shebang = False
-
-        # if not has_shebang:
-        #     yield "#!/usr/bin/env bash"
-
         for line in self.chunk[1:]:
             line = self._transform_line(line)
             if line:
@@ -564,4 +583,3 @@ class Bakefile:
             )
 
         return "\n".join(source)
-
