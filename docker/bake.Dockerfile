@@ -2,12 +2,6 @@ FROM kennethreitz/bake:core
 
 ENV BAKEFILE_PATH /app/Bakefile
 
-# -- Install Shellcheck.
-RUN set -ex && \
-    apt-get install shellcheck -y -qq && \
-    apt-get clean -y -qq && \
-    apt-get autoclean -y -qq
-
 # -- Install latest Bake.
 RUN set -ex && \
     pip3 install bake-cli --upgrade --quiet > /dev/null
