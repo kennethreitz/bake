@@ -36,10 +36,15 @@ release/pypi: install/python
 
 release: test release/git release/docker
 release/git:
-    set -u
 
     RELEASE=$1
 
+    if [[ -z "$RELEASE" ]]; then
+        echo 'Release ($1) not provided; skipping.'
+        exit 0
+    fi
+
+    set -u
     if [[ $(git diff --stat) ]]; then
         git commit -am
         git tag "$1"
