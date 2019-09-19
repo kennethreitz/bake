@@ -127,6 +127,10 @@ Options:
 
 ### Team & Workflow Management
 
+You can use `bake` to bootstrap your team's development environments, ensuring a smooth and optimal workflow & local development experience.
+
+Here's an example, using the `Bakefile` provided above:
+
 ```console
 $ bake install
  + Executing install/node:
