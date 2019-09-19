@@ -165,9 +165,9 @@ Neat, eh?
 ### Arguments & Parameters: Passing Values In
 
 ```console
-$ bake utils/argv KEY=VALUE 1 2 3
+$ bake utils/argv KEY=VALUES 1 2 3
  + Executing utils/argv:
- |  WORLD: 1 2 3
+ |  VALUES: 1 2 3
  + Done.
  ```
 
