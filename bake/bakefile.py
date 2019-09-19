@@ -356,7 +356,10 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        if not Bakefile._is_shebang_line(self.chunk[1]):
+        try:
+            if not Bakefile._is_shebang_line(self.chunk[1]):
+                yield "#!/usr/bin/env bash"
+        except IndexErrpr:
             yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
