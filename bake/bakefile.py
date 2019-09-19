@@ -347,19 +347,6 @@ class TaskScript(BaseAction):
         bash = Bash()
         return bash.command(script, quote=False)
 
-    def shellcheck(self, *, silent=False, debug=False, **kwargs):
-        tf = self.gen_source(sources=[self.source])
-        cmd = f"shellcheck {shlex_quote(tf)} --external-sources --format=json"
-
-        c = delegator.run(cmd)
-
-        if debug:
-            click.echo(f"$ {cmd}", err=True)
-        else:
-            os.remove(tf)
-
-        return c
-
     @property
     def name(self):
         return self.chunk[0].split(":")[0].strip()

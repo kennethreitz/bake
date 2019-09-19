@@ -65,9 +65,6 @@ def do_help(exit=0):
             "--environ-json", str(click.style("--environ-json", fg="green", bold=True))
         )
         help = help.replace("-e,", str(click.style("-e", fg="green", bold=True) + ","))
-        help = help.replace(
-            "--shellcheck", str(click.style("--shellcheck", fg="magenta", bold=True))
-        )
 
         click.echo(help, err=True)
         sys.exit(exit)
@@ -116,13 +113,6 @@ def echo_json(obj):
     "--skip-done", default=False, is_flag=True, hidden=True, envvar="BAKE_SKIP_DONE"
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
-@click.option(
-    "--shellcheck",
-    default=False,
-    is_flag=True,
-    hidden=False,
-    help="Run shellcheck on Bakefile.",
-)
 @click.option("--source", default=False, nargs=1, hidden=True)
 @click.option(
     "--allow",
@@ -191,7 +181,6 @@ def entrypoint(
     _list,
     _continue,
     environ_json,
-    shellcheck,
     debug,
     silent,
     insecure,
@@ -266,9 +255,6 @@ def entrypoint(
     if environ_json:
         bakefile.add_environ_json(environ_json)
 
-    if shellcheck:
-        pass
-
     argv = []
     environ = []
 
@@ -294,7 +280,7 @@ def entrypoint(
 
     bakefile.add_args(*argv)
 
-    if _list and not shellcheck:
+    if _list:
         __list_json = {"tasks": {}}
 
         for _task in bakefile.tasks:
@@ -327,45 +313,6 @@ def entrypoint(
 
         sys.exit(0)
 
-    if shellcheck:
-        __shellcheck_statuses = []
-        for _task in bakefile.tasks:
-            _task = bakefile[_task]
-            c = _task.shellcheck(silent=silent, debug=debug)
-            __shellcheck_statuses.append(c.return_code)
-            if not c.ok:
-                # click.echo(click.style("Shellcheck failed!", fg="red"), err=True)
-                if _json:
-                    echo_json(json.loads(c.out))
-
-                for report in json.loads(c.out):
-                    level = report["level"]
-                    code = report["code"]
-                    message = report["message"]
-                    line = report["line"]
-                    column = (report["column"], report["endColumn"])
-                    colored_line_n = click.style(
-                        str(line).zfill(3), bg="black", fg="cyan", bold=True
-                    )
-                    colored_task = click.style(str(_task), fg="yellow", bold=True)
-                    actual_line = _task.source_lines[line - 1]
-
-                    click.echo(f"In {colored_task} line {line}:", err=True)
-                    click.echo(f"{colored_line_n} {actual_line}", err=True)
-
-                    length = column[1] - column[0]
-                    if not length:
-                        length = len(actual_line)
-
-                    underline = (" " * 4) + (" " * column[0]) + "^" + "-" * (length - 1)
-                    underline += f"SC{code}: {message}"
-                    underline = click.style(level, fg="magenta") + click.style(
-                        underline[len(level) :], fg="red", bold=True
-                    )
-
-                    click.echo(underline, err=True)
-
-        sys.exit(max(__shellcheck_statuses))
     if task:
 
         try:
