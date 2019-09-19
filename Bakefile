@@ -3,10 +3,7 @@
     USERNAME=${USERNAME:-kennethreitz}
 
 install: install/system install/python
-
 test: python/test docker/test
-
-# bake -i release v0.0.0
 release: pypi/publish docker/release
 
 python/test: install/python
@@ -34,25 +31,7 @@ install/system:
 release/pypi: install/python
     pipenv run python setup.py upload
 
-release: test release/git release/docker
-release/git:
-
-    RELEASE=$1
-
-    if [[ -z "$RELEASE" ]]; then
-        echo 'Release ($1) not provided; skipping.'
-        exit 0
-    fi
-
-    set -u
-    if [[ $(git diff --stat) ]]; then
-        git commit -am
-        git tag "$1"
-        git push --tags
-    else
-        echo 'Git tree is dirty. Aborting!'
-        exit 1
-    fi
+release: test release/docker
 release/docker: docker/build/full release/docker/github
 
 release/docker/github: docker/build/full
