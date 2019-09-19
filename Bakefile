@@ -4,7 +4,7 @@
 
 install: install/system install/python
 
-install/python: install/system @skip:key=./Pipfile.lock
+install/python: install/system @skip:key=Pipfile.lock
     pipenv install
 
 install/system:
@@ -38,6 +38,12 @@ docker/build:
 docker/build/full:
     # Build the images.
     set -ex && docker-compose build --no-cache
+
+ci: ci/setup
+    set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
+
+ci/setup: @skip:key=Pipfile.lock
+    pipenv install --dev --deploy --system
 
 random/python:
     #!/usr/bin/env python
