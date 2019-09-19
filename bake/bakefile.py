@@ -39,6 +39,7 @@ class BaseAction:
 
 class TaskFilter(BaseAction):
     """A filter, which can be applied to a task."""
+
     def __init__(self, s, bashfile):
         self.source = s
         self.bashfile = bashfile
@@ -46,7 +47,7 @@ class TaskFilter(BaseAction):
         self.do_skip = None
 
     def __str__(self):
-        """Used for terminal display.""""
+        """Used for terminal display."""
         split = self.source.split(":", 1)
         extra = ")" if len(split) > 1 else ""
         source = "(".join(split) + extra
@@ -97,6 +98,7 @@ class TaskFilter(BaseAction):
     @staticmethod
     def execute_confirm(*, prompt=False, yes=False, secure=False, **kwargs):
         """Executes a confirm dialouge for the user, interactively."""
+
         def abort(msg="Aborted!"):
             msg = click.style(msg, fg="red")
             dash = click.style(" - ", fg="white", bold=True)
@@ -176,6 +178,7 @@ class FakeTaskScript(BaseAction):
 
     Ussually typos. They display red in the terminal. Neat.
     """
+
     def __init__(self, s, bashfile):
         self.source = s
         self.bashfile = bashfile
@@ -190,6 +193,7 @@ class TaskScript(BaseAction):
 
     You're pretty witty & intelligent — you can infer what this class is for, based on its name.
     """
+
     def __init__(self, bashfile, chunk_index=None):
         self.bashfile = bashfile
         self._chunk_index = chunk_index
@@ -574,4 +578,3 @@ class Bakefile:
             )
 
         return "\n".join(source)
-}
