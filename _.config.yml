@@ -5,3 +5,4 @@ relative_links:
   collections: true
 include:
   - ./README.md
+remote_theme: ColeTownsend/Balzac-for-Jekyll
