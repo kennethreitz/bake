@@ -247,13 +247,13 @@ def entrypoint(
             task = bakefile.tasks[source]
             source = task.gen_source(
                 sources=[task.source],
-                remove_comments=True,
+                remove_comments=False,
                 insert_source="__init__",
                 include_shebang=True,
             )
 
         # Giving up — it's just easier to do it here.
-        click.echo("#!/usr/bin/env bash")
+        # click.echo("#!/usr/bin/env bash")
         for source_line in source:
             # print(source_line)
             click.echo(source_line)

@@ -300,27 +300,29 @@ class TaskScript(BaseAction):
         include_shebang=True,
     ):
 
+        if sources is None:
+            sources = []
+
         stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
         with open(stdlib_path, "r") as f:
             stdlib = f.read()
 
-        _sources = [stdlib, self.bashfile.funcs_source, self.bashfile.root_source]
+        _sources = []
 
-        if sources is None:
-            sources = []
+        # Grab the first source line, for shebang comparison.
+        first_natural_line = sources[0]
 
-        _sources.extend(sources)
-        sources = _sources
-
-        source = "\n".join(sources)
-        first_natural_line = source.split("\n")[0]
-
+        # Check if there's a shebang. If so, disable injection.
         if Bakefile._is_shebang_line(first_natural_line) and include_shebang:
             yield first_natural_line
+        else:
+            _sources += [stdlib, self.bashfile.funcs_source, self.bashfile.root_source]
+            yield "#!/usr/bin/env bash"
 
-        if insert_source:
-            yield f"source <(bake --source {insert_source})"
+        source = "\n".join(_sources)
 
+        # if insert_source:
+        #     yield f"source <(bake --source {insert_source})"
         for sourceline in source.split("\n"):
             if not (
                 remove_comments
@@ -337,13 +339,15 @@ class TaskScript(BaseAction):
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
 
-        script_suffix = (
+        sed_magic = (
             "2>&1  | sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
             if not (interactive or silent)
             else ""
         )
-        script_debug = "--verbose -x" if debug else ""
-        script = f"bash --noprofile {script_debug} <(bake --source {self.name})  {args} {script_suffix}"
+        script_debug = "-v" if debug else ""
+        script = f"sh --noprofile {script_debug} <(bake --source {self.name}) {args} {sed_magic}"
+
+        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && env {script_debug} $t {args} {sed_magic} && rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
@@ -373,7 +377,8 @@ class TaskScript(BaseAction):
         return self.bashfile.chunks[self._chunk_index]
 
     def _iter_source(self):
-        yield "#!/usr/bin/env bash"
+        if not Bakefile._is_shebang_line(self.chunk[1]):
+            yield "#!/usr/bin/env bash"
 
         for line in self.chunk[1:]:
             line = self._transform_line(line)
@@ -518,7 +523,7 @@ class Bakefile:
 
     @staticmethod
     def _is_shebang_line(line):
-        return line.startswith("#!")
+        return line.lstrip().startswith("#!")
 
     @staticmethod
     def _is_comment_line(line, *, exclude_shebang=True):
@@ -571,13 +576,17 @@ class Bakefile:
 
         for task in self.tasks:
             task = self[task]
+            f_name = task.name.replace("/", "_")
+            f_name = f_name.replace("-", "_")
+            f_name = f"bake_{f_name}"
+
             source.append(
                 # Replace / namespacing with _ namespacing, for functions.
-                f"function bake_{task.name.replace('/', '_')}"
+                f"function {f_name}"
                 + " { \n"
                 + f"    bake --silent {task.name} $@;\n"
                 + "}\n"
-                + f"declare -x bake_{task.name.replace('/', '_')};"
+                + f"declare -x {f_name};"
             )
 
         return "\n".join(source)
