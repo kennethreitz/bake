@@ -292,16 +292,7 @@ class TaskScript(BaseAction):
 
         return line
 
-    def gen_source(
-        self,
-        sources=None,
-        insert_source=None,
-        remove_comments=False,
-        include_shebang=True,
-    ):
-
-        if sources is None:
-            sources = []
+    def gen_source(self, *, sources):
 
         source_container = []
 
@@ -313,34 +304,25 @@ class TaskScript(BaseAction):
             first_natural_line = "#!/usr/bin/env bash"
 
         # Check if there's a shebang. If so, disable injection.
-        if Bakefile._is_shebang_line(first_natural_line) and include_shebang:
+        if Bakefile._is_shebang_line(first_natural_line):
             shebang = first_natural_line
             yield shebang
 
-            if insert_source and Bakefile._is_safe_to_inject(shebang=shebang):
-                init_source = f". <(bake --source {insert_source})"
-                yield init_source
-                source_container.extend(sources)
-            else:
-                source_container.extend(sources[-1:])
+            source_offset_index = (
+                None if Bakefile._is_safe_to_inject(shebang=shebang) else -1
+            )
+            source_container.extend(sources[source_offset_index:])
 
         else:
             shebang = "#!/usr/bin/env bash"
             yield shebang
-
-            if insert_source:
-                init_source = f"source <(bake --source {insert_source})"
-                yield init_source
 
             source_container += [self.bashfile.funcs_source, self.bashfile.root_source]
 
         main_source = "\n".join(source_container)
 
         for sourceline in main_source.split("\n"):
-            if not (
-                remove_comments
-                and Bakefile._is_comment_line(sourceline, exclude_shebang=False)
-            ):
+            if not Bakefile._is_comment_line(sourceline, exclude_shebang=False):
                 if sourceline:
                     yield sourceline
 

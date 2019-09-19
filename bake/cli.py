@@ -242,9 +242,7 @@ def entrypoint(
             source = random.choice(list(bakefile.tasks.keys()))
             task = bakefile.tasks[source]
             source = task.gen_source(
-                remove_comments=True,
-                include_shebang=True,
-                sources=[task.bashfile.funcs_source, task.bashfile.root_source],
+                sources=[task.bashfile.funcs_source, task.bashfile.root_source]
             )
         else:
             task = bakefile.tasks[source]
@@ -253,10 +251,7 @@ def entrypoint(
                     task.bashfile.funcs_source,
                     task.bashfile.root_source,
                     task.source,
-                ],
-                remove_comments=True,
-                insert_source="__init__",
-                include_shebang=True,
+                ]
             )
 
         for source_line in source:
