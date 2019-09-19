@@ -87,7 +87,7 @@ class TaskFilter(BaseAction):
         return []
 
     @staticmethod
-    def execute_confirm(*, prompt=False, yes=False, secure=False, **kwargs):
+    def execute_confirm(*, prompt=False, yes=False, force=False, secure=False, **kwargs):
         def abort(msg="Aborted!"):
             msg = click.style(msg, fg="red")
             dash = click.style(" - ", fg="white", bold=True)
@@ -111,13 +111,18 @@ class TaskFilter(BaseAction):
                 abort(msg="Please provide a valid number.")
 
         else:
-            if not yes:
+            if not yes or force:
                 question = str(click.style("?", fg="green", bold=True))
                 click.confirm(f" {question} Do you want to continue?", abort=True)
 
         return ("confirmed", True)
 
-    def execute_skip_if(self, *, key, cache=None, **kwargs):
+    def execute_skip_if(self, *, key, cache=None, force=False, **kwargs):
+        if force:
+            print('forcing')
+            self.do_skip = False
+            return ("skip", False)
+
         if cache is None:
             cache = f".git/bake-hash-{sha256(key.encode('utf-8')).hexdigest()}"
 
@@ -148,11 +153,11 @@ class TaskFilter(BaseAction):
         self.do_skip = False
         return ("skip", False)
 
-    def execute(self, yes=False, **kwargs):
+    def execute(self, yes=False, force=False, **kwargs):
         if self.name == "confirm":
-            return self.execute_confirm(yes=yes, **self.arguments)
+            return self.execute_confirm(yes=yes, force=force, **self.arguments)
         elif self.name == "skip":
-            return self.execute_skip_if(yes=yes, **self.arguments)
+            return self.execute_skip_if(yes=yes, force=force, **self.arguments)
 
 
 class FakeTaskScript(BaseAction):
@@ -559,4 +564,4 @@ class Bakefile:
             )
 
         return "\n".join(source)
-}
+
