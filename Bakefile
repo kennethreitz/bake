@@ -28,10 +28,11 @@ install/python: @skip:key=Pipfile.lock install/system
 install/system:
     lazy_brew pipenv
 
+release: test release/pypi release/docker
+
 release/pypi: install/python
     pipenv run python setup.py upload
 
-release: test release/docker
 release/docker: docker/build/full release/docker/github
 
 release/docker/github: docker/build/full
