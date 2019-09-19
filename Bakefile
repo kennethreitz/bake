@@ -3,22 +3,51 @@
     USERNAME=${USERNAME:-kennethreitz}
 
 install: install/system install/python
+test: python/test docker/test
+release: pypi/publish docker/release
 
-install/python: install/system @skip:key=Pipfile.lock
-    pipenv install
-
-install/system:
-    lazy_brew pipenv
+python/test:
+    pipenv run pytest
 
 docker/bash: docker/build
     docker-compose run --entrypoint bash bake
 docker/test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
 
-docker/release: docker/build/full docker/release/github
-    docker-compose push
+docker/build:
+    # Build the images.
+    set -ex && docker-compose build
 
-docker/release/github: docker/build/full
+docker/build/full:
+    # Build the images.
+    set -ex && docker-compose build --no-cache
+
+install/python: @skip:key=Pipfile.lock install/system
+    pipenv install --dev
+
+install/system:
+    lazy_brew pipenv
+
+release/pypi: install/python
+    pipenv run python setup.py upload
+
+release: test release/git release/docker
+release/git:
+    set -u
+
+    RELEASE=$1
+
+    if [[ $(git diff --stat) ]]; then
+        git commit -am
+        git tag "$1"
+        git push --tags
+    else
+        echo 'Git tree is dirty. Aborting!'
+        exit 1
+    fi
+release/docker: docker/build/full release/docker/github
+
+release/docker/github: docker/build/full
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -33,13 +62,8 @@ docker/release/github: docker/build/full
         docker push "$REMOTE_IMAGE"
     done
 
-docker/build:
-    # Build the images.
-    set -ex && docker-compose build
-
-docker/build/full:
-    # Build the images.
-    set -ex && docker-compose build --no-cache
+release/docker/dockerhub: docker/build/full
+    docker-compose push
 
 ci: ci/setup
     set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
