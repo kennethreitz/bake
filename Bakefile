@@ -1,17 +1,19 @@
+
+
 install: install/system install/python
 
 install/python: install/system @skip:key=./Pipfile.lock
     pipenv install
 
 install/system:
-    lazy-brew jq docker-compose
+    lazy_brew jq docker-compose
 
 docker/bash: docker/build install/system
     docker-compose run --entrypoint=bash bake
-    
+
 docker/release: docker/build install/system docker/release/github
     docker-compose push
-    
+
 docker/release/github: install/system docker/build
     REGISTRY=${REGISTRY:-docker.pkg.github.com}
     USERNAME=${USERNAME:-kennethreitz}
@@ -35,12 +37,14 @@ docker/build: install/system
     set -ex && docker-compose build
 
 
-lazy-brew() {
+function lazy_brew {
     set -e
     # Install jq if it's not available.
 
     if ! which jq > /dev/null; then
-        set -ex && brew install jq > /dev/null
+        set -ex && brew install jq
+    else
+        echo 'jq is already installed!'
     fi
 
     # Install requested packages, if they aren't installed.
@@ -50,3 +54,4 @@ lazy-brew() {
         fi
     done
 }
+export lazy_brew
