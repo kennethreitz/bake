@@ -303,10 +303,6 @@ class TaskScript(BaseAction):
         if sources is None:
             sources = []
 
-        stdlib_path = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
-        with open(stdlib_path, "r") as f:
-            stdlib = f.read()
-
         source_container = []
 
         # Grab the first source line, for shebang comparison.
@@ -335,11 +331,7 @@ class TaskScript(BaseAction):
                 init_source = f"source <(bake --source {insert_source})"
                 yield init_source
 
-            source_container += [
-                stdlib,
-                self.bashfile.funcs_source,
-                self.bashfile.root_source,
-            ]
+            source_container += [self.bashfile.funcs_source, self.bashfile.root_source]
 
         main_source = "\n".join(source_container)
 
@@ -486,7 +478,6 @@ class Bakefile:
                         yield (i, line.rstrip())
                     else:
                         yield (i, None)
-        # yield (i, None)
 
     @property
     def home(self):
