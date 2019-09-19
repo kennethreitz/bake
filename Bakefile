@@ -10,6 +10,8 @@ install/python: install/system @skip:key=Pipfile.lock
 install/system:
     lazy_brew pipenv
 
+docker/bash: docker/build
+    docker-compose run --entrypoint bash bake
 docker/test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
 
