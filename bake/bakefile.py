@@ -122,7 +122,7 @@ class TaskFilter(BaseAction):
                 abort(msg="Please provide a valid number.")
 
         else:
-            if not yes or force:
+            if not yes:
                 question = str(click.style("?", fg="green", bold=True))
                 click.confirm(f" {question} Do you want to continue?", abort=True)
 
@@ -131,7 +131,6 @@ class TaskFilter(BaseAction):
     def execute_skip_if(self, *, key, cache=None, force=False, **kwargs):
         """Determines if it is appropriate to skip the dependent TaskScript."""
         if force:
-            print('forcing')
             self.do_skip = False
             return ("skip", False)
 
