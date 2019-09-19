@@ -109,6 +109,7 @@ Options:
   --allow TEXT             Whitelist an environment variable for use.
   --no-deps                Do not run dependent tasks.
   --yes                    Set medium–security prompts to yes.
+  --force -f               Forces task to run even if skip key hasnt changed
   --continue               Continue, if a task fails.
   -i, --interactive        Run in interactive mode.
   --insecure               Inherit parent shell's environment variables.
