@@ -141,7 +141,7 @@ def echo_json(obj):
     help="Do not run dependent tasks.",
 )
 @click.option("--yes", is_flag=True, help="Set medium–security prompts to yes.")
-@click.option("--force", '-i', is_flag=True, help="Forces task to run even if skip key hasnt changed")
+@click.option("--force", '-f', is_flag=True, help="Forces task to run even if skip key hasnt changed")
 @click.option(
     "--continue",
     "_continue",
