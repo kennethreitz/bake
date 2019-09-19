@@ -310,7 +310,6 @@ class TaskScript(BaseAction):
             # Last script comes first.
             first_natural_line = sources[-1].split("\n", 1)[0]
         except IndexError:
-            # TODO: maybe not.
             first_natural_line = "#!/usr/bin/env bash"
 
         # Check if there's a shebang. If so, disable injection.
@@ -321,7 +320,9 @@ class TaskScript(BaseAction):
             if insert_source and Bakefile._is_safe_to_inject(shebang=shebang):
                 init_source = f". <(bake --source {insert_source})"
                 yield init_source
-            source_container.extend(sources)
+                source_container.extend(sources)
+            else:
+                source_container.extend(sources[-1:])
 
         else:
             shebang = "#!/usr/bin/env bash"
