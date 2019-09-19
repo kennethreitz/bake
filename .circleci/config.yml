@@ -22,17 +22,8 @@ jobs:
       # - setup_remote_docker:
       #     docker_layer_caching: true
       - run:
-          name: $ pipenv install
-          command: pipenv install --dev --deploy --system
-
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
-      - run:
-          name: $ pytest
-          command: set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
+          name: $ bake ci
+          command: bake ci
 
       - store_test_results:
           path: reports
