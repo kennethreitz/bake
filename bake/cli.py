@@ -111,7 +111,7 @@ def echo_json(obj):
     default=None,
     nargs=1,
     type=click.INT,
-    help="Lists available tasks (and their dependencies).",
+    help="List only a given number of '/' levels of tasks.",
 )
 @click.option(
     "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
