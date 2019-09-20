@@ -108,8 +108,9 @@ def echo_json(obj):
 @click.option(
     "--levels",
     "-l",
-    default=1,
+    default=None,
     nargs=1,
+    type=click.INT,
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
@@ -290,10 +291,14 @@ def entrypoint(
     if _list:
         __list_json = {"tasks": {}}
 
-        task_list = []
-        for _task in bakefile.tasks:
-            if len(_task.split("/")) <= levels:
-                task_list.append(_task)
+        # Enable level filtering.
+        if levels is not None:
+            task_list = []
+            for _task in bakefile.tasks:
+                if len(_task.split("/")) <= levels:
+                    task_list.append(_task)
+        else:
+            task_list = bakefile.tasks
 
         for _task in task_list:
             depends_on = bakefile[_task].depends_on(
@@ -322,9 +327,9 @@ def entrypoint(
 
         if not silent:
             tasks_unechoed = len(bakefile.tasks) - len(task_list)
-            bake_command = str(click.style(f"bake -l {levels + 1}", fg="red"))
+
             if tasks_unechoed:
-                # click.echo(err=True)
+                bake_command = str(click.style(f"bake -l {levels + 1}", fg="red"))
                 click.echo(
                     f"Note: {tasks_unechoed} more tasks are available. "
                     f"Please use $ {bake_command} to see more.",
