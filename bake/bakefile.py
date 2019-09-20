@@ -599,6 +599,6 @@ class Bakefile:
                 + f"    bake --silent {task.name} $@;\n"
                 + "}\n"
                 + f"declare -x {f_name};"
-        #     )
+            )
 
         return "\n".join(source)
