@@ -586,20 +586,19 @@ class Bakefile:
     def funcs_source(self):
         source = []
 
-        # TODO: this can cause bugs.
-        # for task in self.tasks:
-        #     task = self[task]
-        #     f_name = task.name.replace("/", "_")
-        #     f_name = f_name.replace("-", "_")
-        #     f_name = f"bake_{f_name}"
+        for task in self.tasks:
+            task = self[task]
+            f_name = task.name.replace("/", "_")
+            f_name = f_name.replace("-", "_")
+            f_name = f"_{f_name}"
 
-        #     source.append(
-        #         # Replace / namespacing with _ namespacing, for functions.
-        #         f"function {f_name}"
-        #         + " { \n"
-        #         + f"    bake --silent {task.name} $@;\n"
-        #         + "}\n"
-        #         + f"declare -x {f_name};"
+            source.append(
+                # Replace / namespacing with _ namespacing, for functions.
+                f"function {f_name}"
+                + " { \n"
+                + f"    bake --silent {task.name} $@;\n"
+                + "}\n"
+                + f"declare -x {f_name};"
         #     )
 
         return "\n".join(source)
