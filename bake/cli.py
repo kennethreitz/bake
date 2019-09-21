@@ -367,8 +367,10 @@ def entrypoint(
                     skips.append(edge.do_skip)
 
             if not all(skips or [False]):
+                # TODO: fully implement this?
                 if "@" in f"{task}":
                     silent = True
+
                 if not silent:
                     click.echo(
                         click.style(" + ", fg="white")
@@ -376,24 +378,25 @@ def entrypoint(
                         + click.style(":", fg="white"),
                         err=True,
                     )
-                usually_bash = task.execute(
+                usually_bash_task = task.execute(
                     yes=yes, debug=debug, silent=silent, interactive=interactive
                 )
 
                 if not _continue:
-                    if hasattr(usually_bash, "ok"):
+                    if hasattr(usually_bash_task, "ok"):
 
-                        if usually_bash.return_code > 0:
+                        if usually_bash_task.return_code > 0:
                             if not silent:
                                 click.echo(
                                     click.style(f"Task {task} failed!", fg="red"),
                                     err=True,
                                 )
-                            sys.exit(usually_bash.return_code)
+                            sys.exit(usually_bash_task.return_code)
 
-                    elif isinstance(usually_bash, tuple):
+                    # This happens when it's a task filter.
+                    elif isinstance(usually_bash_task, tuple):
                         key, value = (
-                            usually_bash
+                            usually_bash_task
                         )  # But, in this instance, clearly isn't.
             else:
                 click.echo(

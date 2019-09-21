@@ -553,7 +553,7 @@ class TaskScript(BaseAction):
         sed_magic = (
             "2>&1  | sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
             if not (interactive or silent)
-            else "\b"
+            else "2>&1"
         )
         script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} {sed_magic}; rm -fr $t"
 
