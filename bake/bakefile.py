@@ -230,6 +230,7 @@ class Bakefile:
             task = self[task]
             f_name = task.name.replace("/", "_")
             f_name = f_name.replace("-", "_")
+            f_name = f"_{f_name}"
 
             source.append(
                 # Replace / namespacing with _ namespacing, for functions.
@@ -554,7 +555,7 @@ class TaskScript(BaseAction):
         script = (
             f"t=$(mktemp) && bake --source {self.name} "
             f"> $t && chmod +x $t && $t {args} 2>&1 | "
-            f"{sed_magic}" + ' && exit "${PIPESTATUS[0]}"; rm -fr $t'
+            f"{sed_magic}" + ' && exit "${PIPESTATUS[1]}"; rm -fr $t'
         )
 
         if debug:
