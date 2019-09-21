@@ -3,7 +3,8 @@ import click
 import json
 import random
 
-from .bakefile import Bakefile, TaskFilter, NoBakefileFound
+from .bakefile import Bakefile, TaskFilter
+from .exceptions import NoBakefileFound
 from .clint import eng_join
 
 import pygments
