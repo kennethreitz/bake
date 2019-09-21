@@ -158,14 +158,18 @@ def echo_json(obj):
     type=click.BOOL,
     help="Inherit parent shell's environment variables.",
 )
-@click.argument(
-    "arguments",
-    nargs=-1,
-    type=click.STRING,
-    # multiple=True,
-    # help="task ARGV argument (can be passed multiple times).",
+@click.argument("arguments", nargs=-1, type=click.STRING)
+@click.option(
+    "--silent",
+    "-s",
+    is_flag=True,
+    type=click.BOOL,
+    help="Reduce output.",
+    envvar="BAKE_SILENT",
 )
-@click.option("--silent", "-s", is_flag=True, type=click.BOOL, help="Reduce output.")
+@click.option(
+    "--sort", is_flag=True, type=click.BOOL, help="Sort tasks, alphabetially."
+)
 @click.option(
     "--environ-json",
     "-e",
@@ -192,6 +196,7 @@ def entrypoint(
     environ_json,
     debug,
     silent,
+    sort,
     insecure,
     allow,
     _json,
@@ -305,6 +310,9 @@ def entrypoint(
                     task_list.append(_task)
         else:
             task_list = bakefile.tasks
+
+        if sort:
+            task_list = sorted(task_list)
 
         for _task in task_list:
             depends_on = bakefile[_task].depends_on(
