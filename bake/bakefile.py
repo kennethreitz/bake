@@ -584,6 +584,7 @@ class Bakefile:
 
     @property
     def funcs_source(self):
+        """Functions (_task_name), inserted into the Bash runtime."""
         source = []
 
         for task in self.tasks:
