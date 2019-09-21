@@ -549,13 +549,13 @@ class TaskScript(BaseAction):
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
         args = args if args else "\b"
+        sed_magic = "sed >&2 's/^/ |  /'" if not silent else "sed >&2 's/^//'"
 
-        sed_magic = (
-            "| sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
-            if not silent
-            else "| sed >&2 's/^//' && exit \"${PIPESTATUS[0]}\""
+        script = (
+            f"t=$(mktemp) && bake --source {self.name} "
+            f"> $t && chmod +x $t && $t {args} 2>&1 | "
+            f"{sed_magic}" + ' && exit "${PIPESTATUS[0]}"; rm -fr $t'
         )
-        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} 2>&1 {sed_magic}; rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
