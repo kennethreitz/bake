@@ -231,7 +231,7 @@ def entrypoint(
         sys.exit(0)
 
     if debug:
-        click.echo(f" + bakefile: {bakefile.path}", err=True)
+        click.echo(f" + Bakefile: {bakefile.path}", err=True)
 
     # --source (internal API)
     if source:
@@ -281,7 +281,7 @@ def entrypoint(
     if debug:
         click.echo(f" + argv: {argv!r}", err=True)
         click.echo(f" + environ: {environ!r}", err=True)
-
+        click.echo(err=True)
     for env in environ:
         key, value = env
         if debug:

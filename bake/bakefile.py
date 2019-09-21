@@ -497,7 +497,6 @@ class Bakefile:
 
         i = 0
         for c, d, f in utils.walk_up(root):
-            print(locals())
             if i > max_depth:
                 raise NoBakefileFound(f"No {filename} found!")
             elif filename in f:
