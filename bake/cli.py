@@ -334,7 +334,7 @@ def entrypoint(
             tasks_unechoed = len(bakefile.tasks) - len(task_list)
 
             if tasks_unechoed:
-                bake_command = str(click.style(f"bake -l {levels + 1}", fg="red"))
+                bake_command = str(click.style(f"bake --levels {levels + 1}", fg="red"))
                 click.echo(
                     f"Note: {tasks_unechoed} more tasks are available. "
                     f"Please use $ {bake_command} to see more.",
