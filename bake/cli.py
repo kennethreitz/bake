@@ -348,7 +348,6 @@ def entrypoint(
         sys.exit(0)
 
     if task:
-
         try:
             task = bakefile[task]
         except KeyError:

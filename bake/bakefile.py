@@ -551,11 +551,11 @@ class TaskScript(BaseAction):
         args = args if args else "\b"
 
         sed_magic = (
-            "2>&1  | sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
-            if not (interactive or silent)
-            else "2>&1"
+            "| sed >&2 's/^/ |  /' && exit \"${PIPESTATUS[0]}\""
+            if not silent
+            else "| sed >&2 's/^//' && exit \"${PIPESTATUS[0]}\""
         )
-        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} {sed_magic}; rm -fr $t"
+        script = f"t=$(mktemp) && bake --source {self.name} > $t && chmod +x $t && $t {args} 2>&1 {sed_magic}; rm -fr $t"
 
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
