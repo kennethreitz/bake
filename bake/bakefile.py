@@ -592,11 +592,10 @@ class Bakefile:
             task = self[task]
             f_name = task.name.replace("/", "_")
             f_name = f_name.replace("-", "_")
-            f_name = f"_{f_name}"
 
             source.append(
                 # Replace / namespacing with _ namespacing, for functions.
-                f"function {f_name}"
+                f"{f_name}()"
                 + " { \n"
                 + f"    bake --silent {task.name} $@;\n"
                 + "}\n"

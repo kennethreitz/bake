@@ -1,0 +1,5 @@
+hello:
+    echo 'hi'
+
+hello/reuse:
+    hello
