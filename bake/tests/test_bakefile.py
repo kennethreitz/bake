@@ -1,6 +1,11 @@
 import pytest
 
 
+def test_help(bake):
+    c = bake("--help")
+    assert "bake" in c.err
+
+
 def test_echo(bake):
     c = bake("echo", fixture="1")
     assert "kenneth" in c.err
