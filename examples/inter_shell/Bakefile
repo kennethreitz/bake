@@ -1,5 +1,6 @@
 hello:
     echo 'hi'
+    echo 'there'
 
 hello/reuse:
     hello
