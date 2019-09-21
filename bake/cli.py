@@ -224,9 +224,14 @@ def entrypoint(
             bakefile = Bakefile.find(root=".", filename="Bakefile")
         else:
             bakefile = Bakefile(path=bakefile)
+
     except NoBakefileFound:
         click.echo(click.style("No Bakefile found!", fg="red"), err=True)
         do_help(1)
+        sys.exit(0)
+
+    if debug:
+        click.echo(f" + bakefile: {bakefile.path}", err=True)
 
     # --source (internal API)
     if source:

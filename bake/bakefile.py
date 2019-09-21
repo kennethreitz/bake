@@ -11,6 +11,7 @@ import delegator
 import click
 import networkx
 
+from . import utils
 from .bash import Bash
 
 INDENT_STYLES = ("\t", " " * 4)
@@ -490,11 +491,13 @@ class Bakefile:
 
     @classmethod
     def find(
-        Class, *, filename="Bashfile", root=os.getcwd(), max_depth=4, topdown=True
+        Class, *, filename="Bashfile", root=os.getcwd(), max_depth=4, topdown=False
     ):
         """Returns the path of a Pipfile in parent directories."""
+
         i = 0
-        for c, d, f in os.walk(root, topdown=topdown):
+        for c, d, f in utils.walk_up(root):
+            print(locals())
             if i > max_depth:
                 raise NoBakefileFound(f"No {filename} found!")
             elif filename in f:
@@ -562,8 +565,8 @@ class Bakefile:
         return self.tasks
 
     @property
-    def root_source_lines(self):
-        source_lines = []
+    def iter_root_source_lines(self):
+        """The source of the 'root level' of the Bashfile."""
         task_active = False
         for line in self.source_lines:
             if line:
@@ -574,13 +577,12 @@ class Bakefile:
                         task_active = False
 
                     if not task_active:
-                        source_lines.append(line)
-
-        return source_lines
+                        yield line
 
     @property
     def root_source(self):
-        return "\n".join(self.root_source_lines)
+        """The source of the 'root level' of the Bashfile."""
+        return "\n".join(list(self.iter_root_source_lines))
 
     @property
     def funcs_source(self):
