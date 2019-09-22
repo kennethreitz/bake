@@ -561,7 +561,12 @@ class TaskScript(BaseAction):
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
 
-        bash = Bash(interactive=interactive)
+        if silent:
+            bash_interactive = True
+        else:
+            bash_interactive = interactive
+
+        bash = Bash(interactive=bash_interactive)
         return bash.command(script, quote=False)
 
     @property
