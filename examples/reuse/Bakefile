@@ -5,5 +5,5 @@ hello:
 hello/reuse:
     bake hello
 
-hello/concurrent:
+hello/reuse/concurrent:
     bake hello & bake hello
