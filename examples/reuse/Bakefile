@@ -5,5 +5,8 @@ hello:
 hello/reuse:
     bake hello
 
+hello/reuse/indent:
+    bake hello/reuse | bake_indent
+
 hello/reuse/concurrent:
     bake hello & bake hello
