@@ -131,17 +131,19 @@ class Bakefile:
 
     @classmethod
     def find(
-        Class, *, filename="Bashfile", root=os.getcwd(), max_depth=4, topdown=False
+        Class, *, filename="Bakefile", root=os.getcwd(), max_depth=4, topdown=False
     ):
         """Returns the path of a Pipfile in parent directories."""
 
         i = 0
         for c, d, f in utils.walk_up(root):
             if i > max_depth:
-                raise NoBakefileFound(f"No {filename} found!")
+                break
             elif filename in f:
                 return Class(path=os.path.join(c, filename))
             i += 1
+
+        raise NoBakefileFound(f"No {filename} found!")
 
     @property
     def source(self):
