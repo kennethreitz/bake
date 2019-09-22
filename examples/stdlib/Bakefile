@@ -1,0 +1,19 @@
+TEXT='Hi, there!'
+
+echo: echo/normal echo/colors/red echo/colors/ansi-rainbow echo/indent
+
+echo/normal:
+    echo "$TEXT"
+
+echo/colors/red:
+    echo "$TEXT" | red
+
+echo/colors/ansi-rainbow:
+    declare -a COLORS=('BLACK' 'WHITE' 'RED' 'GREEN' 'YELLOW' 'BLUE' 'PURPLE' 'CYAN')
+    for COLOR in "${COLORS[@]}"; do
+        echo "$TEXT" | bake_fg_color $COLOR
+    done
+
+
+echo/indent:
+    echo "$TEXT" | red | bake_indent '>'

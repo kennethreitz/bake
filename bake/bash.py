@@ -82,6 +82,7 @@ class BashProcess:
         cmd = [system_which("bash"), *args]
 
         std_out = sys.stdout if interactive else subprocess.PIPE
+        # std_out = subprocess.PIPE
         std_in = sys.stdin if interactive else subprocess.PIPE
 
         self.sub = subprocess.Popen(
@@ -130,13 +131,11 @@ class BashProcess:
 class Bash:
     """an instance of bash"""
 
-    def __init__(self, *, path=WHICH_BASH, environ=None):
+    def __init__(self, *, path=WHICH_BASH, environ=None, **kwargs):
         """constructor"""
         self.path = path
         self.environ = environ or {}
-
-        ver_proc = self("--version")
-        self.about = ver_proc.output
+        self.kwargs = kwargs
 
     @property
     def version(self) -> str:
@@ -145,16 +144,15 @@ class Bash:
         # ...GNU Bash, version 4.4.19(1)-release ... --> 4.4.19(1)-release
         return matches.group(1) if matches else "version_unknown"
 
+    @property
+    def about(self):
+        return self("--version").output
+
     def __call__(self, *args) -> BashProcess:
         """execute the bash process as a child of this process"""
-        return BashProcess(parent=self, args=args)
+        return BashProcess(parent=self, args=args, **self.kwargs)
 
     def command(self, script: str, quote=True) -> BashProcess:
         """form up the command with shlex and execute"""
         maybe_quote = shlex_quote if quote else str
         return self(f"-c", maybe_quote(script))
-
-
-def run(script=None, **kwargs):
-    """Runs the given bash script."""
-    return Bash(**kwargs).command(script)

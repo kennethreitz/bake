@@ -3,27 +3,15 @@ import click
 import json
 import random
 
-from .bakefile import Bakefile, TaskFilter, NoBakefileFound
+from .bakefile import Bakefile, TaskFilter
+from .exceptions import NoBakefileFound
 from .clint import eng_join
 
 import pygments
 import pygments.lexers
 import pygments.formatters
 
-SKIP_NEXT = False
-SAFE_ENVIRONS = [
-    "HOME",
-    "PATH",
-    "LANG",
-    "LOCALE",
-    "LANGUAGE",
-    "USER",
-    "TERM",
-    "VIRTUAL_ENV",
-    "BAKEFILE_PATH",
-    "PYTHONUNBUFFERED",
-    "PYTHONDONTWRITEBYTECODE",
-]
+from .constants import SKIP_NEXT, SAFE_ENVIRONS
 
 
 def indent(line):
@@ -101,17 +89,21 @@ def echo_json(obj):
 )
 @click.option(
     "--list",
-    "-l",
     "_list",
     default=False,
     is_flag=True,
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
-    "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
+    "--levels",
+    "-l",
+    default=None,
+    nargs=1,
+    type=click.INT,
+    help="List only a given number of '/' levels of tasks.",
 )
 @click.option(
-    "--skip-done", default=False, is_flag=True, hidden=True, envvar="BAKE_SKIP_DONE"
+    "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--source", default=False, nargs=1, hidden=True)
@@ -136,30 +128,34 @@ def echo_json(obj):
     "--continue",
     "_continue",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Continue, if a task fails.",
 )
 @click.option(
     "--interactive",
     "-i",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Run in interactive mode.",
 )
 @click.option(
     "--insecure",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Inherit parent shell's environment variables.",
 )
-@click.argument(
-    "arguments",
-    nargs=-1,
-    type=click.STRING,
-    # multiple=True,
-    # help="task ARGV argument (can be passed multiple times).",
+@click.argument("arguments", nargs=-1, type=click.STRING)
+@click.option(
+    "--silent",
+    "-s",
+    is_flag=True,
+    # type=click.BOOL,
+    help="Reduce output.",
+    envvar="BAKE_SILENT",
 )
-@click.option("--silent", "-s", is_flag=True, type=click.BOOL, help="Reduce output.")
+@click.option(
+    "--sort", is_flag=True, type=click.BOOL, help="Sort tasks, alphabetially."
+)
 @click.option(
     "--environ-json",
     "-e",
@@ -172,7 +168,7 @@ def echo_json(obj):
     "-j",
     "_json",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Output in JSON format (stdout).",
 )
 def entrypoint(
@@ -181,14 +177,15 @@ def entrypoint(
     bakefile,
     arguments,
     _list,
+    levels,
     _continue,
     environ_json,
     debug,
     silent,
+    sort,
     insecure,
     allow,
     _json,
-    skip_done,
     no_deps,
     interactive,
     dont_skip,
@@ -219,9 +216,14 @@ def entrypoint(
             bakefile = Bakefile.find(root=".", filename="Bakefile")
         else:
             bakefile = Bakefile(path=bakefile)
+
     except NoBakefileFound:
         click.echo(click.style("No Bakefile found!", fg="red"), err=True)
         do_help(1)
+        sys.exit(0)
+
+    if debug:
+        click.echo(f" + Bakefile: {bakefile.path}", err=True)
 
     # --source (internal API)
     if source:
@@ -271,7 +273,7 @@ def entrypoint(
     if debug:
         click.echo(f" + argv: {argv!r}", err=True)
         click.echo(f" + environ: {environ!r}", err=True)
-
+        click.echo(err=True)
     for env in environ:
         key, value = env
         if debug:
@@ -286,7 +288,19 @@ def entrypoint(
     if _list:
         __list_json = {"tasks": {}}
 
-        for _task in bakefile.tasks:
+        # Enable level filtering.
+        if levels is not None:
+            task_list = []
+            for _task in bakefile.tasks:
+                if len(_task.split("/")) <= levels:
+                    task_list.append(_task)
+        else:
+            task_list = bakefile.tasks
+
+        if sort:
+            task_list = sorted(task_list)
+
+        for _task in task_list:
             depends_on = bakefile[_task].depends_on(
                 include_filters=False, recursive=True
             )
@@ -311,13 +325,23 @@ def entrypoint(
                     err=False,
                 )
 
+        if not silent:
+            tasks_unechoed = len(bakefile.tasks) - len(task_list)
+
+            if tasks_unechoed:
+                bake_command = str(click.style(f"bake --levels {levels + 1}", fg="red"))
+                click.echo(
+                    f"Note: {tasks_unechoed} more tasks are available. "
+                    f"Please use $ {bake_command} to see more.",
+                    err=True,
+                )
+
         if _json:
             echo_json(__list_json)
 
         sys.exit(0)
 
     if task:
-
         try:
             task = bakefile[task]
         except KeyError:
@@ -336,8 +360,10 @@ def entrypoint(
                     skips.append(edge.do_skip)
 
             if not all(skips or [False]):
+                # TODO: fully implement this?
                 if "@" in f"{task}":
                     silent = True
+
                 if not silent:
                     click.echo(
                         click.style(" + ", fg="white")
@@ -345,24 +371,25 @@ def entrypoint(
                         + click.style(":", fg="white"),
                         err=True,
                     )
-                usually_bash = task.execute(
+                usually_bash_task = task.execute(
                     yes=yes, dont_skip=dont_skip, debug=debug, silent=silent, interactive=interactive
                 )
 
                 if not _continue:
-                    if hasattr(usually_bash, "ok"):
+                    if hasattr(usually_bash_task, "ok"):
 
-                        if usually_bash.return_code > 0:
+                        if usually_bash_task.return_code > 0:
                             if not silent:
                                 click.echo(
                                     click.style(f"Task {task} failed!", fg="red"),
                                     err=True,
                                 )
-                            sys.exit(usually_bash.return_code)
+                            sys.exit(usually_bash_task.return_code)
 
-                    elif isinstance(usually_bash, tuple):
+                    # This happens when it's a task filter.
+                    elif isinstance(usually_bash_task, tuple):
                         key, value = (
-                            usually_bash
+                            usually_bash_task
                         )  # But, in this instance, clearly isn't.
             else:
                 click.echo(
@@ -381,7 +408,7 @@ def entrypoint(
         for task in tasks:
             execute_task(task, silent=silent)
 
-        if not silent and not skip_done:
+        if not silent:
             click.echo(
                 click.style(" + ", fg="white")
                 + click.style("Done", fg="green")

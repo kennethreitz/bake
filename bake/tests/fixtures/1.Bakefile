@@ -1,5 +1,5 @@
 test1: test2 test3
-    source ./
+    echo '1'
 test2: test3
     echo '2'
 test3: echo

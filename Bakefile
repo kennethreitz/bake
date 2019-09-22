@@ -4,9 +4,10 @@
 
 install: install/system install/python
 test: python/test docker/test
-release: pypi/publish docker/release
+release: test release/pypi release/docker
 
 python/test: install/python
+    unset BAKE_SILENT
     pipenv run pytest
 
 docker/bash: docker/build
@@ -27,8 +28,6 @@ install/python: @skip:key=Pipfile.lock install/system
 
 install/system:
     lazy_brew pipenv
-
-release: test release/pypi release/docker
 
 release/pypi: install/python
     pipenv run python setup.py upload
@@ -61,9 +60,8 @@ ci/setup: @skip:key=Pipfile.lock
 
 random/python:
     #!/usr/bin/env python
-    import site
-    print(site)
-
+    import requests
+    print(requests)
 
 
 lazy_brew() {

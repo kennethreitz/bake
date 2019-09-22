@@ -1,0 +1,16 @@
+INDENT_STYLES = ("\t", " " * 4)
+SKIP_NEXT = False
+SAFE_ENVIRONS = [
+    "HOME",
+    "PATH",
+    "LANG",
+    "LOCALE",
+    "LANGUAGE",
+    "USER",
+    "TERM",
+    "VIRTUAL_ENV",
+    "BAKEFILE_PATH",
+    "PYTHONUNBUFFERED",
+    "PYTHONDONTWRITEBYTECODE",
+    "BAKE_SILENT",
+]
