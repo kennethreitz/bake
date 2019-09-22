@@ -7,6 +7,7 @@ test: python/test docker/test
 release: test release/pypi release/docker
 
 python/test: install/python
+    unset BAKE_SILENT
     pipenv run pytest
 
 docker/bash: docker/build
