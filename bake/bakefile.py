@@ -30,7 +30,7 @@ class Bakefile:
         os.environ["BAKEFILE_PATH"] = self.path
         os.environ["BAKE_SKIP_DONE"] = "1"
 
-        os.environ["BAKE_SILENT"] = 1
+        os.environ["BAKE_SILENT"] = "1"
 
         self.chunks
         self._tasks = None
