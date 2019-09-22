@@ -77,5 +77,13 @@ function red {
 # ----------
 
 function bake_indent {
-    exit 0
+    PIPE_CHAR="$1"
+    
+    if [ -z "$PIPE_CHAR" ]; then
+        PIPE_CHAR="|"
+    fi
+    
+    read -r INPUT
+    echo "$INPUT" | sed >&2 "s/^/ ${PIPE_CHAR}  /"
+    # echo 'hi'
 }
