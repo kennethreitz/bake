@@ -4,7 +4,8 @@
 
 install: install/system install/python
 test: python/test docker/test
-release: pypi/publish docker/release
+# release: test release/pypi release/docker
+release: test release/docker
 
 python/test: install/python
     pipenv run pytest
@@ -27,8 +28,6 @@ install/python: @skip:key=Pipfile.lock install/system
 
 install/system:
     lazy_brew pipenv
-
-release: test release/pypi release/docker
 
 release/pypi: install/python
     pipenv run python setup.py upload
