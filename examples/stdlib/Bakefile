@@ -1,9 +1,12 @@
 TEXT='Hi, there!'
 
-echo: echo/normal echo/red
+echo: echo/normal echo/colors/red echo/indent
 
 echo/normal:
     echo "$TEXT"
 
-echo/red:
+echo/colors/red:
     echo "$TEXT" | red
+
+echo/indent:
+    echo "$TEXT" | red | bake_indent '>'
