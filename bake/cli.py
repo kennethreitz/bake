@@ -11,21 +11,7 @@ import pygments
 import pygments.lexers
 import pygments.formatters
 
-SKIP_NEXT = False
-SAFE_ENVIRONS = [
-    "HOME",
-    "PATH",
-    "LANG",
-    "LOCALE",
-    "LANGUAGE",
-    "USER",
-    "TERM",
-    "VIRTUAL_ENV",
-    "BAKEFILE_PATH",
-    "PYTHONUNBUFFERED",
-    "PYTHONDONTWRITEBYTECODE",
-    "BAKE_SILENT",
-]
+from .constants import SKIP_NEXT, SAFE_ENVIRONS
 
 
 def indent(line):
@@ -118,9 +104,6 @@ def echo_json(obj):
 @click.option(
     "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
 )
-@click.option(
-    "--skip-done", default=False, is_flag=True, hidden=True, envvar="BAKE_SKIP_DONE"
-)
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--source", default=False, nargs=1, hidden=True)
 @click.option(
@@ -201,7 +184,6 @@ def entrypoint(
     insecure,
     allow,
     _json,
-    skip_done,
     no_deps,
     interactive,
     yes,
@@ -423,7 +405,7 @@ def entrypoint(
         for task in tasks:
             execute_task(task, silent=silent)
 
-        if not silent and not skip_done:
+        if not silent:
             click.echo(
                 click.style(" + ", fg="white")
                 + click.style("Done", fg="green")

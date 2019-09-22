@@ -61,8 +61,8 @@ ci/setup: @skip:key=Pipfile.lock
 
 random/python:
     #!/usr/bin/env python
-    import site
-    print(site)
+    import requests
+    print(requests)
 
 
 

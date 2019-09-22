@@ -1,0 +1,9 @@
+TEXT='Hi, there!'
+
+echo: echo/normal echo/red
+
+echo/normal:
+    echo "$TEXT"
+
+echo/red:
+    echo "$TEXT" | red

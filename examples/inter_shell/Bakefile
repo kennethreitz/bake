@@ -1,6 +1,9 @@
 hello:
-    echo 'hi'
-    echo 'there'
+    sleep 1
+    echo hello
 
 hello/reuse:
-    hello
+    bake hello
+
+hello/concurrent:
+    bake hello & bake hello

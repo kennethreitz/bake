@@ -223,27 +223,19 @@ class Bakefile:
         """The source of the 'root level' of the Bashfile."""
         return "\n".join(list(self.iter_root_source_lines))
 
+    def iter_funcs_source(self):
+        """The standard library."""
+        p = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
+        with open(p, "r") as f:
+            for i, line in enumerate(f.readlines()):
+                # Skip the shebang.
+                if i != 1:
+                    yield line
+
     @property
     def funcs_source(self):
         """Functions (_task_name), inserted into the Bash runtime."""
-        source = []
-
-        # TODO: Recommend bake taskname instead.
-        # for task in self.tasks:
-        #     task = self[task]
-        #     f_name = task.name.replace("/", "_")
-        #     f_name = f_name.replace("-", "_")
-        #     f_name = f"task_{f_name}"
-
-        #     source.append(
-        #         # Replace / namespacing with _ namespacing, for functions.
-        #         f"{f_name}()"
-        #         + " { \n"
-        #         + f"    bake --silent {task.name} $@;\n"
-        #         + "}\n"
-        #         + f"declare -x {f_name};"
-        #     )
-
+        source = list(self.iter_funcs_source())
         return "\n".join(source)
 
 
