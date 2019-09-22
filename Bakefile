@@ -63,7 +63,6 @@ random/python:
     print(requests)
 
 
-
 lazy_brew() {
     set -e
     # Install jq if it's not available.
