@@ -82,6 +82,7 @@ class BashProcess:
         cmd = [system_which("bash"), *args]
 
         std_out = sys.stdout if interactive else subprocess.PIPE
+        # std_out = subprocess.PIPE
         std_in = sys.stdin if interactive else subprocess.PIPE
 
         self.sub = subprocess.Popen(

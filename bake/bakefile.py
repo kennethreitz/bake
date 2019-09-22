@@ -545,12 +545,17 @@ class TaskScript(BaseAction):
 
         args = " ".join([shlex_quote(a) for a in self.bashfile.args])
         args = args if args else "\b"
-        sed_magic = "2>&1 | sed >&2 's/^/ |  /'" if not (silent or interactive) else ""
+        sed_magic = (
+            "2>&1 | sed >&2 's/^/ |  /'" if not (silent or interactive) else "\b"
+        )
 
         script = (
             f"t=$(mktemp) && bake --source {self.name} "
-            "> ${t} && chmod +x ${t} && ${t} " + f"{args}" + " && EXIT=${?} "
-            f"{sed_magic}" + "; rm -fr ${t} && exit ${EXIT}"
+            "> ${t} && chmod +x ${t} && ${t} "
+            + f"{args} "
+            + f"{sed_magic} "
+            + '&& EXIT="${PIPESTATUS[0]}" '
+            "&& rm -fr ${t} && exit ${EXIT}"
         )
 
         if debug:
