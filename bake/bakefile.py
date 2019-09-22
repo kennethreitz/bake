@@ -26,11 +26,10 @@ class Bakefile:
             raise NoBakefileFound()
 
         # Set environment variables for 'bake's that run underneath of us.
+        os.environ["BAKE_SKIP_DONE"] = "1"
+        os.environ["BAKE_SILENT"] = "1"
         os.environ["PYTHONUNBUFFERED"] = "1"
         os.environ["BAKEFILE_PATH"] = self.path
-        os.environ["BAKE_SKIP_DONE"] = "1"
-
-        os.environ["BAKE_SILENT"] = "1"
 
         self.chunks
         self._tasks = None
@@ -229,20 +228,21 @@ class Bakefile:
         """Functions (_task_name), inserted into the Bash runtime."""
         source = []
 
-        for task in self.tasks:
-            task = self[task]
-            f_name = task.name.replace("/", "_")
-            f_name = f_name.replace("-", "_")
-            f_name = f"task_{f_name}"
+        # TODO: Recommend bake taskname instead.
+        # for task in self.tasks:
+        #     task = self[task]
+        #     f_name = task.name.replace("/", "_")
+        #     f_name = f_name.replace("-", "_")
+        #     f_name = f"task_{f_name}"
 
-            source.append(
-                # Replace / namespacing with _ namespacing, for functions.
-                f"{f_name}()"
-                + " { \n"
-                + f"    bake --silent {task.name} $@;\n"
-                + "}\n"
-                + f"declare -x {f_name};"
-            )
+        #     source.append(
+        #         # Replace / namespacing with _ namespacing, for functions.
+        #         f"{f_name}()"
+        #         + " { \n"
+        #         + f"    bake --silent {task.name} $@;\n"
+        #         + "}\n"
+        #         + f"declare -x {f_name};"
+        #     )
 
         return "\n".join(source)
 

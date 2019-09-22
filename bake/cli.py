@@ -24,6 +24,7 @@ SAFE_ENVIRONS = [
     "BAKEFILE_PATH",
     "PYTHONUNBUFFERED",
     "PYTHONDONTWRITEBYTECODE",
+    "BAKE_SILENT",
 ]
 
 
@@ -142,20 +143,20 @@ def echo_json(obj):
     "--continue",
     "_continue",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Continue, if a task fails.",
 )
 @click.option(
     "--interactive",
     "-i",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Run in interactive mode.",
 )
 @click.option(
     "--insecure",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Inherit parent shell's environment variables.",
 )
 @click.argument("arguments", nargs=-1, type=click.STRING)
@@ -163,7 +164,7 @@ def echo_json(obj):
     "--silent",
     "-s",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Reduce output.",
     envvar="BAKE_SILENT",
 )
@@ -182,7 +183,7 @@ def echo_json(obj):
     "-j",
     "_json",
     is_flag=True,
-    type=click.BOOL,
+    # type=click.BOOL,
     help="Output in JSON format (stdout).",
 )
 def entrypoint(
