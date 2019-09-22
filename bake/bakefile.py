@@ -25,9 +25,12 @@ class Bakefile:
         if not os.path.exists(path):
             raise NoBakefileFound()
 
+        # Set environment variables for 'bake's that run underneath of us.
+        os.environ["PYTHONUNBUFFERED"] = "1"
         os.environ["BAKEFILE_PATH"] = self.path
         os.environ["BAKE_SKIP_DONE"] = "1"
-        os.environ["PYTHONUNBUFFERED"] = "1"
+
+        os.environ["BAKE_SILENT"] = 1
 
         self.chunks
         self._tasks = None
