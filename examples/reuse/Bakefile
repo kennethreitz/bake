@@ -1,12 +1,10 @@
-hello:
-    sleep 1
-    echo hello
+hello: hello/reuse hello/reuse/concurrent
+
+hello/basic:
+    echo 'hello'
 
 hello/reuse:
-    bake hello
-
-hello/reuse/indent:
-    bake hello/reuse | bake_indent
+    bake hello/basic
 
 hello/reuse/concurrent:
-    bake hello & bake hello
+    bake hello/reuse & bake hello/reuse
