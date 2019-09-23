@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: kennethreitz/bake:ci
     resource_class: xlarge
-    # parallelism: 6
+    parallelism: 3
 
     working_directory: /app
 
