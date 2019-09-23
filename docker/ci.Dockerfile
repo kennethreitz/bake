@@ -2,6 +2,9 @@ FROM kennethreitz/bake:core
 
 ENV TERM xterm
 
+# -- Install CircleCI CLI.
+RUN curl -fLSs https://circle.ci/cli --retry 3 | bash
+
 # -- Install CI deps.
 RUN set -ex && \
     apt-get update -qq && \
