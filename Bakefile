@@ -58,7 +58,7 @@ ci: ci/setup
 ci/setup: @skip:key=Pipfile.lock
     pipenv install --dev --deploy --system
 
-random/ip:
+random/python/ip:
     #!/usr/bin/env python
     import requests
     r = requests.get('https://httpbin.org/ip')
@@ -67,7 +67,7 @@ random/ip:
 random/clis:
     bake:red 'Testing sub–commands.'
     bake:step 'sub-task'
-    echo 'I should *not* be red.' | bake:red | bake:indent | bake:redless
+    echo 'I should *not* be red.' | bake:red | bake:indent | bake:notred
     echo 'I *should* be red.' | bake:red --always | bake:indent
     echo "$(echo test $(bake:red test) test | bake:indent)"
     echo
