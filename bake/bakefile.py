@@ -254,8 +254,6 @@ class TaskFilter(BaseAction):
         self.source = s
         self.bf = bf
         self.__uuid = uuid4().hex
-        self.do_skip = None
-        self.do_interactive = None
 
     def __str__(self):
         """Used for terminal display."""
