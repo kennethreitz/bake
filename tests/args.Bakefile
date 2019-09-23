@@ -1,0 +1,4 @@
+argv:
+    set -u
+    echo "${@}"
+    echo "${KEY}"

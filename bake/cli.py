@@ -82,7 +82,7 @@ def echo_json(obj):
     "--bakefile",
     "-b",
     default="__BAKEFILE__",
-    envvar="BAKEFILE_PATH",
+    envvar="BAKEFILE",
     nargs=1,
     type=click.Path(),
     help="The Bakefile to use.",
@@ -95,7 +95,13 @@ def echo_json(obj):
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
-    "--clear-cache", default=False, is_flag=True, help="Clears the cache  (e.g. @skip)."
+    "--clear-skips", default=False, is_flag=True, help="Clears the skip cache."
+)
+@click.option(
+    "--clear-envs",
+    default=False,
+    is_flag=True,
+    help="Clears the allowed environment variable cache.",
 )
 @click.option(
     "--levels",
@@ -114,7 +120,6 @@ def echo_json(obj):
     "--allow",
     default=False,
     nargs=1,
-    multiple=True,
     hidden=False,
     help="Whitelist an environment variable for use.",
 )
@@ -189,7 +194,8 @@ def entrypoint(
     allow,
     _json,
     no_deps,
-    clear_cache,
+    clear_skips,
+    clear_envs,
     interactive,
     yes,
     help,
@@ -204,9 +210,6 @@ def entrypoint(
     if _json or source:
         silent = True
 
-    # Allow explicitly–passed environment variables.
-    SAFE_ENVIRONS.extend(allow)
-
     # Enable list functionality, by default.
     if task == "__LIST_ALL__":
         _list = True
@@ -215,9 +218,9 @@ def entrypoint(
     # Establish the Bakefile.
     try:
         bf = (
-            Bakefile.find(root=".", filename="Bakefile")
+            Bakefile.find(root=".", filename="Bakefile", debug=debug)
             if bakefile == "__BAKEFILE__"
-            else Bakefile(path=bakefile)
+            else Bakefile(path=bakefile, debug=debug)
         )
 
     except NoBakefileFound:
@@ -225,12 +228,22 @@ def entrypoint(
         do_help(1)
         sys.exit(0)
 
+    if allow:
+        bf.env_cache[allow] = 1
+
+    # Clear the cache, if asked to do so.
+    if clear_envs:
+        bf.env_cache.clear()
+
+    # Allow explicitly–passed environment variables.
+    SAFE_ENVIRONS.extend([g.upper() for g in bf.env_cache])
+
     if debug:
         click.echo(f" + Bakefile: {bf.path}", err=True)
 
     # Clear the cache, if asked to do so.
-    if clear_cache:
-        bf.cache.clear()
+    if clear_skips:
+        bf.skip_cache.clear()
 
     # --source (internal API)
     if source:

@@ -27,13 +27,14 @@ class Bakefile:
         if not os.path.exists(path):
             raise NoBakefileFound()
 
-        self.cache = Cache(bf=self, debug=self.debug)
+        self.skip_cache = Cache(bf=self, namespace="skips", debug=self.debug)
+        self.env_cache = Cache(bf=self, namespace="env.allowed", debug=self.debug)
 
         # Set environment variables for 'bake's that run underneath of us.
         os.environ["BAKE_SKIP_DONE"] = "1"
         os.environ["BAKE_SILENT"] = "1"
         os.environ["PYTHONUNBUFFERED"] = "1"
-        os.environ["BAKEFILE_PATH"] = self.path
+        os.environ["BAKEFILE"] = self.path
 
         self.chunks
         self._tasks = None
@@ -141,6 +142,7 @@ class Bakefile:
         root=os.getcwd(),
         max_depth=4,
         topdown=False,
+        **kwargs,
     ):
         """Returns the path of a Bakefile in parent directories."""
 
@@ -149,7 +151,7 @@ class Bakefile:
             if i > max_depth:
                 break
             elif filename in f:
-                return Class(path=os.path.join(c, filename))
+                return Class(path=os.path.join(c, filename), **kwargs)
             i += 1
 
         raise NoBakefileFound(f"No {filename} found!")
@@ -347,13 +349,13 @@ class TaskFilter(BaseAction):
             return
 
         key = sha256(key.encode("utf-8")).hexdigest()
-        old_hash = str(self.bf.cache[key])
+        old_hash = str(self.bf.skip_cache[key])
 
         # Get the current filestate hashsum.
         with open(key_path, "r") as f:
             current_hash = sha256(f.read().encode("utf-8")).hexdigest()
 
-        self.bf.cache[key] = current_hash
+        self.bf.skip_cache[key] = current_hash
 
         if old_hash == current_hash:
             self.do_skip = True

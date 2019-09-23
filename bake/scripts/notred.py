@@ -1,6 +1,7 @@
 import sys
 
 import click
+from click.utils import strip_ansi
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
@@ -13,4 +14,4 @@ def entrypoint(s, *, err):
 
     s = s.rstrip()
 
-    click.echo(s)
+    click.echo(strip_ansi(s))

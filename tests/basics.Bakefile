@@ -1,0 +1,18 @@
+//two:
+one/two/three/four:
+one/two/:
+
+echo:
+    echo ${1}
+
+echo/dep: dep
+    bake echo ${1} | red
+
+dep:
+    echo 'Installing dep…'
+    exit 0
+
+fail:
+    exit 1
+
+deps/fail: fail

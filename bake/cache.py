@@ -11,11 +11,12 @@ class Cache:
     prefix = PREFIX
     seperator = SEPERATOR
 
-    def __init__(self, *, bf, debug=False, enabled=True):
+    def __init__(self, *, bf, namespace="hashes", debug=False, enabled=True):
 
         self.bf = bf
         self.enabled = enabled
         self.debug = debug
+        self.namespace = namespace
 
         try:
             # Assert git exists, and appears functioning.
@@ -46,7 +47,7 @@ class Cache:
         return f"<Cache enabled={self.enabled}>"
 
     def _key_for_hashes(self, key):
-        return self.seperator.join((self.prefix, "hashes", key))
+        return self.seperator.join((self.prefix, self.namespace, key))
 
     def clear(self):
         for key in self:
@@ -65,8 +66,9 @@ class Cache:
         c = delegator.run(cmd)
         for result in c.out.split("\n"):
             if result.startswith(self.prefix):
-                print(result.split("=", -1)[0])
-                yield result.split("=", -1)[0]
+                yield result.split("=", -1)[0][
+                    len(self.prefix + "." + self.namespace + ".") :
+                ]
 
     def __getitem__(self, k):
         key = self._key_for_hashes(k)
@@ -92,7 +94,8 @@ class Cache:
         return c.ok
 
     def __delitem__(self, k):
-        cmd = f"git config --local --unset {k}"
+        key = self._key_for_hashes(k)
+        cmd = f"git config --local --unset {key}"
 
         if self.debug:
             click.echo(f" {click.style('$', fg='green')} {cmd}", err=True)
