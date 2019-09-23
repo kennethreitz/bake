@@ -17,14 +17,17 @@ from .exceptions import FilterNotAvailable, NoBakefileFound, TaskNotInBashfile
 
 
 class Bakefile:
-    def __init__(self, *, path):
+    def __init__(self, *, path, debug=False):
         self.path = path
         self.environ = os.environ
         self._chunks = []
         self.args = []
+        self.debug = debug
 
         if not os.path.exists(path):
             raise NoBakefileFound()
+
+        self.cache = Cache(bf=self, debug=self.debug)
 
         # Set environment variables for 'bake's that run underneath of us.
         os.environ["BAKE_SKIP_DONE"] = "1"
@@ -35,10 +38,6 @@ class Bakefile:
         self.chunks
         self._tasks = None
         self._graph = None
-
-    @property
-    def cache(self):
-        return Cache(bf=self)
 
     @property
     def graph(self):
@@ -236,6 +235,7 @@ class Bakefile:
 
 class BaseAction:
     do_skip = None
+    do_interactive = None
 
     @property
     def is_filter(self):
@@ -251,6 +251,7 @@ class TaskFilter(BaseAction):
         self.bf = bf
         self.__uuid = uuid4().hex
         self.do_skip = None
+        self.do_interactive = None
 
     def __str__(self):
         """Used for terminal display."""
@@ -332,7 +333,7 @@ class TaskFilter(BaseAction):
                 question = str(click.style("?", fg="green", bold=True))
                 click.confirm(f" {question} Do you want to continue?", abort=True)
 
-        return ("confirmed", True)
+        # return ("confirmed", True)
 
     def execute_skip_if(self, *, key, **kwargs):
         """Determines if it is appropriate to skip the dependent TaskScript."""
@@ -341,7 +342,6 @@ class TaskFilter(BaseAction):
         key_path = os.path.abspath(key)
         if not os.path.exists(key_path):
             self.do_skip = False
-            # return ("skip", False)
             return
 
         key = sha256(key.encode("utf-8")).hexdigest()
@@ -355,11 +355,9 @@ class TaskFilter(BaseAction):
 
         if old_hash == current_hash:
             self.do_skip = True
-            # return ("skip", True)
             return
 
         self.do_skip = False
-        # return ("skip", False)
         return
 
     def execute(self, yes=False, **kwargs):
@@ -368,9 +366,11 @@ class TaskFilter(BaseAction):
         …but I was too tired to approach that problem. I continue to be.
         """
         if self.name == "confirm":
-            return self.execute_confirm(yes=yes, **self.arguments)
+            self.execute_confirm(yes=yes, **self.arguments)
         elif self.name == "skip":
-            return self.execute_skip_if(yes=yes, **self.arguments)
+            self.execute_skip_if(yes=yes, **self.arguments)
+        elif self.name == "interactive":
+            self.do_interactive = True
 
 
 class FakeTaskScript(BaseAction):

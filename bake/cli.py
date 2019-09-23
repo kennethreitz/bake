@@ -351,9 +351,15 @@ def entrypoint(
                 edges = list()
 
             skips = []
+            interactives = []
+
             for edge in edges:
                 if edge.do_skip is not None:
                     skips.append(edge.do_skip)
+                if edge.do_interactive is not None:
+                    interactives.append(edge.do_interactive)
+
+            force_interactive = bool(len(interactives))
 
             if not all(skips or [False]):
                 # TODO: fully implement this?
@@ -368,7 +374,10 @@ def entrypoint(
                         err=True,
                     )
                 usually_bash_task = task.execute(
-                    yes=yes, debug=debug, silent=silent, interactive=interactive
+                    yes=yes,
+                    debug=debug,
+                    silent=silent,
+                    interactive=force_interactive or interactive,
                 )
 
                 if not _continue:
@@ -384,9 +393,10 @@ def entrypoint(
 
                     # This happens when it's a task filter.
                     elif isinstance(usually_bash_task, tuple):
-                        key, value = (
-                            usually_bash_task
-                        )  # But, in this instance, clearly isn't.
+                        # key, value = (
+                        #     usually_bash_task
+                        # )  # But, in this instance, clearly isn't.
+                        pass
             else:
                 click.echo(
                     click.style(" + ", fg="green")

@@ -2,39 +2,34 @@
     REGISTRY=${REGISTRY:-docker.pkg.github.com}
     USERNAME=${USERNAME:-kennethreitz}
 
-install: install/system install/python
-test: python/test docker/test
-release: test release/pypi release/docker
+//: //system //python
+//system:
+    lazy_brew pipenv
+//python: @skip:key=Pipfile.lock //system
+    pipenv install --dev
 
-python/test: install/python
-    unset BAKE_SILENT
-    pipenv run pytest
-
-docker/bash: docker/build
-    docker-compose run --entrypoint bash bake
-docker/test: docker/build
+test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
+release: test release//pypi release//docker
+
 
 docker/build:
     # Build the images.
     set -ex && docker-compose build
 
-docker/build/full:
+docker/bash: @interactive docker/build
+    docker-compose run --entrypoint bash bake
+
+docker//build/full:
     # Build the images.
     set -ex && docker-compose build --no-cache
 
-install/python: @skip:key=Pipfile.lock install/system
-    pipenv install --dev
-
-install/system:
-    lazy_brew pipenv
-
-release/pypi: install/python
+release//pypi: //python
     pipenv run python setup.py upload
 
-release/docker: docker/build/full release/docker/github
+release//docker: docker//build/full release//docker/github
 
-release/docker/github: docker/build/full
+release//docker/github: docker//build/full
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -49,13 +44,13 @@ release/docker/github: docker/build/full
         docker push "$REMOTE_IMAGE"
     done
 
-release/docker/dockerhub: docker/build/full
+release/docker/dockerhub: docker//build/full
     docker-compose push
 
-ci: ci/setup
+//ci: //ci/setup
     set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
 
-ci/setup: @skip:key=Pipfile.lock
+//ci/setup: @skip:key=Pipfile.lock
     pipenv install --dev --deploy --system
 
 random/python/ip:
@@ -64,7 +59,7 @@ random/python/ip:
     r = requests.get('https://httpbin.org/ip')
     print(r.json()['origin'].split(',')[0])
 
-random/clis:
+random/cli:
     bake:red 'Testing sub–commands.'
     bake:step 'sub-task'
     echo 'I should *not* be red.' | bake:red | bake:indent | bake:notred

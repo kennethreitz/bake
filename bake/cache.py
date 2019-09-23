@@ -4,7 +4,7 @@ import delegator
 PREFIX = "bake"
 SEPERATOR = "."
 
-__all__ = ['Cache']
+__all__ = ["Cache"]
 
 
 class Cache:
@@ -75,7 +75,7 @@ class Cache:
         if self.debug:
             click.echo(f" {click.style('$', fg='green')} {cmd}", err=True)
 
-        c = delegator.run()
+        c = delegator.run(cmd)
         if c.ok:
             return c.out.strip()
         else:
