@@ -7,6 +7,7 @@ jobs:
   build:
     docker:
       - image: kennethreitz/bake:ci
+    parallelism: 8
 
     working_directory: /app
 
@@ -15,7 +16,10 @@ jobs:
       # - setup_remote_docker:
       #     docker_layer_caching: true
       - run:
-          name: $ bake ci
+          name: $ pipenv install…
           command: |
             pipenv install --dev --system --deploy
-            cd tests && bats *.bats
+      - run:
+          name: $ bake //ci
+          command: |
+            cd tests && bats circleci tests glob "*.bats"
