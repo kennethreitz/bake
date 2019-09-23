@@ -71,6 +71,7 @@ random/python/ip:
     echo 'KR Copied!' | red --fg cyan
 
 //ci:
+    unset BAKEFILE
     cd tests && bats *.bats
 
 lazy_brew() {
