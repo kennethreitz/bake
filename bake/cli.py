@@ -95,7 +95,7 @@ def echo_json(obj):
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
-    "--clear", default=False, is_flag=True, help="Clears the cache  (e.g. @skip)."
+    "--clear-cache", default=False, is_flag=True, help="Clears the cache  (e.g. @skip)."
 )
 @click.option(
     "--levels",
@@ -189,7 +189,7 @@ def entrypoint(
     allow,
     _json,
     no_deps,
-    clear,
+    clear_cache,
     interactive,
     yes,
     help,
@@ -229,7 +229,7 @@ def entrypoint(
         click.echo(f" + Bakefile: {bf.path}", err=True)
 
     # Clear the cache, if asked to do so.
-    if clear:
+    if clear_cache:
         bf.cache.clear()
 
     # --source (internal API)
