@@ -11,7 +11,8 @@ import networkx
 
 from . import utils
 from .bash import Bash
-from .constants import INDENT_STYLES
+from .cache import Cache
+from .constants import INDENT_STYLES, DEFAULT_BAKEFILE_NAME
 from .exceptions import FilterNotAvailable, NoBakefileFound, TaskNotInBashfile
 
 
@@ -34,6 +35,10 @@ class Bakefile:
         self.chunks
         self._tasks = None
         self._graph = None
+
+    @property
+    def cache(self):
+        return Cache(bf=self)
 
     @property
     def graph(self):
@@ -131,9 +136,14 @@ class Bakefile:
 
     @classmethod
     def find(
-        Class, *, filename="Bashfile", root=os.getcwd(), max_depth=4, topdown=False
+        Class,
+        *,
+        filename=DEFAULT_BAKEFILE_NAME,
+        root=os.getcwd(),
+        max_depth=4,
+        topdown=False,
     ):
-        """Returns the path of a Pipfile in parent directories."""
+        """Returns the path of a Bakefile in parent directories."""
 
         i = 0
         for c, d, f in utils.walk_up(root):
@@ -197,7 +207,7 @@ class Bakefile:
 
         tasks = {}
         for i, chunk in enumerate(self.chunks):
-            script = TaskScript._from_chunk_index(bashfile=self, i=i)
+            script = TaskScript._from_chunk_index(bf=self, i=i)
             tasks[script.name] = script
 
         self._tasks = tasks
@@ -251,9 +261,9 @@ class BaseAction:
 class TaskFilter(BaseAction):
     """A filter, which can be applied to a task."""
 
-    def __init__(self, s, bashfile):
+    def __init__(self, s, *, bf):
         self.source = s
-        self.bashfile = bashfile
+        self.bf = bf
         self.__uuid = uuid4().hex
         self.do_skip = None
 
@@ -271,7 +281,7 @@ class TaskFilter(BaseAction):
 
     def __hash__(self):
         """Important for (networkx) graph traversal."""
-        return hash((self.bashfile, self.source, self.__uuid))
+        return hash((self.bf, self.source, self.__uuid))
 
     @property
     def name(self):
@@ -339,39 +349,33 @@ class TaskFilter(BaseAction):
 
         return ("confirmed", True)
 
-    def execute_skip_if(self, *, key, cache=None, **kwargs):
+    def execute_skip_if(self, *, key, **kwargs):
         """Determines if it is appropriate to skip the dependent TaskScript."""
-        if cache is None:
-            # I'm cheating here, and shoving stuff into the git folder (which I assume is there).
-            # TODO: Improve this — look into $ git config --local (shell) use instead.
-            cache = f".git/bake-hash-{sha256(key.encode('utf-8')).hexdigest()}"
 
+        # Ensure the provided file–key exists, and if it doesn't, abort mission.
         key_path = os.path.abspath(key)
-        cache_path = os.path.abspath(cache)
-        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
-
         if not os.path.exists(key_path):
             self.do_skip = False
-            return ("skip", False)
+            # return ("skip", False)
+            return
 
-        if os.path.exists(cache_path):
-            with open(cache_path, "r") as f:
-                old_hash = f.read().strip()
-        else:
-            old_hash = "NOPE"
+        key = sha256(key.encode("utf-8")).hexdigest()
+        old_hash = str(self.bf.cache[key])
 
+        # Get the current filestate hashsum.
         with open(key_path, "r") as f:
             current_hash = sha256(f.read().encode("utf-8")).hexdigest()
 
-        with open(cache_path, "w") as f:
-            f.write(current_hash)
+        self.bf.cache[key] = current_hash
 
         if old_hash == current_hash:
             self.do_skip = True
-            return ("skip", True)
+            # return ("skip", True)
+            return
 
         self.do_skip = False
-        return ("skip", False)
+        # return ("skip", False)
+        return
 
     def execute(self, yes=False, **kwargs):
         """This should probably be two different classes…
@@ -390,9 +394,9 @@ class FakeTaskScript(BaseAction):
     Ussually typos. They display red in the terminal. Neat.
     """
 
-    def __init__(self, s, bashfile):
+    def __init__(self, s, *, bf):
         self.source = s
-        self.bashfile = bashfile
+        self.bf = bf
 
     def __str__(self):
         """The color red, as mentioned above."""
@@ -405,8 +409,8 @@ class TaskScript(BaseAction):
     You're pretty witty & intelligent — you can infer what this class is for, based on its name.
     """
 
-    def __init__(self, bashfile, chunk_index=None):
-        self.bashfile = bashfile
+    def __init__(self, *, bf, chunk_index=None):
+        self.bf = bf
         self._chunk_index = chunk_index
 
         if self._chunk_index is None:
@@ -419,7 +423,7 @@ class TaskScript(BaseAction):
         return f"{self.name}"
 
     def __hash__(self):
-        return hash((self.bashfile, self._chunk_index))
+        return hash((self.bf, self._chunk_index))
 
     def __eq__(self, other):
         if hasattr(other, "_chunk_index"):
@@ -434,20 +438,20 @@ class TaskScript(BaseAction):
             task_strings = self.declaration_line.split(":", 1)[1].split()
 
             task_name_index_tuples = [
-                (self.bashfile.find_chunk(task_name=s), s) for s in task_strings
+                (self.bf.find_chunk(task_name=s), s) for s in task_strings
             ]
 
             for i, task_string in task_name_index_tuples:
 
                 if task_string.startswith("@"):
                     if include_filters:
-                        yield TaskFilter(task_string, bashfile=self.bashfile)
+                        yield TaskFilter(task_string, bf=self.bf)
                 elif i is None:
                     if include_fakes:
-                        yield FakeTaskScript(task_string, bashfile=self.bashfile)
+                        yield FakeTaskScript(task_string, bf=self.bf)
                 else:
                     # Otherwise, create the task.
-                    yield TaskScript(chunk_index=i, bashfile=self.bashfile)
+                    yield TaskScript(chunk_index=i, bf=self.bf)
 
         actions = [t for t in gen_actions()]
 
@@ -455,9 +459,7 @@ class TaskScript(BaseAction):
             graph = {}
             actions = []
 
-            edge_view = networkx.edge_dfs(
-                self.bashfile.graph, self, orientation="original"
-            )
+            edge_view = networkx.edge_dfs(self.bf.graph, self, orientation="original")
 
             for parent, child, _ in edge_view:
                 if parent not in graph:
@@ -491,9 +493,9 @@ class TaskScript(BaseAction):
         return actions
 
     @classmethod
-    def _from_chunk_index(Class, bashfile, *, i):
+    def _from_chunk_index(Class, bf, *, i):
 
-        return Class(bashfile=bashfile, chunk_index=i)
+        return Class(bf=bf, chunk_index=i)
 
     @staticmethod
     def _transform_line(line, *, indent_styles=INDENT_STYLES):
@@ -543,7 +545,7 @@ class TaskScript(BaseAction):
         self, *, blocking=False, debug=False, interactive=False, silent=False, **kwargs
     ):
 
-        args = " ".join([shlex_quote(a) for a in self.bashfile.args])
+        args = " ".join([shlex_quote(a) for a in self.bf.args])
         args = args if args else "\b"
         sed_magic = (
             "2>&1 | sed >&2 's/^/ |  /'" if not (silent or interactive) else "\b"
@@ -561,7 +563,12 @@ class TaskScript(BaseAction):
         if debug:
             click.echo(f" {click.style('$', fg='green')} {script}", err=True)
 
-        bash = Bash(interactive=interactive)
+        if silent:
+            bash_interactive = True
+        else:
+            bash_interactive = interactive
+
+        bash = Bash(interactive=bash_interactive)
         return bash.command(script, quote=False)
 
     @property
@@ -570,7 +577,7 @@ class TaskScript(BaseAction):
 
     @property
     def chunk(self):
-        return self.bashfile.chunks[self._chunk_index]
+        return self.bf.chunks[self._chunk_index]
 
     def _iter_source(self):
         try:
