@@ -227,28 +227,17 @@ def entrypoint(
     if debug:
         click.echo(f" + Bakefile: {bf.path}", err=True)
 
+    # Clear the cache, if asked to do so.
+    if clear:
+        bf.cache.clear()
+
     # --source (internal API)
     if source:
 
-        def echo_generator(g):
-            for g in g:
-                click.echo(g)
-
-        if source == "__init__":
-            source = random.choice(list(bf.tasks.keys()))
-            task = bf.tasks[source]
-            source = task.gen_source(
-                sources=[task.bf.funcs_source, task.bf.root_source]
-            )
-        else:
-            task = bf.tasks[source]
-            source = task.gen_source(
-                sources=[
-                    task.bf.funcs_source,
-                    task.bf.root_source,
-                    task.source,
-                ]
-            )
+        task = bf.tasks[source]
+        source = task.gen_source(
+            sources=[task.bf.funcs_source, task.bf.root_source, task.source]
+        )
 
         for source_line in source:
             click.echo(source_line)
