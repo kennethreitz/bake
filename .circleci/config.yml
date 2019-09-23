@@ -6,12 +6,9 @@ version: 2
 jobs:
   build:
     docker:
-      - image: docker.pkg.github.com/kennethreitz/bake/bake:ci
-        auth:
-          username: kennethreitz # can specify string literal values
-          password: $GITHUB_TOKEN
+      - image: kennethreitz/bake:ci
     resource_class: 2xlarge+
-    parallelism: 6
+    # parallelism: 6
 
     working_directory: /app
 
@@ -29,7 +26,8 @@ jobs:
           command: |
             cd tests
             mkdir -p reports/bats
-            bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
+            # bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
+            bats *.bats > "reports/bats/$CIRCLE_NODE_INDEX.tap"
 
       - store_test_results:
           path: reports
