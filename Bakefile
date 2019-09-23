@@ -78,7 +78,7 @@ random/python/ip:
 
 //ci/tests: //ci
     unset BAKEFILE
-    bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
+    cd tests && bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
 
 lazy_brew() {
     set -e
