@@ -18,6 +18,7 @@ jobs:
       - run:
           name: $ pipenv install…
           command: |
+            export PIPENV_MAX_SUBPROCESS=128
             pipenv install --dev --system --deploy
       - run:
           name: $ bake //ci
