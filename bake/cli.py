@@ -75,7 +75,7 @@ def echo_json(obj):
     type=click.STRING,
     default="__LIST_ALL__",
     envvar="BAKE_TASK",
-    # required=False,
+    required=False,
 )
 @click.option(
     "--bakefile",
@@ -213,10 +213,11 @@ def entrypoint(
 
     # Establish the Bakefile.
     try:
-        if bakefile == "__BAKEFILE__":
-            bakefile = Bakefile.find(root=".", filename="Bakefile")
-        else:
-            bakefile = Bakefile(path=bakefile)
+        bf = (
+            Bakefile.find(root=".", filename="Bakefile")
+            if bakefile == "__BAKEFILE__"
+            else Bakefile(path=bakefile)
+        )
 
     except NoBakefileFound:
         click.echo(click.style("No Bakefile found!", fg="red"), err=True)
@@ -224,7 +225,7 @@ def entrypoint(
         sys.exit(0)
 
     if debug:
-        click.echo(f" + Bakefile: {bakefile.path}", err=True)
+        click.echo(f" + Bakefile: {bf.path}", err=True)
 
     # --source (internal API)
     if source:
@@ -234,17 +235,17 @@ def entrypoint(
                 click.echo(g)
 
         if source == "__init__":
-            source = random.choice(list(bakefile.tasks.keys()))
-            task = bakefile.tasks[source]
+            source = random.choice(list(bf.tasks.keys()))
+            task = bf.tasks[source]
             source = task.gen_source(
-                sources=[task.bashfile.funcs_source, task.bashfile.root_source]
+                sources=[task.bf.funcs_source, task.bf.root_source]
             )
         else:
-            task = bakefile.tasks[source]
+            task = bf.tasks[source]
             source = task.gen_source(
                 sources=[
-                    task.bashfile.funcs_source,
-                    task.bashfile.root_source,
+                    task.bf.funcs_source,
+                    task.bf.root_source,
                     task.source,
                 ]
             )
@@ -254,12 +255,12 @@ def entrypoint(
         sys.exit(0)
 
     if not insecure:
-        for key in bakefile.environ:
+        for key in bf.environ:
             if key not in SAFE_ENVIRONS:
-                del bakefile.environ[key]
+                del bf.environ[key]
 
     if environ_json:
-        bakefile.add_environ_json(environ_json)
+        bf.add_environ_json(environ_json)
 
     argv = []
     environ = []
@@ -282,9 +283,9 @@ def entrypoint(
                 f" + Setting environ: {click.style(key, fg='red')} {click.style('=', fg='white')} {value}.",
                 err=True,
             )
-        bakefile.add_environ(key, value)
+        bf.add_environ(key, value)
 
-    bakefile.add_args(*argv)
+    bf.add_args(*argv)
 
     if _list:
         __list_json = {"tasks": {}}
@@ -292,19 +293,17 @@ def entrypoint(
         # Enable level filtering.
         if levels is not None:
             task_list = []
-            for _task in bakefile.tasks:
+            for _task in bf.tasks:
                 if len(_task.split("/")) <= levels:
                     task_list.append(_task)
         else:
-            task_list = bakefile.tasks
+            task_list = bf.tasks
 
         if sort:
             task_list = sorted(task_list)
 
         for _task in task_list:
-            depends_on = bakefile[_task].depends_on(
-                include_filters=False, recursive=True
-            )
+            depends_on = bf[_task].depends_on(include_filters=False, recursive=True)
 
             if no_deps:
                 depends_on = ()
@@ -327,7 +326,7 @@ def entrypoint(
                 )
 
         if not silent:
-            tasks_unechoed = len(bakefile.tasks) - len(task_list)
+            tasks_unechoed = len(bf.tasks) - len(task_list)
 
             if tasks_unechoed:
                 bake_command = str(click.style(f"bake --levels {levels + 1}", fg="red"))
@@ -344,14 +343,14 @@ def entrypoint(
 
     if task:
         try:
-            task = bakefile[task]
+            task = bf[task]
         except KeyError:
             click.echo(click.style(f"Task {task} does not exist!", fg="red"))
             sys.exit(1)
 
         def execute_task(task, *, silent=False):
             try:
-                edges = list(bakefile.graph.out_edges(task))[0]
+                edges = list(bf.graph.out_edges(task))[0]
             except IndexError:
                 edges = list()
 
