@@ -94,6 +94,9 @@ def echo_json(obj):
     help="Lists available tasks (and their dependencies).",
 )
 @click.option(
+    "--clear", default=False, is_flag=True, help="Clears the cache  (e.g. @skip)."
+)
+@click.option(
     "--levels",
     "-l",
     default=None,
@@ -185,6 +188,7 @@ def entrypoint(
     allow,
     _json,
     no_deps,
+    clear,
     interactive,
     yes,
     help,
