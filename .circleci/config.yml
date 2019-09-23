@@ -26,7 +26,7 @@ jobs:
           command: |
             cd tests
             mkdir -p /app/reports/bats
-            bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
+            bats $(circleci tests glob '*.bats' | circleci tests split) > "/app/reports/bats/$CIRCLE_NODE_INDEX.tap"
             # bats *.bats > "/app/reports/bats/$CIRCLE_NODE_INDEX.tap"
 
       - store_test_results:
