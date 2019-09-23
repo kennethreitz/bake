@@ -233,21 +233,6 @@ class Bakefile:
         """The source of the 'root level' of the Bashfile."""
         return "\n".join(list(self.iter_root_source_lines))
 
-    def iter_funcs_source(self):
-        """The standard library."""
-        p = os.path.join(os.path.dirname(__file__), "scripts", "stdlib.sh")
-        with open(p, "r") as f:
-            for i, line in enumerate(f.readlines()):
-                # Skip the shebang.
-                if i != 1:
-                    yield line
-
-    @property
-    def funcs_source(self):
-        """Functions (_task_name), inserted into the Bash runtime."""
-        source = list(self.iter_funcs_source())
-        return "\n".join(source)
-
 
 class BaseAction:
     do_skip = None
