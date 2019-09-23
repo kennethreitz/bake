@@ -72,12 +72,12 @@ random/python/ip:
 
 //ci:
     unset BAKEFILE
-    mkdir -p reports/bats
-    pipenv install --deploy --system --dev
+    # pipenv install --deploy --system --dev
 
 
 //ci/tests: //ci
     unset BAKEFILE
+    mkdir -p reports/bats
     cd tests && bats *.bats > "reports/bats/output.tap"
 
 lazy_brew() {
