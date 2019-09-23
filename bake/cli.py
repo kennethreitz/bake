@@ -359,7 +359,7 @@ def entrypoint(
                 if edge.do_interactive is not None:
                     interactives.append(edge.do_interactive)
 
-            force_interactive = bool(len(interactives))
+            force_interactive = any(interactives)
 
             if not all(skips or [False]):
                 # TODO: fully implement this?
