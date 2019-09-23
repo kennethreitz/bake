@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       - image: kennethreitz/bake:ci
-    resource_class: xlarge
+    resource_class: 2xlarge
     # parallelism: 6
 
     working_directory: /app
@@ -26,7 +26,7 @@ jobs:
           command: |
             # circleci tests split <(ls *.bats)
             set -ex && mkdir -p reports/bats
-            set -ex bake //ci --silent > "reports/bats/output.tap"
+            set -ex && bake //ci --silent > "reports/bats/output.tap"
 
       - store_test_results:
           path: reports
