@@ -25,10 +25,7 @@ jobs:
           name: $ bake //ci
           command: |
             # circleci tests split <(ls *.bats)
-            cd tests
-            mkdir -p reports/bats
-            # circleci tests glob "*.bats" | circleci tests split | xargs bats > report/bats/1.tap
-            bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
+            bake //ci/tests --silent --allow CIRCLE_NODE_INDEX
 
       - store_test_results:
           path: reports

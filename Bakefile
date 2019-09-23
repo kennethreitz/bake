@@ -72,8 +72,13 @@ random/python/ip:
 
 //ci:
     unset BAKEFILE
+    mkdir -p reports/bats
     pipenv install --deploy --system --dev
-    set -ex && hash -r && cd tests && bats *.bats --pretty
+
+
+//ci/tests: //ci
+    unset BAKEFILE
+    bats $(circleci tests glob '*.bats' | circleci tests split) > "reports/bats/$CIRCLE_NODE_INDEX.tap"
 
 lazy_brew() {
     set -e
