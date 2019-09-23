@@ -2,7 +2,8 @@ FROM kennethreitz/bake:core
 
 ENV TERM xterm
 
-ARG DEBIAN_FRONTEND='noninteractive'
+# -- Install CircleCI CLI.
+RUN curl -fLSs https://circle.ci/cli --retry 3 | bash
 
 # -- Install CI deps.
 RUN set -ex && \
