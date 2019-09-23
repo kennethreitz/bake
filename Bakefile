@@ -11,25 +11,25 @@
 test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
 release: test release//pypi release//docker
-
+bash: docker//bash
 
 docker/build:
     # Build the images.
     set -ex && docker-compose build
 
-docker/bash: @interactive docker/build
+docker//bash: @interactive docker/build
     docker-compose run --entrypoint bash bake
 
 docker//build/full:
     # Build the images.
     set -ex && docker-compose build --no-cache
 
-release//pypi: //python
+release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-release//docker: docker//build/full release//docker/github
+release//docker: docker//build release//docker/github
 
-release//docker/github: docker//build/full
+release//docker/github: docker//build
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -44,7 +44,7 @@ release//docker/github: docker//build/full
         docker push "$REMOTE_IMAGE"
     done
 
-release/docker/dockerhub: docker//build/full
+release/docker/dockerhub: docker//build
     docker-compose push
 
 //ci: //ci/setup
@@ -59,7 +59,7 @@ random/python/ip:
     r = requests.get('https://httpbin.org/ip')
     print(r.json()['origin'].split(',')[0])
 
-random/cli:
+cli:
     bake:red 'Testing sub–commands.'
     bake:step 'sub-task'
     echo 'I should *not* be red.' | bake:red | bake:indent | bake:notred
@@ -67,7 +67,7 @@ random/cli:
     echo "$(echo test $(bake:red test) test | bake:indent)"
     echo
 
-random/kr:
+//kr:
     sparkescakesparkles="✨ 🍰 ✨" | pbcopy
     echo "$sparkescakesparkles" | pbcopy
     echo 'KR Copied!' | bake:red --fg cyan
