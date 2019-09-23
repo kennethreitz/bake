@@ -1,0 +1,5 @@
+echo:
+    echo '42.'
+
+also-echo:
+    bake echo
