@@ -4,7 +4,7 @@
 
 //: //system //python
     red "System is setup for local development."
-//system:
+//system: //warn
     lazy_brew pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
@@ -15,10 +15,9 @@ release: test //warn @confirm:secure release//pypi docker/release
 
 //warn:
     echo
-    echo "$(red 'Warning'): you are about to release a new version of $(red 'bake' --fg green)."
+    echo "$(red 'Warning'): you are about to do something destructive (to your system; or the internet — but what's the difference, these days?)."
     echo
-    echo 'Please do this simple math problem to prove this is not accidental.'
-    echo
+
 docker/build:
     # Build the images.
     set -ex && docker-compose build
