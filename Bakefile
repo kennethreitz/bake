@@ -70,10 +70,6 @@ random/python/ip:
     echo "$sparkescakesparkles" | pbcopy
     echo 'KR Copied!' | red --fg cyan
 
-//ci:
-    unset BAKEFILE
-    cd tests && bats *.bats
-
 lazy_brew() {
     set -e
     # Install jq if it's not available.
