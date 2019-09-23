@@ -235,9 +235,7 @@ def entrypoint(
     if source:
 
         task = bf.tasks[source]
-        source = task.gen_source(
-            sources=[task.bf.funcs_source, task.bf.root_source, task.source]
-        )
+        source = task.gen_source(sources=[task.bf.root_source, task.source])
 
         for source_line in source:
             click.echo(source_line)

@@ -21,7 +21,7 @@ REQUIRES_PYTHON = ">=3.6.0"
 VERSION = "0.10.0"
 
 # What packages are required for this module to be executed?
-REQUIRED = ["click", "delegator.py", "pygments", "networkx"]
+REQUIRED = ["click", "delegator.py", "pygments", "networkx", "colorama"]
 
 # What packages are optional?
 EXTRAS = {
@@ -103,7 +103,13 @@ setup(
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
-    entry_points={"console_scripts": ["bake=bake.cli:entrypoint"]},
+    entry_points={
+        "console_scripts": [
+            "bake=bake.cli:entrypoint",
+            "bake:red=bake.scripts.red:red",
+            "bake:indent=bake.scripts.indent:indent",
+        ]
+    },
     install_requires=REQUIRED,
     extras_require=EXTRAS,
     include_package_data=True,
