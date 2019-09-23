@@ -8,7 +8,7 @@
     lazy_brew pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
-test: build
+test: docker/build
     unset BAKEFILE
     docker-compose run --entrypoint bash ci -c 'set -ex && pip3 uninstall -y bake-cli && pip3 install -e . --upgrade && hash -r && cd tests && bats *.bats --pretty'
 release: test //warn @confirm:secure release//pypi docker/release
@@ -19,19 +19,19 @@ release: test //warn @confirm:secure release//pypi docker/release
     echo
     echo 'Please do this simple math problem to prove this is not accidental.'
     echo
-build:
+docker/build:
     # Build the images.
     set -ex && docker-compose build
 
-docker/bash: @interactive build
+docker/bash: @interactive docker/build
     docker-compose run --entrypoint bash bake
 
 release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-docker/release: build //docker/github //docker/dockerhub
+docker/push: docker/build //docker/github //docker/dockerhub
 
-//docker/github: build
+//docker/github: docker/build
     set -ux
 
     declare -a IMAGES=('red', 'bake:core' 'bake:latest' 'bake:ci')
@@ -48,7 +48,7 @@ docker/release: build //docker/github //docker/dockerhub
         docker push "$REMOTE_IMAGE"
     done
 
-//docker/dockerhub: build
+//docker/dockerhub: docker/build
     docker-compose push
 
 random/python/ip:
@@ -57,7 +57,7 @@ random/python/ip:
     r = requests.get('https://httpbin.org/ip')
     print(r.json()['origin'].split(',')[0])
 
-cli:
+//example/cli: //
     red 'Testing sub–commands.'
     bake_step 'sub-task'
     echo 'I should *not* be red.' | red | bake_indent | notred
@@ -65,7 +65,7 @@ cli:
     echo "$(echo $(red test --fg yellow) $(red test --bold) $(red test --fg cyan) | bake_indent)"
     echo
 
-fun/kr:
+/kr:
     sparkescakesparkles="✨ 🍰 ✨" | pbcopy
     echo "$sparkescakesparkles" | pbcopy
     echo 'KR Copied!' | red --fg cyan
