@@ -7,6 +7,9 @@ jobs:
   build:
     docker:
       - image: docker.pkg.github.com/kennethreitz/bake/bake:ci
+        auth:
+          username: kennethreitz # can specify string literal values
+          password: $GITHUB_TOKEN
     resource_class: 2xlarge+
     parallelism: 6
 
