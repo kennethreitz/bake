@@ -1,5 +1,7 @@
 FROM kennethreitz/bake:core
 
+ENV TERM xterm
+
 # -- Install CI deps.
 RUN set -ex && \
     apt-get update -qq && \

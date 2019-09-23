@@ -24,7 +24,7 @@ services:
     depends_on:
       - core
     volumes:
-      - ./Bakefile:/app/Bakefile
+      # - ./Bakefile:/app/Bakefile
       - .:/app
 
   red:
@@ -42,3 +42,5 @@ services:
       dockerfile: ./docker/ci.Dockerfile
     depends_on:
       - core
+    volumes:
+      - .:/app

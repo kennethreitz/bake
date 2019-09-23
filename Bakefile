@@ -8,8 +8,9 @@
     lazy_brew pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
-test: //build
-    docker-compose run --entrypoint bash bake -c 'set -ex && pipenv install --dev --system --deploy && cd tests && bats *.bats'
+test: build
+    unset BAKEFILE
+    docker-compose run --entrypoint bash ci -c 'set -ex && pip3 uninstall -y bake-cli && pip3 install -e . --upgrade && hash -r && cd tests && bats *.bats --pretty'
 release: test //warn @confirm:secure release//pypi docker/release
 
 //warn:
