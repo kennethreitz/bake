@@ -4,7 +4,7 @@ import delegator
 PREFIX = "bake"
 SEPERATOR = "."
 
-__all__ = ["cache"]
+__all__ = ['Cache']
 
 
 class Cache:
