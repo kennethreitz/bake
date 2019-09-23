@@ -26,3 +26,11 @@ services:
     volumes:
       - ./Bakefile:/app/Bakefile
       - .:/app
+
+  red:
+    image: kennethreitz/red:${DOCKER_RELEASE:-latest}
+    build:
+      context: .
+      dockerfile: ./docker/red.Dockerfile
+    depends_on:
+      - core

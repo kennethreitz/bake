@@ -10,7 +10,7 @@
 
 test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
-release: test release//warn @confirm:secure release//pypi release//docker
+release: test release//warn @confirm:secure release//pypi docker/release
 bash: docker//bash
 
 release//warn:
@@ -33,14 +33,16 @@ docker//build/full:
 release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-release//docker: docker/build release//docker/github
+docker/release: docker/build release//docker/github release//docker/dockerhub
 
 release//docker/github: docker/build
     set -ux
 
-    declare -a IMAGES=('bake:core' 'bake:latest')
+    declare -a IMAGES=('bake:core' 'bake:latest' 'red')
 
     for IMAGE in "${IMAGES[@]}"; do
+        bake_step "Building $IMAGE..."
+
         REMOTE_IMAGE="$REGISTRY/$USERNAME/bake/$IMAGE"
 
         # Tag the images for GitHub Registry.
@@ -50,7 +52,7 @@ release//docker/github: docker/build
         docker push "$REMOTE_IMAGE"
     done
 
-release/docker/dockerhub: docker/build
+release//docker/dockerhub: docker/build
     docker-compose push
 
 //ci: //ci/setup
