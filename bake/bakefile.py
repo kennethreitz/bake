@@ -147,10 +147,12 @@ class Bakefile:
         i = 0
         for c, d, f in utils.walk_up(root):
             if i > max_depth:
-                raise NoBakefileFound(f"No {filename} found!")
+                break
             elif filename in f:
                 return Class(path=os.path.join(c, filename))
             i += 1
+
+        raise NoBakefileFound(f"No {filename} found!")
 
     @property
     def source(self):
