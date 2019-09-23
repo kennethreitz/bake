@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: kennethreitz/bake:ci
+      - image: docker.pkg.github.com/kennethreitz/bake/bake:ci
     resource_class: 2xlarge+
     parallelism: 6
 
