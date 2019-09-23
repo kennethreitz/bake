@@ -71,14 +71,7 @@ random/python/ip:
     echo 'KR Copied!' | red --fg cyan
 
 //ci:
-    unset BAKEFILE
-    # pipenv install --deploy --system --dev
-
-
-//ci/tests: //ci
-    unset BAKEFILE
-    mkdir -p reports/bats
-    cd tests && bats *.bats > "reports/bats/output.tap"
+    cd tests && bats *.bats
 
 lazy_brew() {
     set -e
