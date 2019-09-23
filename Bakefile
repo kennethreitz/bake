@@ -3,45 +3,40 @@
     USERNAME=${USERNAME:-kennethreitz}
 
 //: //system //python
+    red "System is setup for local development."
 //system:
-    lazy_brew pipenv
+    lazy_brew pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
+test: //build
+    docker-compose run --entrypoint bash bake -c 'set -ex && pipenv install --dev --system --deploy && cd tests && bats *.bats'
+release: test //warn @confirm:secure release//pypi docker/release
 
-test: docker/build
-    docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
-release: test release//warn @confirm:secure release//pypi docker/release
-bash: docker//bash
-
-release//warn:
+//warn:
     echo
     echo "$(red 'Warning'): you are about to release a new version of $(red 'bake' --fg green)."
     echo
     echo 'Please do this simple math problem to prove this is not accidental.'
     echo
-docker/build:
+build:
     # Build the images.
     set -ex && docker-compose build
 
-docker//bash: @interactive docker/build
+docker/bash: @interactive build
     docker-compose run --entrypoint bash bake
-
-docker//build/full:
-    # Build the images.
-    set -ex && docker-compose build --no-cache
 
 release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-docker/release: docker/build release//docker/github release//docker/dockerhub
+docker/release: build //docker/github //docker/dockerhub
 
-release//docker/github: docker/build
+//docker/github: build
     set -ux
 
-    declare -a IMAGES=('bake:core' 'bake:latest' 'red')
+    declare -a IMAGES=('red', 'bake:core' 'bake:latest' 'bake:ci')
 
     for IMAGE in "${IMAGES[@]}"; do
-        bake_step "Building $IMAGE..."
+        bake_step "Pushing $IMAGE..."
 
         REMOTE_IMAGE="$REGISTRY/$USERNAME/bake/$IMAGE"
 
@@ -52,14 +47,8 @@ release//docker/github: docker/build
         docker push "$REMOTE_IMAGE"
     done
 
-release//docker/dockerhub: docker/build
+//docker/dockerhub: build
     docker-compose push
-
-//ci: //ci/setup
-    set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
-
-//ci/setup: @skip:key=Pipfile.lock
-    pipenv install --dev --deploy --system
 
 random/python/ip:
     #!/usr/bin/env python
@@ -75,7 +64,7 @@ cli:
     echo "$(echo $(red test --fg yellow) $(red test --bold) $(red test --fg cyan) | bake_indent)"
     echo
 
-//kr:
+fun/kr:
     sparkescakesparkles="✨ 🍰 ✨" | pbcopy
     echo "$sparkescakesparkles" | pbcopy
     echo 'KR Copied!' | red --fg cyan

@@ -34,3 +34,11 @@ services:
       dockerfile: ./docker/red.Dockerfile
     depends_on:
       - core
+
+  ci:
+    image: kennethreitz/bake:ci
+    build:
+      context: .
+      dockerfile: ./docker/ci.Dockerfile
+    depends_on:
+      - core

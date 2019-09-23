@@ -13,7 +13,7 @@ RUN set -ex && \
 RUN set -ex && \
     apt-get update -qq && \
     apt-get upgrade -y -qq && \
-    apt-get install curl python3 python3-distutils -y -qq >/dev/null && \
+    apt-get install curl python3 git python3-distutils  -y -qq >/dev/null && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq
 
