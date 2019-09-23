@@ -106,8 +106,10 @@ setup(
     entry_points={
         "console_scripts": [
             "bake=bake.cli:entrypoint",
-            "bake:red=bake.scripts.red:red",
-            "bake:indent=bake.scripts.indent:indent",
+            "bake:red=bake.scripts.red:entrypoint",
+            "bake:redless=bake.scripts.redless:entrypoint",
+            "bake:indent=bake.scripts.indent:entrypoint",
+            "bake:step=bake.scripts.step:entrypoint",
         ]
     },
     install_requires=REQUIRED,
@@ -121,6 +123,7 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],

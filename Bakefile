@@ -58,11 +58,24 @@ ci: ci/setup
 ci/setup: @skip:key=Pipfile.lock
     pipenv install --dev --deploy --system
 
-random/python:
+random/ip:
     #!/usr/bin/env python
     import requests
-    print(requests)
+    r = requests.get('https://httpbin.org/ip')
+    print(r.json()['origin'].split(',')[0])
 
+random/clis:
+    bake:red 'Testing sub–commands.'
+    bake:step 'sub-task'
+    echo 'I should *not* be red.' | bake:red | bake:indent | bake:redless
+    echo 'I *should* be red.' | bake:red --always | bake:indent
+    echo "$(echo test $(bake:red test) test | bake:indent)"
+    echo
+
+random/kr:
+    sparkescakesparkles="✨ 🍰 ✨" | pbcopy
+    echo "$sparkescakesparkles" | pbcopy
+    echo 'KR Copied!' | bake:red --fg cyan
 
 lazy_brew() {
     set -e
