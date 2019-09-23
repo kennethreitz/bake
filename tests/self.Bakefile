@@ -1,5 +1,7 @@
+LIFE='42.'
+
 echo:
-    echo '42.'
+    echo ${LIFE}
 
 also-echo:
     bake echo
