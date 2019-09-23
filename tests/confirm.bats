@@ -1,3 +1,5 @@
+#!/usr/bin/env bats
+export BAKEFILE=confirm.Bakefile
 source ./_common.sh
 
 @test "confirm works" {
@@ -5,7 +7,7 @@ source ./_common.sh
 }
 
 @test "confirm --yes works" {
-    bake -b confirm.Bakefile secure --yes
+    bake secure --yes
 }
 
 @test "confirm:secure works" {

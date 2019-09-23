@@ -1,19 +1,22 @@
+#!/usr/bin/env bats
+
+export BAKEFILE=cache.Bakefile
 
 @test "skips clear" {
-    bake -b cache.Bakefile --clear-skips
+    bake --clear-skips
 }
 
 @test "cache runs" {
-    run bake -b cache.Bakefile task
+    run bake task
     [[ $output != *Skipping* ]]
 }
 
 @test "cache skips" {
-    run bake -b cache.Bakefile task
+    run bake task
     [[ $output == *Skipping* ]]
 }
 
 @test "skip skips" {
-    run bake -b cache.Bakefile --no-deps task
+    run bake --no-deps task
     [[ $output != *Skipping* ]]
 }
