@@ -18,7 +18,7 @@ URL = "https://github.com/kennethreitz/bake"
 EMAIL = "me@kennethreitz.org"
 AUTHOR = "Kenneth Reitz"
 REQUIRES_PYTHON = ">=3.6.0"
-VERSION = "0.10.0"
+VERSION = "0.10.1"
 
 # What packages are required for this module to be executed?
 REQUIRED = ["click", "delegator.py", "pygments", "networkx", "colorama"]
@@ -106,10 +106,10 @@ setup(
     entry_points={
         "console_scripts": [
             "bake=bake.cli:entrypoint",
-            "bake:red=bake.scripts.red:entrypoint",
-            "bake:notred=bake.scripts.notred:entrypoint",
-            "bake:indent=bake.scripts.indent:entrypoint",
-            "bake:step=bake.scripts.step:entrypoint",
+            "red=bake.scripts.red:entrypoint",
+            "notred=bake.scripts.notred:entrypoint",
+            "bake_indent=bake.scripts.indent:entrypoint",
+            "bake_step=bake.scripts.step:entrypoint",
         ]
     },
     install_requires=REQUIRED,
