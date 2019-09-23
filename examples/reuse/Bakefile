@@ -1,10 +1,16 @@
 hello: hello/reuse hello/reuse/concurrent
-
+    echo "You just ran $(red 'hello') directly, then indirectly (via bake+bash; 6 times, concurrently!)"
 hello/basic:
-    echo 'hello'
-
+    sleep 2
+    echo "[$(red $(uuidgen))] hello!"
 hello/reuse:
     bake hello/basic
 
 hello/reuse/concurrent:
-    bake hello/reuse & bake hello/reuse
+    set -ex && \
+        bake hello/reuse &
+        bake hello/reuse &
+        bake hello/reuse &
+        bake hello/reuse &
+        bake hello/reuse &
+        bake hello/reuse
