@@ -22,7 +22,7 @@ jobs:
             export PIPENV_MAX_SUBPROCESS=128
             pipenv install --dev --system --deploy
       - run:
-          name: $ bake //ci
+          name: BATS tests [sharded]
           command: |
             cd tests
             mkdir -p reports/bats
