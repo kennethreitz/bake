@@ -22,4 +22,6 @@ jobs:
       - run:
           name: $ bake //ci
           command: |
-            cd tests && bats circleci tests glob "*.bats"
+            # circleci tests split <(ls *.bats)
+            cd tests
+            circleci tests glob ".bats" | circleci tests split | xargs bats
