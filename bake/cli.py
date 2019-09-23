@@ -6,6 +6,7 @@ import random
 from .bakefile import Bakefile, TaskFilter
 from .exceptions import NoBakefileFound
 from .clint import eng_join
+from .utils import scrub_hidden_tasks
 
 import pygments
 import pygments.lexers
@@ -99,7 +100,7 @@ def echo_json(obj):
 @click.option(
     "--levels",
     "-l",
-    default=None,
+    default=-2,
     nargs=1,
     type=click.INT,
     help="The number of '/' levels to list.",
@@ -281,7 +282,7 @@ def entrypoint(
         if levels is not None:
             task_list = []
             for _task in bf.tasks:
-                if len(_task.split("/")) <= levels:
+                if len(_task.split("/")) <= abs(levels):
                     task_list.append(_task)
         else:
             task_list = bf.tasks
@@ -289,8 +290,13 @@ def entrypoint(
         if sort:
             task_list = sorted(task_list)
 
+        if levels < 0:
+            task_list = scrub_hidden_tasks(task_list)
+
         for _task in task_list:
             depends_on = bf[_task].depends_on(include_filters=False, recursive=True)
+            if levels < 0:
+                depends_on = scrub_hidden_tasks(depends_on)
 
             if no_deps:
                 depends_on = ()
@@ -313,15 +319,18 @@ def entrypoint(
                 )
 
         if not silent:
-            tasks_unechoed = len(bf.tasks) - len(task_list)
+            if levels > 0:
+                tasks_unechoed = len(bf.tasks) - len(task_list)
 
-            if tasks_unechoed:
-                bake_command = str(click.style(f"bake --levels {levels + 1}", fg="red"))
-                click.echo(
-                    f"Note: {tasks_unechoed} more tasks are available. "
-                    f"Please use $ {bake_command} to see more.",
-                    err=True,
-                )
+                if tasks_unechoed and levels is not None:
+                    bake_command = str(
+                        click.style(f"bake --levels {abs(levels) + 1}", fg="red")
+                    )
+                    click.echo(
+                        f"Note: {tasks_unechoed} more tasks are available. "
+                        f"Please use $ {bake_command} to see more.",
+                        err=True,
+                    )
 
         if _json:
             echo_json(__list_json)

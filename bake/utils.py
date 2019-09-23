@@ -1,6 +1,17 @@
 import os
 
 
+def scrub_hidden_tasks(names):
+
+    hidden_char = "//"
+    _names = []
+    for name in names:
+        if hidden_char not in str(name):
+            _names.append(name)
+
+    return _names
+
+
 def walk_up(bottom):
     """mimic os.walk, but walk 'up' instead of down the directory tree.
     From: https://gist.github.com/zdavkeos/1098474
