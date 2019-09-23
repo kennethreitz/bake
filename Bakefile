@@ -10,9 +10,15 @@
 
 test: docker/build
     docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
-release: test release//pypi release//docker
+release: test release//warn @confirm:secure release//pypi release//docker
 bash: docker//bash
 
+release//warn:
+    echo
+    echo "$(bake:red 'Warning'): you are about to release a new version of $(bake:red 'bake' --fg green)."
+    echo
+    echo 'Please do this simple math problem to prove this is not accidental.'
+    echo
 docker/build:
     # Build the images.
     set -ex && docker-compose build
@@ -27,9 +33,9 @@ docker//build/full:
 release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-release//docker: docker//build release//docker/github
+release//docker: docker/build release//docker/github
 
-release//docker/github: docker//build
+release//docker/github: docker/build
     set -ux
 
     declare -a IMAGES=('bake:core' 'bake:latest')
@@ -44,7 +50,7 @@ release//docker/github: docker//build
         docker push "$REMOTE_IMAGE"
     done
 
-release/docker/dockerhub: docker//build
+release/docker/dockerhub: docker/build
     docker-compose push
 
 //ci: //ci/setup
