@@ -24,4 +24,8 @@ jobs:
           command: |
             # circleci tests split <(ls *.bats)
             cd tests
-            circleci tests glob "*.bats" | circleci tests split | xargs bats
+            mkdir -p report/bats
+            circleci tests glob "*.bats" | circleci tests split | xargs bats > report/bats/1.tap
+
+      - store_test_results:
+          path: report
