@@ -11,7 +11,7 @@
 test: docker/build
     unset BAKEFILE
     docker-compose run --entrypoint bash ci -c 'set -ex && pip3 uninstall -y bake-cli && pip3 install -e . --upgrade && hash -r && cd tests && bats *.bats --pretty'
-release: test //warn @confirm:secure release//pypi docker/release
+release: test //warn @confirm:secure release//pypi docker/push
 
 //warn:
     echo
