@@ -15,7 +15,7 @@ bash: docker//bash
 
 release//warn:
     echo
-    echo "$(bake:red 'Warning'): you are about to release a new version of $(bake:red 'bake' --fg green)."
+    echo "$(red 'Warning'): you are about to release a new version of $(red 'bake' --fg green)."
     echo
     echo 'Please do this simple math problem to prove this is not accidental.'
     echo
