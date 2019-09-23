@@ -107,7 +107,7 @@ setup(
         "console_scripts": [
             "bake=bake.cli:entrypoint",
             "bake:red=bake.scripts.red:entrypoint",
-            "bake:redless=bake.scripts.redless:entrypoint",
+            "bake:notred=bake.scripts.notred:entrypoint",
             "bake:indent=bake.scripts.indent:entrypoint",
             "bake:step=bake.scripts.step:entrypoint",
         ]
