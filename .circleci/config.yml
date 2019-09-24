@@ -7,7 +7,7 @@ jobs:
   test:
     docker:
       - image: kennethreitz/bake:ci
-    parallelism: 6
+    parallelism: 1
 
     working_directory: /app
 
