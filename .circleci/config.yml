@@ -23,15 +23,14 @@ jobs:
           command: |
             cd tests
             mkdir -p /app/reports/bats
-            bats $(circleci tests glob '*.bats' | circleci tests split) > "/app/reports/bats/$CIRCLE_NODE_INDEX.xml"
-            # bats *.bats > "/app/reports/bats/$CIRCLE_NODE_INDEX.tap"
+            # bats $(circleci tests glob '*.bats' | circleci tests split) > "/app/reports/bats/$CIRCLE_NODE_INDEX.xml"
+            bats *.bats > "/app/reports/bats/$CIRCLE_NODE_INDEX.tap"
 
       - store_test_results:
           path: reports
   docker-push:
     docker:
       - image: kennethreitz/bake:ci
-    resource_class: 2xlarge
 
     working_directory: /app
 
@@ -53,7 +52,6 @@ jobs:
   docker-push-ci:
     docker:
       - image: kennethreitz/bake:ci
-    resource_class: xlarge
 
     working_directory: /app
 
