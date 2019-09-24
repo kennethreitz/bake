@@ -89,7 +89,7 @@ workflows:
   docker-push-ci:
     triggers:
       - schedule:
-          cron: "@hourly"
+          cron: "0 * * * *"
           filters:
             branches:
               only:
