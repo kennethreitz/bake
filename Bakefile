@@ -5,7 +5,7 @@
 //: //system //python
     red "System is setup for local development."
 //system: //warn @confirm
-    lazy_brew pipenv bats
+    lazy_brew_pretty pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
 test: docker/build
@@ -69,18 +69,20 @@ random/python/ip:
     echo "$sparkescakesparkles" | pbcopy
     echo 'KR Copied!' | red --fg cyan
 
-lazy_brew() {
-    set -e
+lazy_brew_pretty() {
     # Install jq if it's not available.
 
-    if ! which jq > /dev/null; then
-        set -ex && brew install jq
+    if ! which -s jq; then
+        bake_step "Installing jq"
+        brew install jq 2>&1 | bake_indent --char $(red '|')
     fi
+    set +e
 
     # Install requested packages, if they aren't installed.
-    for PACKAGE in "$@"; do
-        if ! brew info --installed --json | jq 'map(.name) | index( "$PACKAGE" )' > /dev/null; then
-            set -ex && brew install "$PACKAGE" > /dev/null
+    for PACKAGE in "${@}"; do
+        if ! which -s ${PACKAGE}; then
+            bake_step "Installing ${PACKAGE}" --color green
+            brew install "${PACKAGE}" 2>&1 | bake_indent --char $(red '|')
         fi
     done
 }
