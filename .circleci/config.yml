@@ -73,7 +73,11 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              exclude:
+                - master
   test-and-docker-push:
     jobs:
       - test
