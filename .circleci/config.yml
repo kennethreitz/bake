@@ -38,7 +38,7 @@ jobs:
           command: |
             set -u
             echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
-            echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
+            # echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
 
       - run:
           name: $ bake docker/push
