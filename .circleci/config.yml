@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: kennethreitz/bake:ci
     resource_class: xlarge
@@ -14,8 +14,6 @@ jobs:
 
     steps:
       - checkout
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
       - run:
           name: $ pipenv install…
           command: |
@@ -31,3 +29,42 @@ jobs:
 
       - store_test_results:
           path: reports
+  docker:
+    docker:
+      - image: kennethreitz/bake:ci
+    resource_class: xlarge
+    parallelism: 3
+
+    working_directory: /app
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: $ docker login
+          command:
+            docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
+            docker login docker.pkg.github.com -u ${GITHUB_USERNAME} -p ${GITHUB_TOKEN}
+
+      - run:
+          name: $ bake docker/push
+          command: bake docker/push
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  docker:
+    jobs:
+      - test
+      - docker:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              only: /^v.*/
