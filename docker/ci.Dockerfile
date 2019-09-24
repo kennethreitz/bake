@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND='noninteractive'
 RUN set -ex && \
     apt-get update -qq && \
     apt-get upgrade -y -qq && \
-    apt-get install curl && \
+    apt-get install curl -y -qq --no-install-recommends && \
     apt-get install expect npm -y -qq >/dev/null && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq && \
