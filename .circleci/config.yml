@@ -76,7 +76,8 @@ workflows:
       - test:
           filters:
             branches:
-              exclude: master
+              ignore:
+                - master
   test-and-docker-push:
     jobs:
       - test
