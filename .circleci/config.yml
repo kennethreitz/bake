@@ -7,10 +7,7 @@ jobs:
   test:
     docker:
       - image: kennethreitz/bake:ci
-    parallelism: 1
-
     working_directory: /app
-
     steps:
       - checkout
       - run:
@@ -19,13 +16,11 @@ jobs:
             export PIPENV_MAX_SUBPROCESS=128
             pipenv install --dev --system --deploy
       - run:
-          name: BATS tests [sharded]
+          name: BATS tests
           command: |
             cd tests
             mkdir -p /app/reports/bats
-            # bats $(circleci tests glob '*.bats' | circleci tests split) > "/app/reports/bats/$CIRCLE_NODE_INDEX.xml"
-            bats *.bats > "/app/reports/bats/$CIRCLE_NODE_INDEX.tap"
-
+            bats *.bats > "/app/reports/bats/$CIRCLE_NODE_INDEX.xml"
       - store_test_results:
           path: reports
   docker-push:
