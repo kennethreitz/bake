@@ -37,7 +37,7 @@ jobs:
           name: $ docker login
           command: |
             set -u
-            docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+            # docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
             # echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
             # echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
 
