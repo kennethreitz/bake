@@ -16,6 +16,7 @@ RUN set -ex && \
 # -- Copy in tap2junit plugin.
 COPY ./docker/scripts/tap2xml /usr/local/bin/tap2xml
 
+# -- Install tap2junit deps.
 RUN cpan install XML::LibXML > /dev/null
 
 # -- Install latest Bake.
