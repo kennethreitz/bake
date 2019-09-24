@@ -4,7 +4,6 @@ FROM python:3-slim-buster
 ARG DEBIAN_FRONTEND='noninteractive'
 
 # -- Setup mirrors, for faster downloads (main sources can be *very* slow sometimes).
-RUN cat /etc/apt/sources.list
 COPY ./docker/scripts/use-mirrors.sh /opt/use-mirrors.sh
 RUN set -ex && \
     /opt/use-mirrors.sh && \

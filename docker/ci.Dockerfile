@@ -5,26 +5,22 @@ ENV TERM xterm
 # -- Install CI deps.
 RUN set -ex && \
     apt-get update -qq && \
-    apt-get install expect npm docker.io --no-install-recommends -y -qq >/dev/null && \
+    apt-get install expect npm docker.io libxml-perl --no-install-recommends -y -qq >/dev/null && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq && \
-    curl -fLSs https://circle.ci/cli --retry 3 | bash && \
-    npm install -g bats > /dev/null && \
-    pip3 install bake-cli --upgrade --quiet > /dev/null && \
-    apt remove --autoremove --purge -y curl && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq && \
+    # -- Really slim down that image.
     rm -fr /var/lib/apt/lists/*
 
-# -- Install bats.
-RUN set -ex && npm install -g bats > /dev/null
+# -- Copy in tap2junit plugin.
+COPY ./docker/scripts/tap2xml /usr/local/bin/tap2xml
 
 # -- Install latest Bake.
 RUN set -ex && \
     pip3 install bake-cli --upgrade --quiet > /dev/null
 
-# -- Really slim down that image.
-RUN set -ex && \
-    rm -fr /var/lib/apt/lists
+# -- Install BATS.
+RUN set -ex && npm install -g bats > /dev/null
 
 ENTRYPOINT [ "bash" ]

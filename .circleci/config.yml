@@ -20,7 +20,7 @@ jobs:
           command: |
             cd tests
             mkdir -p /app/reports/bats
-            bats *.bats --tap > "/app/reports/bats/$CIRCLE_NODE_INDEX.xml"
+            bats *.bats --tap | tap2xml > "/app/reports/bats/report.xml"
       - store_test_results:
           path: reports
   docker-push:

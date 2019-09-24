@@ -29,6 +29,8 @@ release//pypi: @interactive //python
     pipenv run python setup.py upload
 
 docker/push: docker/build //docker/github //docker/dockerhub
+docker/push/ci: docker/build
+    docker-compose push ci
 
 //docker/github: docker/build
     set -ux
@@ -55,14 +57,6 @@ random/python/ip:
     import requests
     r = requests.get('https://httpbin.org/ip')
     print(r.json()['origin'].split(',')[0])
-
-//example/cli: //
-    red 'Testing sub–commands.'
-    bake_step 'sub-task'
-    echo 'I should *not* be red.' | red | bake_indent | notred
-    echo 'But, I *should* be red.' | red --always | bake_indent | bake_indent
-    echo "$(echo $(red test --fg yellow) $(red test --bold) $(red test --fg cyan) | bake_indent)"
-    echo
 
 /kr:
     sparkescakesparkles="✨ 🍰 ✨" | pbcopy
