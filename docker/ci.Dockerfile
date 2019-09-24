@@ -5,7 +5,7 @@ ENV TERM xterm
 # -- Install CI deps.
 RUN set -ex && \
     apt-get update -qq && \
-    apt-get install expect npm docker.io libxml-perl --no-install-recommends -y -qq >/dev/null && \
+    apt-get install expect npm docker.io libcgi-xmlform-perl -y -qq >/dev/null && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq && \
     apt-get clean -y -qq && \
