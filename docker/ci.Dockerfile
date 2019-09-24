@@ -5,7 +5,7 @@ ENV TERM xterm
 # -- Install CI deps.
 RUN set -ex && \
     apt-get update -qq && \
-    apt-get install expect npm docker.io -y -qq >/dev/null && \
+    apt-get install expect npm docker.io --no-install-recommends -y -qq >/dev/null && \
     apt-get clean -y -qq && \
     apt-get autoclean -y -qq && \
     curl -fLSs https://circle.ci/cli --retry 3 | bash && \
