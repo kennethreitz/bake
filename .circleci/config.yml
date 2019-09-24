@@ -42,6 +42,7 @@ jobs:
       - run: &docker-login
           name: $ docker login
           command: |
+            set -u
             docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
             docker login docker.pkg.github.com -u ${GITHUB_USERNAME} -p ${GITHUB_TOKEN}
 
