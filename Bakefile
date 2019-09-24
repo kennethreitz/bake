@@ -4,7 +4,7 @@
 
 //: //system //python
     red "System is setup for local development."
-//system: //warn
+//system: //warn @confirm
     lazy_brew pipenv bats
 //python: @skip:key=Pipfile.lock //system
     pipenv install --dev
@@ -15,7 +15,7 @@ release: test //warn @confirm:secure release//pypi docker/push
 
 //warn:
     echo
-    echo "$(red 'Warning'): you are about to do something destructive (to your system; or the internet — but what's the difference, these days?)."
+    echo "$(red 'Warning'): You are about to make modifications to your system."
     echo
 
 docker/build:
