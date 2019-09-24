@@ -7,7 +7,7 @@ jobs:
   test:
     docker:
       - image: kennethreitz/bake:ci
-    resource_class: xlarge
+    # resource_class: large
     parallelism: 3
 
     working_directory: /app
@@ -29,11 +29,10 @@ jobs:
 
       - store_test_results:
           path: reports
-  docker:
+  docker-push:
     docker:
       - image: kennethreitz/bake:ci
-    resource_class: xlarge
-    parallelism: 3
+    resource_class: 2xlarge
 
     working_directory: /app
 
@@ -41,9 +40,9 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run:
+      - run: &docker-login
           name: $ docker login
-          command:
+          command: |
             docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD}
             docker login docker.pkg.github.com -u ${GITHUB_USERNAME} -p ${GITHUB_TOKEN}
 
@@ -51,15 +50,34 @@ jobs:
           name: $ bake docker/push
           command: bake docker/push
 
+  docker-push-ci:
+    docker:
+      - image: kennethreitz/bake:ci
+    resource_class: xlarge
+
+    working_directory: /app
+
+    steps:
+      - checkout
+      - run: *docker-login
+      - run:
+          name: $ docker-compose build ci
+          command: |
+            docker-compose build ci
+      - run:
+          name: $ docker push
+          command: |
+            docker push kennethreitz/bake:ci
+
 workflows:
   version: 2
   test:
     jobs:
       - test
-  docker:
+  test-and-docker-push:
     jobs:
       - test
-      - docker:
+      - docker-push:
           requires:
             - test
           filters:
@@ -68,3 +86,13 @@ workflows:
                 - master
             tags:
               only: /^v.*/
+  docker-push-ci:
+    triggers:
+      - schedule:
+          cron: "@hourly"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - docker-push-ci
