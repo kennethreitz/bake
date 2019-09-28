@@ -1,0 +1,4 @@
+task: skipme
+    exit 0
+skipme: @skip:key=cache.Bakefile
+    exit 0

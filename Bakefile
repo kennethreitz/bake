@@ -2,44 +2,44 @@
     REGISTRY=${REGISTRY:-docker.pkg.github.com}
     USERNAME=${USERNAME:-kennethreitz}
 
-install: install/system install/python
-test: python/test docker/test
-release: test release/pypi release/docker
+//: //system //python
+    red "System is setup for local development."
+//system: //warn @confirm
+    lazy_brew_pretty pipenv bats
+//python: @skip:key=Pipfile.lock //system
+    pipenv install --dev
+test: docker/build
+    unset BAKEFILE
+    docker-compose run --entrypoint bash ci -c 'set -ex && pip3 uninstall -y bake-cli && pip3 install -e . --upgrade && hash -r && cd tests && bats *.bats --pretty'
+release: test //warn @confirm:secure release//pypi docker/push
 
-python/test: install/python
-    unset BAKE_SILENT
-    pipenv run pytest
-
-docker/bash: docker/build
-    docker-compose run --entrypoint bash bake
-docker/test: docker/build
-    docker-compose run --entrypoint bash bake -c 'set -ex && pip3 install pytest && pytest'
+//warn:
+    echo
+    echo "$(red 'Warning'): You are about to make modifications to your system."
+    echo
 
 docker/build:
     # Build the images.
     set -ex && docker-compose build
 
-docker/build/full:
-    # Build the images.
-    set -ex && docker-compose build --no-cache
+docker/bash: @interactive docker/build
+    docker-compose run --entrypoint bash bake
 
-install/python: @skip:key=Pipfile.lock install/system
-    pipenv install --dev
-
-install/system:
-    lazy_brew pipenv
-
-release/pypi: install/python
+release//pypi: @interactive //python
     pipenv run python setup.py upload
 
-release/docker: docker/build/full release/docker/github
+docker/push: docker/build //docker/github //docker/dockerhub
+docker/push/ci: docker/build
+    docker-compose push ci
 
-release/docker/github: docker/build/full
+//docker/github: docker/build
     set -ux
 
-    declare -a IMAGES=('bake:core' 'bake:latest')
+    declare -a IMAGES=('red', 'bake:core' 'bake:latest' 'bake:ci')
 
     for IMAGE in "${IMAGES[@]}"; do
+        bake_step "Pushing $IMAGE..."
+
         REMOTE_IMAGE="$REGISTRY/$USERNAME/bake/$IMAGE"
 
         # Tag the images for GitHub Registry.
@@ -49,33 +49,34 @@ release/docker/github: docker/build/full
         docker push "$REMOTE_IMAGE"
     done
 
-release/docker/dockerhub: docker/build/full
+//docker/dockerhub: docker/build
     docker-compose push
 
-ci: ci/setup
-    set -ex && mkdir -p reports/pytest && pytest --junitxml=reports/pytest/report.xml
-
-ci/setup: @skip:key=Pipfile.lock
-    pipenv install --dev --deploy --system
-
-random/python:
+random/python/ip:
     #!/usr/bin/env python
     import requests
-    print(requests)
+    r = requests.get('https://httpbin.org/ip')
+    print(r.json()['origin'].split(',')[0])
 
+/kr:
+    sparkescakesparkles="✨ 🍰 ✨" | pbcopy
+    echo "$sparkescakesparkles" | pbcopy
+    echo 'KR Copied!' | red --fg cyan
 
-lazy_brew() {
-    set -e
+lazy_brew_pretty() {
     # Install jq if it's not available.
 
-    if ! which jq > /dev/null; then
-        set -ex && brew install jq
+    if ! which -s jq; then
+        bake_step "Installing jq"
+        brew install jq 2>&1 | bake_indent --char $(red '|')
     fi
+    set +e
 
     # Install requested packages, if they aren't installed.
-    for PACKAGE in "$@"; do
-        if ! brew info --installed --json | jq 'map(.name) | index( "$PACKAGE" )' > /dev/null; then
-            set -ex && brew install "$PACKAGE" > /dev/null
+    for PACKAGE in "${@}"; do
+        if ! which -s ${PACKAGE}; then
+            bake_step "Installing ${PACKAGE}" --color green
+            brew install "${PACKAGE}" 2>&1 | bake_indent --char $(red '|')
         fi
     done
 }

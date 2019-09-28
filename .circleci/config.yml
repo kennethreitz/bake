@@ -4,26 +4,95 @@
 #
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      # specify the version you desire here
-      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: kennethreitz/bake
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+      - image: kennethreitz/bake:ci
+    working_directory: /app
+    steps:
+      - checkout
+      - run:
+          name: $ pipenv install…
+          command: |
+            export PIPENV_MAX_SUBPROCESS=128
+            pipenv install --dev --system --deploy
+      - run:
+          name: BATS tests
+          command: |
+            cd tests
+            mkdir -p /app/reports/bats
+            bats *.bats --tap | tap2xml > "/app/reports/bats/report.xml"
+      - store_test_results:
+          path: reports
+  docker-push:
+    docker:
+      - image: kennethreitz/bake:ci
 
     working_directory: /app
 
     steps:
       - checkout
-      # - setup_remote_docker:
-      #     docker_layer_caching: true
-      - run:
-          name: $ bake ci
-          command: bake ci
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: &docker-login
+          name: $ docker login
+          command: |
+            set -u
+            # docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_PASSWORD
+            # echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
+            # echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com --username $GITHUB_USERNAME --password-stdin
 
-      - store_test_results:
-          path: reports
+      - run:
+          name: $ bake docker/push
+          command: bake docker/push
+
+  docker-push-ci:
+    docker:
+      - image: kennethreitz/bake:ci
+
+    working_directory: /app
+
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: *docker-login
+      - run:
+          name: $ docker-compose build ci
+          command: |
+            docker-compose build ci
+      - run:
+          name: $ docker push
+          command: |
+            docker push kennethreitz/bake:ci
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore:
+                - master
+  test-and-docker-push:
+    jobs:
+      - test
+      - docker-push:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+            tags:
+              only: /^v.*/
+  docker-push-ci:
+    triggers:
+      - schedule:
+          cron: "0 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - docker-push-ci

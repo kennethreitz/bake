@@ -1,7 +1,0 @@
-kinda-dangerous: @confirm
-    echo 'success1'
-really-dangerous: @confirm:secure
-    echo 'success2'
-
-mostly-harmless: kinda-dangerous
-mostly-dangerous: really-dangerous

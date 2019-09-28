@@ -1,0 +1,5 @@
+secure: @confirm
+    exit 0
+
+secure/real: @confirm:secure
+    exit 1
