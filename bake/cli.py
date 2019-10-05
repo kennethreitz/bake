@@ -391,7 +391,7 @@ def entrypoint(
                     )
                 usually_bash_task = task.execute(
                     yes=yes,
-                    dont_skip=dont_skip
+                    dont_skip=dont_skip,
                     debug=debug,
                     silent=silent,
                     interactive=force_interactive or interactive,
