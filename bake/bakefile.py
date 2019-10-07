@@ -185,8 +185,9 @@ class Bakefile:
         return shebang.strip().endswith("sh")
 
     def _is_task_line(self, line):
-        if line.startswith(INDENT_STYLES[0]) or line.startswith(INDENT_STYLES[1]):
-            return True
+        for item in INDENT_STYLES:
+            if line.startswith(item):
+                return True
 
     @staticmethod
     def _is_shebang_line(line):

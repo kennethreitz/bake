@@ -1,4 +1,4 @@
-INDENT_STYLES = ("\t", " " * 4)
+INDENT_STYLES = ("\t", " " * 4, " " * 2)
 SKIP_NEXT = False
 SAFE_ENVIRONS = [
     "HOME",
