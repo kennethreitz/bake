@@ -72,3 +72,9 @@ export BAKEFILE=basics.Bakefile
     run bake deps/fail --no-deps
     [ "${status}" -eq 0 ]
 }
+
+@test "bake --verbose" {
+    run bake --verbose echo foo
+    [ "${lines[0]}" = " + Executing echo:" ]
+    [ "${lines[1]}" = " |  + echo foo" ]
+}

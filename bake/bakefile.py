@@ -492,7 +492,7 @@ class TaskScript(BaseAction):
 
         return line
 
-    def gen_source(self, *, sources):
+    def gen_source(self, *, sources, verbose=False):
 
         source_container = []
 
@@ -519,6 +519,9 @@ class TaskScript(BaseAction):
 
             source_container += [self.bashfile.funcs_source, self.bashfile.root_source]
 
+        if verbose and Bakefile._is_safe_to_inject(shebang):
+            yield "set -x"
+
         main_source = "\n".join(source_container)
 
         for sourceline in main_source.split("\n"):
@@ -529,7 +532,7 @@ class TaskScript(BaseAction):
         yield "\n"
 
     def execute(
-        self, *, blocking=False, debug=False, interactive=False, silent=False, **kwargs
+        self, *, blocking=False, debug=False, interactive=False, silent=False, verbose=False, **kwargs
     ):
 
         args = " ".join([shlex_quote(a) for a in self.bf.args])
@@ -539,7 +542,7 @@ class TaskScript(BaseAction):
         )
 
         script = (
-            f"t=$(mktemp) && bake --source {self.name} "
+            f"t=$(mktemp) && bake {'--verbose' if verbose else ''} --source {self.name} "
             "> ${t} && chmod +x ${t} && ${t} "
             + f"{args} "
             + f"{sed_magic} "

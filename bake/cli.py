@@ -117,6 +117,13 @@ def echo_json(obj):
 @click.option("--debug", default=False, is_flag=True, hidden=True)
 @click.option("--source", default=False, nargs=1, hidden=True)
 @click.option(
+    "--verbose", 
+    default=False, 
+    is_flag=True,
+    hidden=False,
+    help="Run verbosely",
+)
+@click.option(
     "--allow",
     default=False,
     nargs=1,
@@ -200,6 +207,7 @@ def entrypoint(
     yes,
     help,
     source,
+    verbose,
 ):
     """bake — the strangely familiar task–runner."""
 
@@ -249,7 +257,7 @@ def entrypoint(
     if source:
 
         task = bf.tasks[source]
-        source = task.gen_source(sources=[task.bf.root_source, task.source])
+        source = task.gen_source(sources=[task.bf.root_source, task.source], verbose=verbose)
 
         for source_line in source:
             click.echo(source_line)
@@ -391,6 +399,7 @@ def entrypoint(
                     debug=debug,
                     silent=silent,
                     interactive=force_interactive or interactive,
+                    verbose=verbose,
                 )
 
                 if not _continue:
