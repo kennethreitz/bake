@@ -1,0 +1,12 @@
+build: build/stage
+
+build/stage: fetch
+    echo Building stage
+
+fetch: fetch/consul fetch/s6-overlay
+
+fetch/consul:
+    echo Fetching consul
+
+fetch/s6-overlay:
+    echo Fetching S6
