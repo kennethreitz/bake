@@ -26,8 +26,6 @@ import colorama
 )
 @click.option("--bold", is_flag=True, type=click.BOOL, default=False, help="Be bold.")
 def entrypoint(s, *, fg, bg, bold, err, always):
-    """Echoes string with specific foreground and background color."""
-    
     if always:
         # Don't strip colors.
         colorama.init(strip=False)

@@ -22,7 +22,6 @@ colorama.init(strip=False)
     "--color", nargs=1, type=click.STRING, default="yellow", help="Color to use."
 )
 def entrypoint(s, *, char, read_stderr, no_color, color):
-    """Echoes step titles in < + steptitle > format."""
 
     pipe = sys.stdin if not read_stderr else sys.stderr
     if s is False:

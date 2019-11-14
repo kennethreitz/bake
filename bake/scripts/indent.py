@@ -9,7 +9,6 @@ import click
 )
 @click.option("--char", nargs=1, type=click.STRING, default="|", help="Prefix char.")
 def entrypoint(*, char, read_stderr):
-    """Indents and echoes string with a specific pipe."""
 
     pipe = sys.stdin if not read_stderr else sys.stderr
 
