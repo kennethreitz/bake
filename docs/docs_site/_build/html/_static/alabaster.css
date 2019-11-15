@@ -1,20 +1,26 @@
-/*
- * flasky.css_t
- * ~~~~~~~~~~~~
- *
- * :copyright: Copyright 2010 by Armin Ronacher. Modifications by Kenneth Reitz.
- * :license: Flask Design License, see LICENSE for details.
- */
 
-{% set page_width = '940px' %}
-{% set sidebar_width = '220px' %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @import url("basic.css");
 
 /* -- page layout ----------------------------------------------------------- */
 
 body {
-    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro';
+    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
     font-size: 17px;
     background-color: white;
     color: #000;
@@ -22,8 +28,9 @@ body {
     padding: 0;
 }
 
+
 div.document {
-    width: {{ page_width }};
+    width: 940px;
     margin: 30px auto 0 auto;
 }
 
@@ -33,11 +40,13 @@ div.documentwrapper {
 }
 
 div.bodywrapper {
-    margin: 0 0 0 {{ sidebar_width }};
+    margin: 0 0 0 220px;
 }
 
 div.sphinxsidebar {
-    width: {{ sidebar_width }};
+    width: 220px;
+    font-size: 14px;
+    line-height: 1.5;
 }
 
 hr {
@@ -50,13 +59,12 @@ div.body {
     padding: 0 30px 0 30px;
 }
 
-img.floatingflask {
-    padding: 0 0 10px 10px;
-    float: right;
+div.body > .section {
+    text-align: left;
 }
 
 div.footer {
-    width: {{ page_width }};
+    width: 940px;
     margin: 20px auto 30px auto;
     font-size: 14px;
     color: #888;
@@ -67,9 +75,16 @@ div.footer a {
     color: #888;
 }
 
-div.related {
+p.caption {
+    font-family: ;
+    font-size: inherit;
+}
+
+
+div.relations {
     display: none;
 }
+
 
 div.sphinxsidebar a {
     color: #444;
@@ -81,19 +96,30 @@ div.sphinxsidebar a:hover {
     border-bottom: 1px solid #999;
 }
 
-div.sphinxsidebar {
-    font-size: 14px;
-    line-height: 1.5;
-}
-
 div.sphinxsidebarwrapper {
     padding: 18px 10px;
 }
 
 div.sphinxsidebarwrapper p.logo {
     padding: 0;
-    margin: -10px 0 0 -20px;
+    margin: -10px 0 0 0px;
     text-align: center;
+}
+
+div.sphinxsidebarwrapper h1.logo {
+    margin-top: -10px;
+    text-align: center;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+div.sphinxsidebarwrapper h1.logo-name {
+    margin-top: 0px;
+}
+
+div.sphinxsidebarwrapper p.blurb {
+    margin-top: 0;
+    font-style: normal;
 }
 
 div.sphinxsidebar h3,
@@ -132,10 +158,29 @@ div.sphinxsidebar ul {
     color: #000;
 }
 
+div.sphinxsidebar ul li.toctree-l1 > a {
+    font-size: 120%;
+}
+
+div.sphinxsidebar ul li.toctree-l2 > a {
+    font-size: 110%;
+}
+
 div.sphinxsidebar input {
-    border: 1px solid #ccc;
-    font-family: 'Georgia', serif;
+    border: 1px solid #CCC;
+    font-family: 'goudy old style', 'minion pro', 'bell mt', Georgia, 'Hiragino Mincho Pro', serif;
     font-size: 1em;
+}
+
+div.sphinxsidebar hr {
+    border: none;
+    height: 1px;
+    color: #AAA;
+    background: #AAA;
+
+    text-align: left;
+    margin-left: 0;
+    width: 50%;
 }
 
 /* -- body styles ----------------------------------------------------------- */
@@ -170,14 +215,14 @@ div.body h5 { font-size: 100%; }
 div.body h6 { font-size: 100%; }
 
 a.headerlink {
-    color: #ddd;
+    color: #DDD;
     padding: 0 4px;
     text-decoration: none;
 }
 
 a.headerlink:hover {
     color: #444;
-    background: #eaeaea;
+    background: #EAEAEA;
 }
 
 div.body p, div.body dd, div.body li {
@@ -185,11 +230,10 @@ div.body p, div.body dd, div.body li {
 }
 
 div.admonition {
-    background: #fafafa;
-    margin: 20px -30px;
+    margin: 20px 0px;
     padding: 10px 30px;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    background-color: #FCC;
+    border: 1px solid #FAA;
 }
 
 div.admonition tt.xref, div.admonition a tt {
@@ -223,13 +267,13 @@ dt:target, .highlight {
 }
 
 div.note {
-    background-color: #eee;
-    border: 1px solid #ccc;
+    background-color: #EEE;
+    border: 1px solid #CCC;
 }
 
 div.seealso {
-    background-color: #ffc;
-    border: 1px solid #ff6;
+    background-color: #EEE;
+    border: 1px solid #CCC;
 }
 
 div.topic {
@@ -244,19 +288,26 @@ p.admonition-title:after {
     content: ":";
 }
 
-pre, tt {
+pre, tt, code {
     font-family: 'Consolas', 'Menlo', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
     font-size: 0.9em;
+}
+
+.hll {
+    background-color: #FFC;
+    margin: 0 -12px;
+    padding: 0 12px;
+    display: block;
 }
 
 img.screenshot {
 }
 
-tt.descname, tt.descclassname {
+tt.descname, tt.descclassname, code.descname, code.descclassname {
     font-size: 0.95em;
 }
 
-tt.descname {
+tt.descname, code.descname {
     padding-right: 0.08em;
 }
 
@@ -288,8 +339,8 @@ table.field-list, table.footnote {
 table.footnote {
     margin: 15px 0;
     width: 100%;
-    border: 1px solid #eee;
-    background: #fdfdfd;
+    border: 1px solid #EEE;
+    background: #FDFDFD;
     font-size: 0.9em;
 }
 
@@ -306,8 +357,12 @@ table.field-list td {
     padding: 0;
 }
 
+table.field-list p {
+    margin-bottom: 0.8em;
+}
+
 table.footnote td.label {
-    width: 0px;
+    width: .1px;
     padding: 0.3em 0 0.3em 0.5em;
 }
 
@@ -330,20 +385,21 @@ blockquote {
 }
 
 ul, ol {
+    /* Matches the 30px from the narrow-screen "li > ul" selector below */
     margin: 10px 0 10px 30px;
     padding: 0;
 }
 
 pre {
-    background: #eee;
+    background: #EEE;
     padding: 7px 30px;
-    margin: 15px -30px;
+    margin: 15px 0px;
     line-height: 1.3em;
 }
 
 dl pre, blockquote pre, li pre {
-    margin-left: -60px;
-    padding-left: 60px;
+    margin-left: 0;
+    padding-left: 30px;
 }
 
 dl dl pre {
@@ -351,13 +407,13 @@ dl dl pre {
     padding-left: 90px;
 }
 
-tt {
+tt, code {
     background-color: #ecf0f3;
     color: #222;
     /* padding: 1px 2px; */
 }
 
-tt.xref, a tt {
+tt.xref, code.xref, a tt {
     background-color: #FBFBFB;
     border-bottom: 1px solid white;
 }
@@ -365,6 +421,11 @@ tt.xref, a tt {
 a.reference {
     text-decoration: none;
     border-bottom: 1px dotted #004B6B;
+}
+
+/* Don't put an underline on images */
+a.image-reference, a.image-reference:hover {
+    border-bottom: none;
 }
 
 a.reference:hover {
@@ -382,12 +443,12 @@ a.footnote-reference:hover {
     border-bottom: 1px solid #6D4100;
 }
 
-a:hover tt {
+a:hover tt, a:hover code {
     background: #EEE;
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 870px) {
 
     div.sphinxsidebar {
     	display: none;
@@ -416,6 +477,11 @@ a:hover tt {
     	margin-left: 0;
     }
 
+	li > ul {
+        /* Matches the 30px from the "ul, ol" selector above */
+		margin-left: 30px;
+	}
+
     .document {
     	width: auto;
     }
@@ -436,10 +502,106 @@ a:hover tt {
         display: none;
     }
 
+
+
 }
+
+
+
+@media screen and (max-width: 875px) {
+
+    body {
+        margin: 0;
+        padding: 20px 30px;
+    }
+
+    div.documentwrapper {
+        float: none;
+        background: white;
+    }
+
+    div.sphinxsidebar {
+        display: block;
+        float: none;
+        width: 102.5%;
+        margin: 50px -30px -20px -30px;
+        padding: 10px 20px;
+        background: #333;
+        color: #FFF;
+    }
+
+    div.sphinxsidebar h3, div.sphinxsidebar h4, div.sphinxsidebar p,
+    div.sphinxsidebar h3 a {
+        color: white;
+    }
+
+    div.sphinxsidebar a {
+        color: #AAA;
+    }
+
+    div.sphinxsidebar p.logo {
+        display: none;
+    }
+
+    div.document {
+        width: 100%;
+        margin: 0;
+    }
+
+    div.footer {
+        display: none;
+    }
+
+    div.bodywrapper {
+        margin: 0;
+    }
+
+    div.body {
+        min-height: 0;
+        padding: 0;
+    }
+
+    .rtd_doc_footer {
+        display: none;
+    }
+
+    .document {
+        width: auto;
+    }
+
+    .footer {
+        width: auto;
+    }
+
+    .footer {
+        width: auto;
+    }
+
+    .github {
+        display: none;
+    }
+}
+
 
 /* misc. */
 
 .revsys-inline {
     display: none!important;
+}
+
+/* Make nested-list/multi-paragraph items look better in Releases changelog
+ * pages. Without this, docutils' magical list fuckery causes inconsistent
+ * formatting between different release sub-lists.
+ */
+div#changelog > div.section > ul > li > p:only-child {
+    margin-bottom: 0;
+}
+
+/* Hide fugly table cell borders in ..bibliography:: directive output */
+table.docutils.citation, table.docutils.citation td, table.docutils.citation th {
+  border: none;
+  /* Below needed in some edge cases; if not applied, bottom shadows appear */
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }

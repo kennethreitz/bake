@@ -6,8 +6,8 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to Bake’s documentation! &#8212; Bake  documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <title>Bake: A s☿rangely familiar workflow utility! &#8212; Bake  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -17,38 +17,43 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
-  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="nav-item nav-item-0"><a href="#">Bake  documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-bake-s-documentation">
-<h1>Welcome to Bake’s documentation!<a class="headerlink" href="#welcome-to-bake-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="bake-a-srangely-familiar-workflow-utility">
+<h1><strong>Bake</strong>: A s☿rangely familiar workflow utility!<a class="headerlink" href="#bake-a-srangely-familiar-workflow-utility" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<p>Bake helps you write task automation scripts like GNU Make but instead of fiddling with GNU Make’s complicated rules and syntax, you get to do it in pure Bash. Just like Make’s <cite>Makefile</cite> and <cite>make</cite> command, Bake has <cite>Bakefile</cite> and <cite>bake</cite> command.</p>
+<p>In a typical project workflow, the <cite>Bakefile</cite> most often resides in the same directory as the other source files for the project. You can have many different <cite>Bakefiles</cite> on your machine at any one time. In fact, if you have a large project, you may choose to manage it using separate <cite>Bakefiles</cite> for different parts of the project. The combination of <cite>bake</cite> command, <cite>Bakefile</cite> and the familiar bash syntax provides a very powerful tool for managing projects and automating repetitive tasks. It can not only be used to control the compilation of source code, but also to prepare manual pages and to install the application into a target directory.</p>
+<div class="section" id="what-s-in-the-oven">
+<h2>What’s in the oven?<a class="headerlink" href="#what-s-in-the-oven" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>A <cite>Bakefile</cite>, which looks and feels like the good parts of a <cite>Makefile</cite></li>
+<li>Except, you can write real bash code! (Any and all syntax is accepted — no magic going on here.)</li>
+<li>Unlike Makefile, you may utilize <strong>[ 4 × U+0020 a.k.a. “spaces”]</strong> for indentation.</li>
+<li>Environment variables are explicitly passed or whitelisted (–allow), not inherited from the parent shell.</li>
+<li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
+<li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
+</ul>
 </div>
 <div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
+</div>
 </div>
 
 
@@ -57,23 +62,24 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to Bake’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
-</ul>
+<h1 class="logo"><a href="#">Bake</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
   </ul></li>
 </ul>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/index.md.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -91,7 +97,19 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy; Copyright 2019, Kenneth Reitz.
+      &copy;2019, Kenneth Reitz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      
+      |
+      <a href="_sources/index.md.txt"
+          rel="nofollow">Page source</a>
     </div>
+
+    
+
+    
   </body>
 </html>
