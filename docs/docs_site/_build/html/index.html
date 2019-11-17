@@ -16,8 +16,10 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="files/installation.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
@@ -27,27 +29,46 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="bake-a-srangely-familiar-workflow-utility">
 <h1><strong>Bake</strong>: A s☿rangely familiar workflow utility!<a class="headerlink" href="#bake-a-srangely-familiar-workflow-utility" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
-<p>Bake helps you write task automation scripts like GNU Make but instead of fiddling with GNU Make’s complicated rules and syntax, you get to do it in pure Bash. Just like Make’s <cite>Makefile</cite> and <cite>make</cite> command, Bake has <cite>Bakefile</cite> and <cite>bake</cite> command.</p>
+<p><strong>Bake</strong> helps you write task automation scripts like <strong>GNU Make</strong> but instead of fiddling with GNU Make’s complicated rules and syntax, you get to do it in pure <strong>Bash</strong>. Just like Make’s <strong>Makefile</strong> and <strong>make</strong> command, Bake has <strong>Bakefile</strong> and <strong>bake</strong> command.</p>
 <p>In a typical project workflow, the <cite>Bakefile</cite> most often resides in the same directory as the other source files for the project. You can have many different <cite>Bakefiles</cite> on your machine at any one time. In fact, if you have a large project, you may choose to manage it using separate <cite>Bakefiles</cite> for different parts of the project. The combination of <cite>bake</cite> command, <cite>Bakefile</cite> and the familiar bash syntax provides a very powerful tool for managing projects and automating repetitive tasks. It can not only be used to control the compilation of source code, but also to prepare manual pages and to install the application into a target directory.</p>
 <div class="section" id="what-s-in-the-oven">
 <h2>What’s in the oven?<a class="headerlink" href="#what-s-in-the-oven" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>A <cite>Bakefile</cite>, which looks and feels like the good parts of a <cite>Makefile</cite></li>
-<li>Except, you can write real bash code! (Any and all syntax is accepted — no magic going on here.)</li>
-<li>Unlike Makefile, you may utilize <strong>[ 4 × U+0020 a.k.a. “spaces”]</strong> for indentation.</li>
+<li>A <strong>Bakefile</strong>, which looks and feels like the good parts of a <strong>Makefile</strong>.</li>
+<li>Except, you can write real <cite>bash</cite> code! (Any and all syntax is accepted — no magic going on here.)</li>
+<li>Unlike <strong>Makefile</strong>, you may utilize <strong>[ 4 × U+0020 a.k.a. “spaces”]</strong> for indentation.</li>
 <li>Environment variables are explicitly passed or whitelisted (–allow), not inherited from the parent shell.</li>
 <li>Tasks can be run safely and reliably. Rest assured that scripts are executed from the project root directory.</li>
 <li>There are many other benefits to this design, that have yet to be expressed in this document.</li>
 </ul>
 </div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="table-of-contents">
+<h2>Table of Contents 🚀🚀<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="files/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="files/installation.html#for-local-development">For Local Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="files/installation.html#various-nix-distributions-python-3-6">Various *nix Distributions (Python 3.6+)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="files/installation.html#macos-previously-known-as-os-x">MacOS (Previously known as OS X)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="files/installation.html#for-production-environment">For Production Environment</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="installation-bootstrapping">
+<h2>Installation &amp; Bootstrapping<a class="headerlink" href="#installation-bootstrapping" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="indices-tables">
+<h2>Indices &amp; Tables<a class="headerlink" href="#indices-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
@@ -58,6 +79,7 @@
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -72,11 +94,15 @@
 
 
 <h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="files/installation.html">Installation</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="files/installation.html" title="next chapter">Installation</a></li>
   </ul></li>
 </ul>
 </div>
@@ -92,6 +118,14 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -101,7 +135,7 @@
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.8</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
       <a href="_sources/index.md.txt"

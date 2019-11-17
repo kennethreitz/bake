@@ -1,0 +1,6 @@
+Some
+============
+
+.. code-block:: bash
+
+    echo "o"
