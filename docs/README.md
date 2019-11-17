@@ -6,6 +6,7 @@
 
 * ~~Make the docs site up and running with Sphinx~~
 * ~~Add installation instruction~~
+* Deploy v0.1.0
 * Turn the Sphinx site builder's `Makefile` into a `Bakefile` and add that as an example
 * Automate flask template via `Bakefile`
 * Automate hugo blog deployment with `Bakefile`
