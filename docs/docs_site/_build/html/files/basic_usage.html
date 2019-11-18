@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Basic Usage &#8212; Bake  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="A Few Terminal Tricks" href="terminal_tricks.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="basic-usage">
+<h1>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h1>
+<p>In a typical workflow, <strong>Bakefile</strong> lives in the <strong>root</strong> directory of your project and you should be running <strong>bake</strong> command from the same directory. Bakefiles contain information regarding the tasks that you want to accomplish. A task is basically an assortment of bash commands which can be anything from a simple one liner to a uber complicated hierarchical workflow with multiple subtasks. Each task has to follow a specific structure.</p>
+<p><strong>Bake is space aware. Use four spaces to indent in the appropriate positions.</strong></p>
+<div class="section" id="task-without-subtasks">
+<h2>Task without Subtasks<a class="headerlink" href="#task-without-subtasks" title="Permalink to this headline">¶</a></h2>
+<p>Here is a simple example of a Bakefile containing a single task.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bakefile</span>
+
+task1:
+
+<span class="c1"># print a Rambrant quote</span>
+<span class="nb">echo</span> <span class="s2">&quot;“Painting is the grandchild of Nature.”</span>
+
+<span class="s2">― Rembrandt Van Rijn&quot;</span>
+</pre></div>
+</div>
+<p>To run this task, type:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bake task1
+</pre></div>
+</div>
+<p>You terminal should print something like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+ Executing task1:
+<span class="p">|</span>  “Painting is the grandchild of Nature.”
+<span class="p">|</span>  ― Rembrandt Van Rijn
++ Done.
+</pre></div>
+</div>
+</div>
+<div class="section" id="task-with-subtasks">
+<h2>Task with Subtasks<a class="headerlink" href="#task-with-subtasks" title="Permalink to this headline">¶</a></h2>
+<p>Subtasks can be defined via <cite>task/subtask</cite> format. You can also use <cite>task//subtask</cite> format to define subtasks. Nested subtasks can be defined as <cite>task/subtask/subsubtask</cite> format. Bake runs the tasks in order agnostic way. So,it doesn’t matter whether the tasks or subtasks are defined before or after main task. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bakefile</span>
+
+<span class="c1"># task with subtasks</span>
+task2: task2/subtask1 task2//subtask2
+
+<span class="c1"># subtasks</span>
+task2/subtask1:
+    <span class="c1"># print a Vinci quote</span>
+    <span class="nb">echo</span> <span class="s2">&quot;“Nothing strengthens authority so much as silence.”</span>
+
+<span class="s2">    - Leonardo Da Vinci&quot;</span>
+
+task2//subtask2:
+    <span class="c1"># print a Gogh quote</span>
+    <span class="nb">echo</span> <span class="s2">&quot;“Art is to console those who are broken by life.”</span>
+
+<span class="s2">    - Vincent van Gogh&quot;</span>
+</pre></div>
+</div>
+<p>You can choose to run individual subtasks or all the tasks at the same time. To run a subtask, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bake task2/subtask1
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+ Executing task2/subtask1:
+<span class="p">|</span>  “Nothing strengthens authority so much as silence.”
+<span class="p">|</span>  - Leonardo Da Vinci
++ Done.
+</pre></div>
+</div>
+<p>Or you can run all the subtasks simultaneously by calling the primary task. To run all the subtasks under <cite>task2</cite>, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+ Executing task2/subtask1:
+<span class="p">|</span>  “Nothing strengthens authority so much as silence.”
+<span class="p">|</span>  - Leonardo Da Vinci
++ Executing task2//subtask2:
+<span class="p">|</span>  “Art is to console those who are broken by life.”
+<span class="p">|</span>  - Vincent van Gogh
++ Executing task2:
++ Done.
+</pre></div>
+</div>
+</div>
+<div class="section" id="task-with-arguments">
+<h2>Task with Arguments<a class="headerlink" href="#task-with-arguments" title="Permalink to this headline">¶</a></h2>
+<p>Arguments can be easily passed to the task in <cite>bake taskname arg1 arg2 …</cite> format</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bakefile</span>
+
+<span class="c1"># task with argument</span>
+task3/subtask1:
+    <span class="c1"># take any number of integers and return their sum</span>
+    <span class="nv">num1</span><span class="o">=</span><span class="nv">$1</span>
+    <span class="nv">num2</span><span class="o">=</span><span class="nv">$2</span>
+    <span class="o">((</span><span class="nv">sum</span><span class="o">=</span>num1 + num2<span class="o">))</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Sum of </span><span class="nv">$1</span><span class="s2"> &amp; </span><span class="nv">$2</span><span class="s2"> is </span><span class="nv">$sum</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Run the task via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bake task3/subtask1 <span class="m">1</span> <span class="m">2</span>
+</pre></div>
+</div>
+<p>You should see the output in the terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+ Executing task3/subtask1:
+<span class="p">|</span>  Sum of <span class="m">1</span> <span class="p">&amp;</span> <span class="m">2</span> is <span class="m">3</span>
++ Done.
+</pre></div>
+</div>
+</div>
+<div class="section" id="task-with-confirmation-prompt">
+<h2>Task with Confirmation Prompt<a class="headerlink" href="#task-with-confirmation-prompt" title="Permalink to this headline">¶</a></h2>
+<p>You can fire a confirmation prompt before running a task via <cite>taskname:&#64;confirm</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bakefile</span>
+
+<span class="c1"># task with confirmation prompt</span>
+task4/subtask1:@confirm
+    <span class="nb">echo</span> <span class="s2">&quot;Performing ls command...&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Files in your current folder:&quot;</span>
+    ls
+</pre></div>
+</div>
+<p>Run the command via:
+.. code-block:: bash</p>
+<blockquote>
+<div><p>$ bake task4/subtask1</p>
+</div></blockquote>
+<p>The output should be (depends where you run the command):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>? Do you want to <span class="k">continue</span>? <span class="o">[</span>y/N<span class="o">]</span>: y
++ Executing task4/subtask1:
+<span class="p">|</span>  Performing ls <span class="nb">command</span>
+<span class="p">|</span>
+<span class="p">|</span>  Files in your current folder:
+<span class="p">|</span>  Bakefile
+<span class="p">|</span>  faqs.md
+<span class="p">|</span>  installation.md
+<span class="p">|</span>  quickstart.md
++ Done.
+</pre></div>
+</div>
+</div>
+<div class="section" id="task-with-interactive-prompts">
+<h2>Task with Interactive Prompts<a class="headerlink" href="#task-with-interactive-prompts" title="Permalink to this headline">¶</a></h2>
+<p>If you want to show interactive prompts (normally bake supresses them) of the underlying <cite>Bash</cite> commands, you can do so using <cite>taskname:&#64;interactive</cite> format. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Bakefile</span>
+
+<span class="c1"># take username and password and echo them out</span>
+task5:@interactive
+<span class="nb">read</span> -p <span class="s1">&#39;Username: &#39;</span> username
+<span class="nb">read</span> -sp <span class="s1">&#39;Password: &#39;</span> password
+<span class="nb">echo</span>
+<span class="nb">echo</span> <span class="s2">&quot;&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Username is </span><span class="nv">$username</span><span class="s2">&quot;</span>
+<span class="nb">echo</span> <span class="s2">&quot;Password is </span><span class="nv">$password</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>Defining the task in this way will let you interact with the underlying prompts. Run the task:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ bake task5
+</pre></div>
+</div>
+<p>This will let out the underlying interactive prompts.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>+ Executing task5:
+Username: rednafi
+Password:
+
+Username is rednafi
+Password is rembrandt
++ Done.
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Bake</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Basic Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#task-without-subtasks">Task without Subtasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-with-subtasks">Task with Subtasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-with-arguments">Task with Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-with-confirmation-prompt">Task with Confirmation Prompt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-with-interactive-prompts">Task with Interactive Prompts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="terminal_tricks.html">A Few Terminal Tricks</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="terminal_tricks.html" title="next chapter">A Few Terminal Tricks</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Kenneth Reitz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/files/basic_usage.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

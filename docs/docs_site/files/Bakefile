@@ -1,0 +1,60 @@
+# Bakefile
+task1:
+
+    # print a Rambrant quote
+    echo "“Painting is the grandchild of Nature.”
+
+    ― Rembrandt Van Rijn"
+
+# task with subtasks
+task2: task2/subtask1 task2//subtask2
+
+# subtasks
+task2/subtask1:
+    # print a Vinci quote
+    echo "“Nothing strengthens authority so much as silence.”
+
+    - Leonardo Da Vinci"
+
+task2//subtask2:
+    # print a Gogh quote
+    echo "“Art is to console those who are broken by life.”
+
+    - Vincent van Gogh"
+
+# task with argument
+task3/subtask1:
+    # take any number of integers and return their sum
+    num1=$1
+    num2=$2
+    ((sum=num1 + num2))
+    echo "Sum of $1 & $2 is $sum"
+
+# confirmation prompt
+task4/subtask1:@confirm
+    echo "Performing ls command..."
+    echo ""
+    echo "Files in your current folder:"
+    ls
+
+
+# interactive task
+task5/subtask1:@interactive
+    read -p 'Username: ' username
+    read -sp 'Password: ' password
+    echo
+    echo ""
+    echo "Username is $username"
+    echo "Password is $password"
+
+# ignore tasks
+
+task6/subtask1:
+    echo "“I saw the angel in the marble and carved until I set him free.”
+
+    - Michelangelo"
+
+task6/subtask2:@skip:key=faqs.md
+    echo "I ran out of quotes."
+
+task6: task6/subtask1 task6/subtask2
