@@ -1,0 +1,158 @@
+Quickstart
+================
+
+In a typical workflow, **Bakefile** lives in the **root** directory of your project and you should be running **bake** command from the same directory. Bakefiles contain information regarding the tasks that you want to accomplish. A task is basically an assortment of bash commands which can be anything from a simple one liner to a uber complicated hierarchical workflow with multiple subtasks. Each task has to follow a specific structure.
+
+.. code-block:: bash
+    TASKNAME/SUBTASKNAME : [OPTIONS] [TASK] [ARGUMENTS]
+        BASH_COMMAND_GOES_HERE
+
+**Bake is space aware. Use four spaces to indent in the appropriate positions.**
+
+Task without Subtasks
+------------------------
+
+Here is a simple example of a Bakefile containing a single task.
+
+.. code-block:: bash
+
+    # Bakefile
+
+    task1:
+
+    # print a Rambrant quote
+    echo "“Painting is the grandchild of Nature.”
+
+    ― Rembrandt Van Rijn"
+
+To run this task, type:
+
+.. code-block:: bash
+
+    bake task1
+
+You terminal should print something like this:
+
+.. code-block:: bash
+
+    + Executing task1:
+    |  “Painting is the grandchild of Nature.”
+    |  ― Rembrandt Van Rijn
+    + Done.
+
+
+Task with Subtasks
+-----------------------------
+Subtasks can be defined via `task/subtask` format. You can also use `task//subtask` format to define subtasks. For example:
+
+.. code-block:: bash
+
+    # Bakefile
+
+    # task with subtasks
+    task2: task2/subtask1 task2//subtask2
+
+    # subtasks
+    task2/subtask1:
+        # print a Vinci quote
+        echo "“Nothing strengthens authority so much as silence.”
+
+        - Leonardo Da Vinci"
+
+    task2//subtask2:
+        # print a Gogh quote
+        echo "“Art is to console those who are broken by life.”
+
+        - Vincent van Gogh"
+
+
+You can choose to run individual subtasks or all the tasks at the same time. To run a subtask, run:
+
+.. code-block:: bash
+
+    bake task2/subtask1
+
+.. code-block:: bash
+
+    + Executing task2/subtask1:
+    |  “Nothing strengthens authority so much as silence.”
+    |  - Leonardo Da Vinci
+    + Done.
+
+Or you can run all the subtasks simultaneously by calling the primary task. To all subtasks under `task2`, run:
+
+.. code-block:: bash
+    bake task2
+
+.. code-block:: bash
+
+    + Executing task2/subtask1:
+    |  “Nothing strengthens authority so much as silence.”
+    |  - Leonardo Da Vinci
+    + Executing task2//subtask2:
+    |  “Art is to console those who are broken by life.”
+    |  - Vincent van Gogh
+    + Executing task2:
+    + Done.
+
+Task with Arguments
+-----------------------
+
+Arguments can be easily passed to the task in `bake taskname arg1 arg2 ...` format
+
+.. code-block:: bash
+
+    # Bakefile
+
+    # task with argument
+    task3/subtask1:
+        # take any number of integers and return their sum
+        num1=$1
+        num2=$2
+        ((sum=num1 + num2))
+        echo "Sum of $1 & $2 is $sum"
+
+Run the task via:
+
+.. code-block:: bash
+
+    bake task3/subtask1 1 2
+
+You should see the output in the terminal:
+
+.. code-block:: bash
+
+    + Executing task3/subtask1:
+    |  Sum of 1 & 2 is 3
+    + Done.
+
+Task with Confirmation Prompt
+-------------------------------
+
+You can fire a confirmation prompt before running a task using `taskname:@confirm` format.
+
+.. code-block:: bash
+
+    # Bakefile
+    
+    # task with confirmation prompt
+    task4/subtask1:@confirm
+        echo "Performing ls command..."
+        echo ""
+        echo "Files in your current folder:"
+        ls
+
+The output should be (depends where you run the command):
+
+.. code-block:: bash
+
+    ? Do you want to continue? [y/N]: y
+    + Executing task4/subtask1:
+    |  Performing ls command
+    |
+    |  Files in your current folder:
+    |  Bakefile
+    |  faqs.md
+    |  installation.md
+    |  quickstart.md
+    + Done.

@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Installation &#8212; Bake  documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Bake: A s☿rangely familiar workflow utility!" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="for-local-development">
+<h2>For Local Development<a class="headerlink" href="#for-local-development" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="various-nix-distributions-python-3-6">
+<h3>Various <a href="#id1"><span class="problematic" id="id2">*</span></a>nix Distributions (Python 3.6+)<a class="headerlink" href="#various-nix-distributions-python-3-6" title="Permalink to this headline">¶</a></h3>
+<p>The primary installation method of <cite>bake</cite> , today, is via <cite>pip</cite> :</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install bake-cli
+</pre></div>
+</div>
+<p>This will always work, but it will not be the default recommendation.</p>
+</div>
+<div class="section" id="macos-previously-known-as-os-x">
+<h3>MacOS (Previously known as OS X)<a class="headerlink" href="#macos-previously-known-as-os-x" title="Permalink to this headline">¶</a></h3>
+<p>Installation of bake will (soon) be very easy, with Homebrew. The formula needs a subtle adjustment — if you want to help, <a class="reference external" href="http://github.com/kennethreitz/homebrew--">here’s the repo!</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ brew install kennethreitz/-/bake
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="for-production-environment">
+<h2>For Production Environment<a class="headerlink" href="#for-production-environment" title="Permalink to this headline">¶</a></h2>
+<p>You an also run <cite>bake</cite> via Docker! An official image has been made available on <a class="reference external" href="https://cloud.docker.com/u/kennethreitz/repository/docker/kennethreitz/bake:">DockerHub.</a></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ docker run kennethreitz/bake
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Bakefile is expected to live at <cite>/app/Bakefile</cite>.</p></li>
+</ul>
+<p>If you inherit from this image, ONBUILD directives will automatically copy your application code (build context) into the container, into /app.</p>
+<ul class="simple">
+<li><p>Bonus Points: this image is also available on the <a class="reference external" href="https://github.com/kennethreitz/bake/packages/24444">GitHub Package Registry</a> (beta).</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Bake</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#for-local-development">For Local Development</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#various-nix-distributions-python-3-6">Various *nix Distributions (Python 3.6+)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#macos-previously-known-as-os-x">MacOS (Previously known as OS X)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#for-production-environment">For Production Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter"><strong>Bake</strong>: A s☿rangely familiar workflow utility!</a></li>
+      <li>Next: <a href="quickstart.html" title="next chapter">Quickstart</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Kenneth Reitz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/files/installation.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
