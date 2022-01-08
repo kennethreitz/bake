@@ -115,7 +115,7 @@ def echo_json(obj):
     "--help", "-h", default=False, is_flag=True, help="Show this message and exit."
 )
 @click.option("--debug", default=False, is_flag=True, hidden=True)
-@click.option("--source", default=False, nargs=1, hidden=True)
+@click.option("--source", default="", nargs=1, hidden=True)
 @click.option(
     "--allow",
     default=False,
