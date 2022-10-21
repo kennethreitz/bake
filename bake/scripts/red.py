@@ -21,7 +21,7 @@ import colorama
     "--bg",
     nargs=1,
     type=click.STRING,
-    default=False,
+    default="",
     help="Background color to use (rare).",
 )
 @click.option("--bold", is_flag=True, type=click.BOOL, default=False, help="Be bold.")
