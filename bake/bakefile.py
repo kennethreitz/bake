@@ -472,7 +472,7 @@ class TaskScript(BaseAction):
 
         # Remove duplicates from the list.
         _actions = []
-        for action in actions:
+        for action in reversed(actions):
             if action not in _actions:
                 _actions.append(action)
         actions = _actions
