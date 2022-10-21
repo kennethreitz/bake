@@ -23,6 +23,7 @@ class Bakefile:
         self._chunks = []
         self.args = []
         self.debug = debug
+        self._included_sources = None
 
         if not os.path.exists(path):
             raise NoBakefileFound()
@@ -158,12 +159,25 @@ class Bakefile:
 
     @property
     def source(self):
+        included_content = ''
+        content = self._get_source()
+
+        for included_source in self.included_sources:
+            included_content += included_source + '\n'
+
+        return included_content + content
+
+    def _get_source(self):
         with open(self.path, "r") as f:
             return f.read()
 
     @property
     def source_lines(self):
-        return self.source.split("\n")
+        return [
+            line
+            for line in self.source.split("\n")
+            if not self._is_include_line(line)
+        ]
 
     def _is_declaration_line(self, line, collect_all=False):
         line = line.replace("\t", " " * 4)
@@ -214,7 +228,7 @@ class Bakefile:
             tasks[script.name] = script
 
         self._tasks = tasks
-        return self.tasks
+        return self._tasks
 
     @property
     def iter_root_source_lines(self):
@@ -235,6 +249,47 @@ class Bakefile:
     def root_source(self):
         """The source of the 'root level' of the Bashfile."""
         return "\n".join(list(self.iter_root_source_lines))
+
+    @property
+    def included_sources(self):
+        if self._included_sources is not None:
+            return self._included_sources
+
+        return self._get_included_sources_recursively(self._get_source())
+
+    def _is_include_line(self, line):
+        return line.startswith('include ')
+
+    def _get_included_sources_recursively(self, source, already_got=None):
+        if already_got is None:
+            already_got = set()
+
+        sources = []
+        includes = [
+            line
+            for line in source.split("\n")
+            if self._is_include_line(line)
+        ]
+        filenames = [
+            filename.strip(' ')
+            for include in includes
+            for filename in include.split(' ')[1:]
+            if filename.strip(' ')
+        ]
+
+        for filename in filenames:
+            if filename not in already_got:
+                with open(filename) as file:
+                    include_source = file.read()
+                    sources.append(include_source)
+                    include_sources = self._get_included_sources_recursively(
+                        include_source, already_got
+                    )
+                    sources.extend(include_sources)
+
+            already_got.add(filename)
+
+        return sources
 
 
 class BaseAction:

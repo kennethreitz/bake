@@ -1,0 +1,4 @@
+include included3.Bakefile
+
+included2:
+    echo Included2

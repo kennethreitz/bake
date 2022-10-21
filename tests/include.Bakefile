@@ -1,0 +1,3 @@
+include included1.Bakefile included2.Bakefile
+
+include: included1 included2 included3
